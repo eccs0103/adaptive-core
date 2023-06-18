@@ -10,27 +10,20 @@ class Archive {
 	 */
 	constructor(key, initial) {
 		this.#key = key;
-		if (initial !== undefined) {
-			this.data = initial;
+		if (localStorage.getItem(this.#key) === null) {
+			localStorage.setItem(this.#key, JSON.stringify((initial === undefined ? `` : initial), undefined, `\t`))
 		}
 	}
 	/** @type {String} */ #key;
-	get #item() {
-		let item = localStorage.getItem(this.#key);
-		if (item === null) {
-			item = ``;
-			localStorage.setItem(this.#key, item);
-		}
-		return item;
-	}
-	set #item(value) {
-		localStorage.setItem(this.#key, value);
-	}
 	get data() {
-		return (/** @type {Notation} */ (JSON.parse(this.#item)));
+		const item = localStorage.getItem(this.#key);
+		if (item === null) {
+			throw new ReferenceError(`Key '${this.#key}' isn't defined.`);
+		}
+		return (/** @type {Notation} */ (JSON.parse(item)));
 	}
 	set data(value) {
-		this.#item = JSON.stringify(value, undefined, `\t`);
+		localStorage.setItem(this.#key, JSON.stringify(value, undefined, `\t`));
 	}
 	/**
 	 * @param {(value: Notation) => Notation} action 
