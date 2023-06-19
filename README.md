@@ -5,7 +5,7 @@
 ## Feed
 ### Update 1.2.8 (19.06.2023)
 - Improved `Archive` module.
-- Added `Database` and `Timespan` modules.
+- Added `Database` module.
 
 ### Update 1.2.5 (16.06.2023)
 - Added classes `large-padding`, `large-gap` for spacing control.  
