@@ -3,8 +3,9 @@
 ## Information
 
 ## Feed
-## Update 1.2.10 (17.07.2023)
-- *Information is not yet available*
+### Update 1.2.10 (26.07.2023)
+- Modified the `Application` module structure. `Application` has been changed to `Manager`.
+- Modified the `Coordinate` module structure. `Coordinate` has been changed to `Point2X`.
 
 ### Update 1.2.9 (21.06.2023)
 - Added frame rate limiter to the `Engine` module.
