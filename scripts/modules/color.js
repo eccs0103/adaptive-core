@@ -1,10 +1,12 @@
 "use strict";
 
-/** @enum {String} */ const ColorFormat = {
+/** @enum {String} */ const ColorFormats = {
 	/** @readonly */ RGB: `RGB`,
 	/** @readonly */ HSL: `HSL`,
 	/** @readonly */ HEX: `HEX`,
 };
+Object.freeze(ColorFormats);
+
 class Color {
 	//#region Converters
 	/**
@@ -47,25 +49,25 @@ class Color {
 	}
 	/**
 	 * @param {Color} source 
-	 * @param {ColorFormat} format 
+	 * @param {ColorFormats} format 
 	 * @param {Boolean} deep 
 	 */
-	static stringify(source, format = ColorFormat.RGB, deep = false) {
+	static stringify(source, format = ColorFormats.RGB, deep = false) {
 		switch (format) {
-			case ColorFormat.RGB: return `rgb${deep ? `a` : ``}(${source.#red}, ${source.#green}, ${source.#blue}${deep ? `, ${source.#alpha}` : ``})`;
-			case ColorFormat.HSL: return `hsl${deep ? `a` : ``}(${source.#hue}deg, ${source.#saturation}%, ${source.#lightness}%${deep ? `, ${source.#alpha}` : ``})`;
-			case ColorFormat.HEX: return `#${source.#red.toString(16).replace(/^(?!.{2})/, `0`)}${source.#green.toString(16).replace(/^(?!.{2})/, `0`)}${source.#blue.toString(16).replace(/^(?!.{2})/, `0`)}${deep ? (source.#alpha * 255).toString(16).replace(/^(?!.{2})/, `0`) : ``}`;
+			case ColorFormats.RGB: return `rgb${deep ? `a` : ``}(${source.#red}, ${source.#green}, ${source.#blue}${deep ? `, ${source.#alpha}` : ``})`;
+			case ColorFormats.HSL: return `hsl${deep ? `a` : ``}(${source.#hue}deg, ${source.#saturation}%, ${source.#lightness}%${deep ? `, ${source.#alpha}` : ``})`;
+			case ColorFormats.HEX: return `#${source.#red.toString(16).replace(/^(?!.{2})/, `0`)}${source.#green.toString(16).replace(/^(?!.{2})/, `0`)}${source.#blue.toString(16).replace(/^(?!.{2})/, `0`)}${deep ? (source.#alpha * 255).toString(16).replace(/^(?!.{2})/, `0`) : ``}`;
 			default: throw new TypeError(`Invalid color format: '${format}'.`);
 		}
 	}
 	/**
 	 * @param {String} source 
-	 * @param {ColorFormat} format 
+	 * @param {ColorFormats} format 
 	 * @param {Boolean} deep 
 	 */
-	static parse(source, format = ColorFormat.RGB, deep = false) {
+	static parse(source, format = ColorFormats.RGB, deep = false) {
 		switch (format) {
-			case ColorFormat.RGB: {
+			case ColorFormats.RGB: {
 				const regex = new RegExp(`rgb${deep ? `a` : ``}\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)\\s*${deep ? `,\\s*(0(\\.\\d+)?|1(\\.0+)?)\\s*` : ``}\\)`, `i`);
 				const matches = regex.exec(source);
 				if (!matches) {
@@ -74,7 +76,7 @@ class Color {
 				const [, red, green, blue, alpha] = matches.map((item) => Number.parseInt(item));
 				return Color.viaRGB(red, green, blue, deep ? alpha : 1);
 			};
-			case ColorFormat.HSL: {
+			case ColorFormats.HSL: {
 				const regex = new RegExp(`hsl${deep ? `a` : ``}\\(\\s*(\\d+)(?:deg)?\\s*,\\s*(\\d+)(?:%)?\\s*,\\s*(\\d+)(?:%)?\\s*${deep ? `,\\s*(0(\\.\\d+)?|1(\\.0+)?)\\s*` : ``}\\)`, `i`);
 				const matches = regex.exec(source);
 				if (!matches) {
@@ -83,7 +85,7 @@ class Color {
 				const [, hue, saturation, lightness, alpha] = matches.map((item) => Number.parseInt(item));
 				return Color.viaHSL(hue, saturation, lightness, deep ? alpha : 1);
 			};
-			case ColorFormat.HEX: {
+			case ColorFormats.HEX: {
 				const regex = new RegExp(`#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})${deep ? `([0-9a-f]{2})` : ``}`, `i`);
 				const matches = regex.exec(source);
 				if (!matches) {
@@ -100,7 +102,7 @@ class Color {
 	 */
 	static tryParse(source) {
 		let result = null;
-		for (const [format, deep] of Object.keys(ColorFormat).flatMap((format) => (/** @type {Array<[String, Boolean]>} */ ([[format, false], [format, true]])))) {
+		for (const [format, deep] of Object.values(ColorFormats).flatMap((format) => (/** @type {Array<[String, Boolean]>} */ ([[format, false], [format, true]])))) {
 			try {
 				result = Color.parse(source, format, deep);
 				break;
@@ -345,22 +347,10 @@ class Color {
 	//#endregion
 	//#region Methods
 	/**
-	 * @param {Color} value 
-	 */
-	assign(value) {
-		this.#red = value.#red;
-		this.#green = value.#green;
-		this.#blue = value.#blue;
-		this.#hue = value.#hue;
-		this.#saturation = value.#saturation;
-		this.#lightness = value.#lightness;
-		this.#alpha = value.#alpha;
-	}
-	/**
-	 * @param {ColorFormat} format 
+	 * @param {ColorFormats} format 
 	 * @param {Boolean} deep
 	 */
-	toString(format = ColorFormat.RGB, deep = false) {
+	toString(format = ColorFormats.RGB, deep = false) {
 		return Color.stringify(this, format, deep);
 	}
 	/**

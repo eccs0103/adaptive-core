@@ -3,6 +3,10 @@
 ## Information
 
 ## Feed
+### Update 1.2.11 (12.08.2023)
+- Styles have been changed.
+- A loading module has been added.
+
 ### Update 1.2.10 (26.07.2023)
 - Modified the `Application` module structure. `Application` has been changed to `Manager`.
 - Modified the `Coordinate` module structure. `Coordinate` has been changed to `Point2X`.
