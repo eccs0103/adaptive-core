@@ -15,11 +15,26 @@
 	<link rel="stylesheet" href="../styles/style.css">
 	<link rel="stylesheet" href="../styles/themes/material.css">
 	<link rel="stylesheet" href="../styles/local/main.css">
+	<script src="../scripts/components/archive.js" defer></script>
+	<script src="../scripts/components/console.js" defer></script>
+	<script src="../scripts/components/window.js" defer></script>
+	<script src="../scripts/components/informant.js" defer></script>
+	<script src="../scripts/components/manager.js" defer></script>
+	<script src="../scripts/components/loader.js" defer></script>
 	<script src="../scripts/main.js" defer></script>
 </head>
 
 <body>
-	
+	<canvas is="ac-animator"></canvas>
+	<dialog class="layer rounded in-top in-right with-padding with-vertical-gap" is="ac-debugger"></dialog>
+	<dialog class="layer rounded with-padding with-gap flex column loader" is="ac-window">
+		<img src="../resources/Circuit (Transparent).gif" alt="Logo">
+	</dialog>
+	<dialog class="layer rounded with-padding with-gap flex column informant" is="ac-informant">
+		<div class="flex centered header"></div>
+		<div class="container"></div>
+		<div class="flex centered with-gap footer"></div>
+	</dialog>
 </body>
 
 </html>

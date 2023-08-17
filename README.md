@@ -3,6 +3,10 @@
 ## Information
 
 ## Feed
+### Update 1.2.15 (18.08.2023)
+- Updated modules.
+- Changed design.
+
 ### Update 1.2.11 (12.08.2023)
 - Styles have been changed.
 - A loading module has been added.
