@@ -1,8 +1,24 @@
-# Adaptive Core Webpage Extended Template
+# Adaptive Webpage Template
 
 ## Information
 
 ## Feed
+### Обновление 2.0.0 (23.08.2023)
+- Изменена стандартная структура (см. `./pages/main.html`).
+- Добавлена фуникция `integer` в компонент `Random`.
+- Улучшена фуникция `case` в `Random`.
+- Изменена структура геометрических классов (см. `./scripts/components/measures.js`).
+- Добавлен класс `Vector`.
+- Переписан класс `Engine`.
+- Переписан класс `Animator`.
+- Собраны функции всплывающих окон в класс `Informant`.
+- Переписан класс `Manager`.
+- Добавлен пользовательский элемент `ac-panel`.
+- Добавлен компонент загрузки.
+- Добавлена нулевая структура (см. `./scripts/structure.js`).
+- Переименован CSS класс `alert` в `invalid`.
+- Улучшены стили диалогов.
+
 ### Update 1.2.15 (18.08.2023)
 - Updated modules.
 - Changed design.

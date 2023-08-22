@@ -1,15 +1,10 @@
 // @ts-ignore
-/** @typedef {import("./window.js")} */
+/** @typedef {import("./manager.js")} */
 
 "use strict";
 
-const dialogLoader = document.querySelector(`dialog.loader`);
-if (dialogLoader) {
-	if (!(dialogLoader instanceof ACWindowElement)) {
-		throw new TypeError(`Invalid element: ${dialogLoader}`);
-	}
-	dialogLoader.show();
-	window.addEventListener(`load`, async (event) => {
-		await dialogLoader.close();
+Manager.load(new Promise((resolve) => {
+	window.addEventListener(`load`, (event) => {
+		resolve(undefined);
 	});
-}
+}))

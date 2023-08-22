@@ -16,24 +16,29 @@
 	<link rel="stylesheet" href="../styles/themes/material.css">
 	<link rel="stylesheet" href="../styles/local/main.css">
 	<script src="../scripts/components/archive.js" defer></script>
-	<script src="../scripts/components/console.js" defer></script>
-	<script src="../scripts/components/window.js" defer></script>
 	<script src="../scripts/components/informant.js" defer></script>
+	<script src="../scripts/components/window.js" defer></script>
 	<script src="../scripts/components/manager.js" defer></script>
-	<script src="../scripts/components/loader.js" defer></script>
+	<script src="../scripts/structure.js" defer></script>
 	<script src="../scripts/main.js" defer></script>
 </head>
 
 <body>
-	<!-- <dialog class="layer rounded in-top in-right with-padding with-vertical-gap" is="ac-debugger"></dialog> -->
-	<!-- <dialog class="layer rounded with-padding with-gap flex column loader" is="ac-window">
-		<img src="../resources/Circuit (Transparent).gif" alt="Logo">
-	</dialog> -->
-	<dialog class="layer rounded with-padding with-gap flex column informant" is="ac-informant">
-		<div class="flex centered header"></div>
-		<div class="container"></div>
-		<div class="flex centered with-gap footer"></div>
+	<!-- Your code goes here -->
+	<dialog class="console layer rounded in-top in-right with-padding with-vertical-gap"></dialog>
+	<dialog class="pop-up layer rounded with-padding with-gap flex column">
+		<div class="header flex centered">
+			<h3>Title</h3>
+		</div>
+		<div class="container">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis dolorum aliquid deserunt enim ab quas fugiat adipisci. Repellendus, sapiente hic perspiciatis atque quod iure, debitis eius in neque dolor exercitationem!</div>
+		<div class="footer flex centered with-gap">
+			<button class="layer rounded flex with-padding">Button</button>
+			<input type="text" placeholder="Enter text..." class="depth rounded flex with-padding">
+		</div>
 	</dialog>
+	<ac-panel class="loader layer with-padding large-padding flex primary-centered" hidden>
+		<div class="flex column primary-centered with-gap with-padding">
+			<img src="../resources/Circuit (Transparent).gif" alt="Logo">
+		</div>
+	</ac-panel>
 </body>
-
-</html>

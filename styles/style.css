@@ -219,15 +219,6 @@ dialog:not([open]) {
 	display: none !important;
 }
 
-dialog.informant > *:empty {
-	display: none;
-}
-
-dialog.informant div.container {
-	overflow-y: auto;
-	overflow-wrap: anywhere;
-}
-
 dialog.console {
 	position: fixed;
 	inset: 0 0 auto auto;
@@ -240,7 +231,16 @@ dialog.console *:nth-child(2n) {
 	text-align: right;
 }
 
-dialog.loader {
+dialog.pop-up > *:empty {
+	display: none;
+}
+
+dialog.pop-up div.container {
+	overflow: hidden auto;
+	word-wrap: break-word;
+}
+
+ac-window {
 	position: fixed;
 	inset: 0;
 }

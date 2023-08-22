@@ -31,19 +31,14 @@ class Random {
 	static case(cases) {
 		const summary = Array.from(cases).reduce((previous, [, percentage]) => previous + percentage, 0);
 		const random = Random.number(0, summary);
-		let selection = undefined;
 		let start = 0;
 		for (const [item, percentage] of cases) {
 			const end = start + percentage;
 			if (start <= random && random < end) {
-				selection = item;
-				break;
+				return item;
 			}
 			start = end;
 		}
-		if (selection === undefined) {
-			throw new ReferenceError(`Can't select value. Maybe stack is empty.`);
-		}
-		return selection;
+		throw new ReferenceError(`Can't select value. Maybe stack is empty.`);
 	}
 }

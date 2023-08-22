@@ -1,13 +1,6 @@
 "use strict";
 
 /**
- * @template Item
- * @callback ChangeAction<Item>
- * @param {Item} value
- * @returns {Item}
- */
-
-/**
  * @template Notation 
  */
 class Archive {
@@ -33,11 +26,9 @@ class Archive {
 		localStorage.setItem(this.#key, JSON.stringify(value, undefined, `\t`));
 	}
 	/**
-	 * @param {ChangeAction<Notation>} action 
+	 * @param {(value: Notation) => Notation} action 
 	 */
 	change(action) {
 		this.data = action(this.data);
 	}
 }
-
-const a = new Archive(``);
