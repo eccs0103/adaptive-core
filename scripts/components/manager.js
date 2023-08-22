@@ -1,7 +1,7 @@
 // @ts-ignore
 /** @typedef {import("./informant.js")} */
 // @ts-ignore
-/** @typedef {import("./window.js")} */
+/** @typedef {import("./panel.js")} */
 
 "use strict";
 

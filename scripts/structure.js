@@ -1,5 +1,7 @@
 // @ts-ignore
 /** @typedef {import("./components/archive.js")} */
+// @ts-ignore
+/** @typedef {import("./components/measures.js")} */
 
 "use strict";
 
