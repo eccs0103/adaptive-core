@@ -23,4 +23,4 @@ class ACPanelElement extends HTMLElement {
 		this.hidden = true;
 	}
 }
-customElements.define(`ac-window`, ACPanelElement);
+customElements.define(`ac-panel`, ACPanelElement);

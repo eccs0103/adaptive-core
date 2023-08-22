@@ -8,7 +8,7 @@
 class Manager extends Informant {
 	/** @type {ACPanelElement} */ static #panelLoader;
 	static {
-		const panelLoader = document.querySelector(`ac-window.loader`);
+		const panelLoader = document.querySelector(`ac-panel.loader`);
 		if (!(panelLoader instanceof ACPanelElement)) {
 			throw new TypeError(`Invalid element: ${panelLoader}`);
 		}
