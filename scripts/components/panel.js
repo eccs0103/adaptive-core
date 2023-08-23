@@ -17,8 +17,8 @@ class ACPanelElement extends HTMLElement {
 	}
 	async close() {
 		await this.animate([
-			{ opacity: `0` },
 			{ opacity: `1` },
+			{ opacity: `0` },
 		], { duration: this.duration, fill: `both` }).finished;
 		this.toggleAttribute(`open`, false);
 	}
