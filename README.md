@@ -1,6 +1,7 @@
 # Adaptive Webpage Template
 
 ## Information
+Template for creating adaptive web pages.
 
 ## Feed
 ### Update 2.0.0 (23.08.2023)
