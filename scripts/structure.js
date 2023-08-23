@@ -47,7 +47,7 @@ if (!(metaApplicationName instanceof HTMLMetaElement)) {
 const title = metaApplicationName.content;
 
 /** @type {Archive<SettingsNotation>} */ const archiveSettings = new Archive(`${developer}.${title}.Settings`, Settings.export(new Settings()));
-const settings = Settings.import(archiveSettings.data);
 
 const manager = new Manager();
+const settings = Settings.import(archiveSettings.data);
 //#endregion
