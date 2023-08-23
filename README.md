@@ -3,21 +3,21 @@
 ## Information
 
 ## Feed
-### Обновление 2.0.0 (23.08.2023)
-- Изменена стандартная структура (см. `./pages/main.html`).
-- Добавлена фуникция `integer` в компонент `Random`.
-- Улучшена фуникция `case` в `Random`.
-- Изменена структура геометрических классов (см. `./scripts/components/measures.js`).
-- Добавлен класс `Vector`.
-- Переписан класс `Engine`.
-- Переписан класс `Animator`.
-- Собраны функции всплывающих окон в класс `Informant`.
-- Переписан класс `Manager`.
-- Добавлен пользовательский элемент `ac-panel`.
-- Добавлен компонент загрузки.
-- Добавлена нулевая структура (см. `./scripts/structure.js`).
-- Переименован CSS класс `alert` в `invalid`.
-- Улучшены стили диалогов.
+### Update 2.0.0 (23.08.2023)
+- Modified the default structure (see `./pages/main.html`).
+- Added the `integer` function to the `Random` component.
+- Improved the `case` function in `Random`.
+- Altered the structure of geometric classes (see `./scripts/components/measures.js`).
+- Introduced the `Vector` class.
+- Rewritten the `Engine` class.
+- Rewritten the `Animator` class.
+- Consolidated popup window functions into the `Informant` class.
+- Rewritten the `Manager` class.
+- Added a custom element `ac-panel`.
+- Added a loading component.
+- Introduced a zero structure (see `./scripts/structure.js`).
+- Renamed the CSS class `alert` to `invalid`.
+- Enhanced dialog styles.
 
 ### Update 1.2.15 (18.08.2023)
 - Updated modules.
