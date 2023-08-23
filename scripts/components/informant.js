@@ -1,19 +1,69 @@
 "use strict";
 
 class Informant {
-	//#region Console
-	/** @type {HTMLDialogElement} */ static #dialogConsole;
-	static {
+	//#region Definition
+	constructor() {
 		const dialogConsole = document.querySelector(`dialog.console`);
 		if (!(dialogConsole instanceof HTMLDialogElement)) {
 			throw new TypeError(`Invalid element: ${dialogConsole}`);
 		}
 		this.#dialogConsole = dialogConsole;
+
+		const dialogPopUp = document.querySelector(`dialog.pop-up`);
+		if (!(dialogPopUp instanceof HTMLDialogElement)) {
+			throw new TypeError(`Invalid element: ${dialogPopUp}`);
+		}
+		const dialogPopUpClone = (/** @type {HTMLDialogElement} */ (dialogPopUp.cloneNode()));
+
+		const elementHeader = dialogPopUp.querySelector(`*.header`);
+		if (!(elementHeader instanceof HTMLElement)) {
+			throw new TypeError(`Invalid element: ${elementHeader}`);
+		}
+		const elementHeaderClone = dialogPopUpClone.appendChild(/** @type {HTMLElement} */(elementHeader.cloneNode()));
+		
+		const h3Title = elementHeader.querySelector(`h3`);
+		if (!(h3Title instanceof HTMLHeadingElement)) {
+			throw new TypeError(`Invalid element: ${h3Title}`);
+		}
+		const h3TitleClone = elementHeaderClone.appendChild(/** @type {HTMLHeadingElement} */(h3Title.cloneNode()));
+		
+		const elementContainer = dialogPopUp.querySelector(`*.container`);
+		if (!(elementContainer instanceof HTMLElement)) {
+			throw new TypeError(`Invalid element: ${elementContainer}`);
+		}
+		const elementContainerClone = dialogPopUpClone.appendChild(/** @type {HTMLElement} */(elementContainer.cloneNode()));
+		
+		const elementFooter = dialogPopUp.querySelector(`*.footer`);
+		if (!(elementFooter instanceof HTMLElement)) {
+			throw new TypeError(`Invalid element: ${elementFooter}`);
+		}
+		const elementFooterClone = dialogPopUpClone.appendChild(/** @type {HTMLElement} */(elementFooter.cloneNode()));
+		
+		const buttonPrototype = elementFooter.querySelector(`button`);
+		if (!(buttonPrototype instanceof HTMLButtonElement)) {
+			throw new TypeError(`Invalid element: ${buttonPrototype}`);
+		}
+		const buttonPrototypeClone = (/** @type {HTMLButtonElement} */(buttonPrototype.cloneNode()));
+		
+		const inputPrototype = elementFooter.querySelector(`input`);
+		if (!(inputPrototype instanceof HTMLInputElement)) {
+			throw new TypeError(`Invalid element: ${inputPrototype}`);
+		}
+		const inputPrototypeClone = (/** @type {HTMLInputElement} */(inputPrototype.cloneNode()));
+		
+		this.#dialogPopUp = dialogPopUpClone;
+		this.#buttonPrototype = buttonPrototypeClone;
+		this.#inputPrototype = inputPrototypeClone;
+		dialogPopUp.remove();
 	}
+	//#endregion
+	//#region Console
+	/** @type {HTMLDialogElement} */ #dialogConsole;
+
 	/**
 	 * @param {Object} [object]
 	 */
-	static log(object) {
+	log(object) {
 		if (object === undefined && this.#dialogConsole.open) {
 			this.#dialogConsole.open = false;
 		} else if (object !== undefined && !this.#dialogConsole.open) {
@@ -29,67 +79,15 @@ class Informant {
 	}
 	//#endregion
 	//#region Pop Up
-	/** @type {HTMLDialogElement} */ static #dialogPopUp;
-	/** @type {HTMLButtonElement} */ static #buttonPrototype;
-	/** @type {HTMLInputElement} */ static #inputPrototype;
-	static {
-		const dialogPopUp = document.querySelector(`dialog.pop-up`);
-		if (!(dialogPopUp instanceof HTMLDialogElement)) {
-			throw new TypeError(`Invalid element: ${dialogPopUp}`);
-		}
-		const dialogPopUpClone = (/** @type {HTMLDialogElement} */ (dialogPopUp.cloneNode()));
-		//#region Header
-		const elementHeader = dialogPopUp.querySelector(`*.header`);
-		if (!(elementHeader instanceof HTMLElement)) {
-			throw new TypeError(`Invalid element: ${elementHeader}`);
-		}
-		const elementHeaderClone = dialogPopUpClone.appendChild(/** @type {HTMLElement} */(elementHeader.cloneNode()));
-		//#region Title
-		const h3Title = elementHeader.querySelector(`h3`);
-		if (!(h3Title instanceof HTMLHeadingElement)) {
-			throw new TypeError(`Invalid element: ${h3Title}`);
-		}
-		const h3TitleClone = elementHeaderClone.appendChild(/** @type {HTMLHeadingElement} */(h3Title.cloneNode()));
-		//#endregion
-		//#endregion
-		//#region Container
-		const elementContainer = dialogPopUp.querySelector(`*.container`);
-		if (!(elementContainer instanceof HTMLElement)) {
-			throw new TypeError(`Invalid element: ${elementContainer}`);
-		}
-		const elementContainerClone = dialogPopUpClone.appendChild(/** @type {HTMLElement} */(elementContainer.cloneNode()));
-		//#endregion
-		//#region Footer
-		const elementFooter = dialogPopUp.querySelector(`*.footer`);
-		if (!(elementFooter instanceof HTMLElement)) {
-			throw new TypeError(`Invalid element: ${elementFooter}`);
-		}
-		const elementFooterClone = dialogPopUpClone.appendChild(/** @type {HTMLElement} */(elementFooter.cloneNode()));
-		//#region Button
-		const buttonPrototype = elementFooter.querySelector(`button`);
-		if (!(buttonPrototype instanceof HTMLButtonElement)) {
-			throw new TypeError(`Invalid element: ${buttonPrototype}`);
-		}
-		const buttonPrototypeClone = (/** @type {HTMLButtonElement} */(buttonPrototype.cloneNode()));
-		//#endregion
-		//#region Input
-		const inputPrototype = elementFooter.querySelector(`input`);
-		if (!(inputPrototype instanceof HTMLInputElement)) {
-			throw new TypeError(`Invalid element: ${inputPrototype}`);
-		}
-		const inputPrototypeClone = (/** @type {HTMLInputElement} */(inputPrototype.cloneNode()));
-		//#endregion
-		//#endregion
-		this.#dialogPopUp = dialogPopUpClone;
-		this.#buttonPrototype = buttonPrototypeClone;
-		this.#inputPrototype = inputPrototypeClone;
-		dialogPopUp.remove();
-	}
+	/** @type {HTMLDialogElement} */ #dialogPopUp;
+	/** @type {HTMLButtonElement} */ #buttonPrototype;
+	/** @type {HTMLInputElement} */ #inputPrototype;
+
 	/**
 	 * @param {String} message 
 	 * @param {String} title 
 	 */
-	static async alert(message, title = `Message`) {
+	async alert(message, title = `Message`) {
 		const dialogPopUp = document.body.appendChild(/** @type {HTMLDialogElement} */(this.#dialogPopUp.cloneNode(true)));
 		dialogPopUp.addEventListener(`click`, (event) => {
 			if (event.target == dialogPopUp) {
@@ -140,7 +138,7 @@ class Informant {
 	 * @param {String} message 
 	 * @param {String} title 
 	 */
-	static async confirm(message, title = `Message`) {
+	async confirm(message, title = `Message`) {
 		const dialogPopUp = document.body.appendChild(/** @type {HTMLDialogElement} */(this.#dialogPopUp.cloneNode(true)));
 		dialogPopUp.addEventListener(`click`, (event) => {
 			if (event.target == dialogPopUp) {
@@ -195,7 +193,7 @@ class Informant {
 		buttonDecline.innerText = `Decline`;
 		//#endregion
 		//#endregion
-		const promise = await (/** @type {Promise<Boolean>} */ (new Promise((resolve) => {
+		const promise = await (/** @type {Promise<Boolean>} */(new Promise((resolve) => {
 			dialogPopUp.addEventListener(`close`, (event) => {
 				resolve(false);
 			});
@@ -213,7 +211,7 @@ class Informant {
 	 * @param {String} message 
 	 * @param {String} title 
 	 */
-	static async prompt(message, title = `Message`) {
+	async prompt(message, title = `Message`) {
 		const dialogPopUp = document.body.appendChild(/** @type {HTMLDialogElement} */(this.#dialogPopUp.cloneNode(true)));
 		dialogPopUp.addEventListener(`click`, (event) => {
 			if (event.target == dialogPopUp) {
@@ -266,7 +264,7 @@ class Informant {
 		const inputPrompt = elementFooter.appendChild(/** @type {HTMLInputElement} */(this.#inputPrototype.cloneNode(true)));
 		//#endregion
 		//#endregion
-		const promise = await (/** @type {Promise<String?>} */ (new Promise((resolve) => {
+		const promise = await (/** @type {Promise<String?>} */(new Promise((resolve) => {
 			dialogPopUp.addEventListener(`close`, (event) => {
 				resolve(null);
 			});

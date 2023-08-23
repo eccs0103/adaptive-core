@@ -1,7 +1,7 @@
 // @ts-ignore
 /** @typedef {import("./components/archive.js")} */
 // @ts-ignore
-/** @typedef {import("./components/measures.js")} */
+/** @typedef {import("./components/manager.js")} */
 
 "use strict";
 
@@ -47,4 +47,7 @@ if (!(metaApplicationName instanceof HTMLMetaElement)) {
 const title = metaApplicationName.content;
 
 /** @type {Archive<SettingsNotation>} */ const archiveSettings = new Archive(`${developer}.${title}.Settings`, Settings.export(new Settings()));
+const settings = Settings.import(archiveSettings.data);
+
+const manager = new Manager();
 //#endregion

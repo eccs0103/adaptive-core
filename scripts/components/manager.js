@@ -6,23 +6,26 @@
 "use strict";
 
 class Manager extends Informant {
-	/** @type {ACPanelElement} */ static #panelLoader;
-	static {
+	constructor() {
+		super();
+		
 		const panelLoader = document.querySelector(`ac-panel.loader`);
 		if (!(panelLoader instanceof ACPanelElement)) {
 			throw new TypeError(`Invalid element: ${panelLoader}`);
 		}
 		this.#panelLoader = panelLoader;
 	}
+	/** @type {ACPanelElement} */ #panelLoader;
+
 	/**
 	 * @param {Promise<unknown>} task 
 	 */
-	static async load(task) {
+	async load(task) {
 		this.#panelLoader.open();
 		await task;
 		await this.#panelLoader.close();
 	}
-	static getSearch() {
+	getSearch() {
 		return new Map(window.decodeURI(location.search.replace(/^\??/, ``)).split(`&`).filter(item => item).map((item) => {
 			const [key, value] = item.split(`=`);
 			return [key, value];
@@ -31,7 +34,7 @@ class Manager extends Informant {
 	/**
 	 * @param {File} file 
 	 */
-	static download(file) {
+	download(file) {
 		const aLink = document.createElement(`a`);
 		aLink.download = file.name;
 		aLink.href = URL.createObjectURL(file);
@@ -42,14 +45,14 @@ class Manager extends Informant {
 	/**
 	 * @param {any} error 
 	 */
-	static analysis(error) {
+	analysis(error) {
 		return error instanceof Error ? error.stack ?? `${error.name}: ${error.message}` : `Invalid error type.`;
 	}
-	static #locked = true;
+	#locked = true;
 	/**
 	 * @param {any} error 
 	 */
-	static async prevent(error) {
+	async prevent(error) {
 		const message = this.analysis(error);
 		if (this.#locked) {
 			await this.alert(message, `Error`);
