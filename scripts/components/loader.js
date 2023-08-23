@@ -7,4 +7,4 @@ Manager.load(new Promise((resolve) => {
 	window.addEventListener(`load`, (event) => {
 		resolve(undefined);
 	});
-}))
+}));

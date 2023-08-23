@@ -1,14 +1,38 @@
 "use strict";
 
 class Informant {
-	//#region Definition
-	constructor() {
+	//#region Console
+	/** @type {HTMLDialogElement} */ static #dialogConsole;
+	static {
 		const dialogConsole = document.querySelector(`dialog.console`);
 		if (!(dialogConsole instanceof HTMLDialogElement)) {
 			throw new TypeError(`Invalid element: ${dialogConsole}`);
 		}
-		this.#dialogConsole = dialogConsole;
-
+		Informant.#dialogConsole = dialogConsole;
+	}
+	/**
+	 * @param {Object} [object]
+	 */
+	static log(object) {
+		if (object === undefined && Informant.#dialogConsole.open) {
+			Informant.#dialogConsole.open = false;
+		} else if (object !== undefined && !Informant.#dialogConsole.open) {
+			Informant.#dialogConsole.open = true;
+		}
+		if (object !== undefined && Informant.#dialogConsole.open) {
+			Informant.#dialogConsole.replaceChildren(...Object.entries(object).flat().map((item) => {
+				const span = document.createElement(`span`);
+				span.innerText = item;
+				return span;
+			}));
+		}
+	}
+	//#endregion
+	//#region Pop Up
+	/** @type {HTMLDialogElement} */ static #dialogPopUp;
+	/** @type {HTMLButtonElement} */ static #buttonPrototype;
+	/** @type {HTMLInputElement} */ static #inputPrototype;
+	static {
 		const dialogPopUp = document.querySelector(`dialog.pop-up`);
 		if (!(dialogPopUp instanceof HTMLDialogElement)) {
 			throw new TypeError(`Invalid element: ${dialogPopUp}`);
@@ -20,77 +44,50 @@ class Informant {
 			throw new TypeError(`Invalid element: ${elementHeader}`);
 		}
 		const elementHeaderClone = dialogPopUpClone.appendChild(/** @type {HTMLElement} */(elementHeader.cloneNode()));
-		
+
 		const h3Title = elementHeader.querySelector(`h3`);
 		if (!(h3Title instanceof HTMLHeadingElement)) {
 			throw new TypeError(`Invalid element: ${h3Title}`);
 		}
 		const h3TitleClone = elementHeaderClone.appendChild(/** @type {HTMLHeadingElement} */(h3Title.cloneNode()));
-		
+
 		const elementContainer = dialogPopUp.querySelector(`*.container`);
 		if (!(elementContainer instanceof HTMLElement)) {
 			throw new TypeError(`Invalid element: ${elementContainer}`);
 		}
 		const elementContainerClone = dialogPopUpClone.appendChild(/** @type {HTMLElement} */(elementContainer.cloneNode()));
-		
+
 		const elementFooter = dialogPopUp.querySelector(`*.footer`);
 		if (!(elementFooter instanceof HTMLElement)) {
 			throw new TypeError(`Invalid element: ${elementFooter}`);
 		}
 		const elementFooterClone = dialogPopUpClone.appendChild(/** @type {HTMLElement} */(elementFooter.cloneNode()));
-		
+
 		const buttonPrototype = elementFooter.querySelector(`button`);
 		if (!(buttonPrototype instanceof HTMLButtonElement)) {
 			throw new TypeError(`Invalid element: ${buttonPrototype}`);
 		}
 		const buttonPrototypeClone = (/** @type {HTMLButtonElement} */(buttonPrototype.cloneNode()));
-		
+
 		const inputPrototype = elementFooter.querySelector(`input`);
 		if (!(inputPrototype instanceof HTMLInputElement)) {
 			throw new TypeError(`Invalid element: ${inputPrototype}`);
 		}
 		const inputPrototypeClone = (/** @type {HTMLInputElement} */(inputPrototype.cloneNode()));
-		
-		this.#dialogPopUp = dialogPopUpClone;
-		this.#buttonPrototype = buttonPrototypeClone;
-		this.#inputPrototype = inputPrototypeClone;
+
+		Informant.#dialogPopUp = dialogPopUpClone;
+		Informant.#buttonPrototype = buttonPrototypeClone;
+		Informant.#inputPrototype = inputPrototypeClone;
 		dialogPopUp.remove();
 	}
-	//#endregion
-	//#region Console
-	/** @type {HTMLDialogElement} */ #dialogConsole;
-
-	/**
-	 * @param {Object} [object]
-	 */
-	log(object) {
-		if (object === undefined && this.#dialogConsole.open) {
-			this.#dialogConsole.open = false;
-		} else if (object !== undefined && !this.#dialogConsole.open) {
-			this.#dialogConsole.open = true;
-		}
-		if (object !== undefined && this.#dialogConsole.open) {
-			this.#dialogConsole.replaceChildren(...Object.entries(object).flat().map((item) => {
-				const span = document.createElement(`span`);
-				span.innerText = item;
-				return span;
-			}));
-		}
-	}
-	//#endregion
-	//#region Pop Up
-	/** @type {HTMLDialogElement} */ #dialogPopUp;
-	/** @type {HTMLButtonElement} */ #buttonPrototype;
-	/** @type {HTMLInputElement} */ #inputPrototype;
-
 	/**
 	 * @param {String} message 
 	 * @param {String} title 
 	 */
-	async alert(message, title = `Message`) {
-		const dialogPopUp = document.body.appendChild(/** @type {HTMLDialogElement} */(this.#dialogPopUp.cloneNode(true)));
+	static async alert(message, title = `Message`) {
+		const dialogPopUp = document.body.appendChild(/** @type {HTMLDialogElement} */(Informant.#dialogPopUp.cloneNode(true)));
 		dialogPopUp.addEventListener(`click`, (event) => {
-			if (event.target == dialogPopUp) {
+			if (event.target === dialogPopUp) {
 				dialogPopUp.close();
 			}
 		});
@@ -138,10 +135,10 @@ class Informant {
 	 * @param {String} message 
 	 * @param {String} title 
 	 */
-	async confirm(message, title = `Message`) {
-		const dialogPopUp = document.body.appendChild(/** @type {HTMLDialogElement} */(this.#dialogPopUp.cloneNode(true)));
+	static async confirm(message, title = `Message`) {
+		const dialogPopUp = document.body.appendChild(/** @type {HTMLDialogElement} */(Informant.#dialogPopUp.cloneNode(true)));
 		dialogPopUp.addEventListener(`click`, (event) => {
-			if (event.target == dialogPopUp) {
+			if (event.target === dialogPopUp) {
 				dialogPopUp.close();
 			}
 		});
@@ -183,12 +180,12 @@ class Informant {
 			throw new TypeError(`Invalid element: ${elementFooter}`);
 		}
 		//#region Button Accept
-		const buttonAccept = elementFooter.appendChild(/** @type {HTMLButtonElement} */(this.#buttonPrototype.cloneNode(true)));
+		const buttonAccept = elementFooter.appendChild(/** @type {HTMLButtonElement} */(Informant.#buttonPrototype.cloneNode(true)));
 		buttonAccept.classList.add(`highlight`);
 		buttonAccept.innerText = `Accept`;
 		//#endregion
 		//#region Button Decline
-		const buttonDecline = elementFooter.appendChild(/** @type {HTMLButtonElement} */(this.#buttonPrototype.cloneNode(true)));
+		const buttonDecline = elementFooter.appendChild(/** @type {HTMLButtonElement} */(Informant.#buttonPrototype.cloneNode(true)));
 		buttonDecline.classList.add(`invalid`);
 		buttonDecline.innerText = `Decline`;
 		//#endregion
@@ -211,10 +208,10 @@ class Informant {
 	 * @param {String} message 
 	 * @param {String} title 
 	 */
-	async prompt(message, title = `Message`) {
-		const dialogPopUp = document.body.appendChild(/** @type {HTMLDialogElement} */(this.#dialogPopUp.cloneNode(true)));
+	static async prompt(message, title = `Message`) {
+		const dialogPopUp = document.body.appendChild(/** @type {HTMLDialogElement} */(Informant.#dialogPopUp.cloneNode(true)));
 		dialogPopUp.addEventListener(`click`, (event) => {
-			if (event.target == dialogPopUp) {
+			if (event.target === dialogPopUp) {
 				dialogPopUp.close();
 			}
 		});
@@ -256,12 +253,12 @@ class Informant {
 			throw new TypeError(`Invalid element: ${elementFooter}`);
 		}
 		//#region Button Accept
-		const buttonAccept = elementFooter.appendChild(/** @type {HTMLButtonElement} */(this.#buttonPrototype.cloneNode(true)));
+		const buttonAccept = elementFooter.appendChild(/** @type {HTMLButtonElement} */(Informant.#buttonPrototype.cloneNode(true)));
 		buttonAccept.classList.add(`highlight`);
 		buttonAccept.innerText = `Accept`;
 		//#endregion
 		//#region Button Decline
-		const inputPrompt = elementFooter.appendChild(/** @type {HTMLInputElement} */(this.#inputPrototype.cloneNode(true)));
+		const inputPrompt = elementFooter.appendChild(/** @type {HTMLInputElement} */(Informant.#inputPrototype.cloneNode(true)));
 		//#endregion
 		//#endregion
 		const promise = await (/** @type {Promise<String?>} */(new Promise((resolve) => {

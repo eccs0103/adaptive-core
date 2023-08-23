@@ -6,26 +6,23 @@
 "use strict";
 
 class Manager extends Informant {
-	constructor() {
-		super();
-		
+	/** @type {ACPanelElement} */ static #panelLoader;
+	static {
 		const panelLoader = document.querySelector(`ac-panel.loader`);
 		if (!(panelLoader instanceof ACPanelElement)) {
 			throw new TypeError(`Invalid element: ${panelLoader}`);
 		}
-		this.#panelLoader = panelLoader;
+		Manager.#panelLoader = panelLoader;
 	}
-	/** @type {ACPanelElement} */ #panelLoader;
-
 	/**
 	 * @param {Promise<unknown>} task 
 	 */
-	async load(task) {
-		this.#panelLoader.open();
+	static async load(task) {
+		Manager.#panelLoader.open();
 		await task;
-		await this.#panelLoader.close();
+		await Manager.#panelLoader.close();
 	}
-	getSearch() {
+	static getSearch() {
 		return new Map(window.decodeURI(location.search.replace(/^\??/, ``)).split(`&`).filter(item => item).map((item) => {
 			const [key, value] = item.split(`=`);
 			return [key, value];
@@ -34,7 +31,7 @@ class Manager extends Informant {
 	/**
 	 * @param {File} file 
 	 */
-	download(file) {
+	static download(file) {
 		const aLink = document.createElement(`a`);
 		aLink.download = file.name;
 		aLink.href = URL.createObjectURL(file);
@@ -45,17 +42,17 @@ class Manager extends Informant {
 	/**
 	 * @param {any} error 
 	 */
-	analysis(error) {
+	static analysis(error) {
 		return error instanceof Error ? error.stack ?? `${error.name}: ${error.message}` : `Invalid error type.`;
 	}
-	#locked = true;
+	static #locked = true;
 	/**
 	 * @param {any} error 
 	 */
-	async prevent(error) {
-		const message = this.analysis(error);
-		if (this.#locked) {
-			await this.alert(message, `Error`);
+	static async prevent(error) {
+		const message = Manager.analysis(error);
+		if (Manager.#locked) {
+			await Manager.alert(message, `Error`);
 			location.reload();
 		} else {
 			console.error(message);
