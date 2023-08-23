@@ -27,9 +27,7 @@ class Settings {
 	}
 	reset() {
 		const settings = new Settings();
-		for (const key in settings) {
-			this[key] = settings[key];
-		}
+		// TODO
 	}
 }
 //#endregion

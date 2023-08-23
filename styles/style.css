@@ -240,9 +240,13 @@ dialog.pop-up div.container {
 	word-wrap: break-word;
 }
 
-ac-window {
+ac-panel {
 	position: fixed;
 	inset: 0;
+}
+
+ac-panel:not([open]) {
+	display: none !important;
 }
 
 *.grid-line {

@@ -9,7 +9,7 @@ class ACPanelElement extends HTMLElement {
 		this.#duration = value;
 	}
 	async open() {
-		this.hidden = false;
+		this.toggleAttribute(`open`, true);
 		await this.animate([
 			{ opacity: `0` },
 			{ opacity: `1` },
@@ -20,7 +20,7 @@ class ACPanelElement extends HTMLElement {
 			{ opacity: `0` },
 			{ opacity: `1` },
 		], { duration: this.duration, fill: `both` }).finished;
-		this.hidden = true;
+		this.toggleAttribute(`open`, false);
 	}
 }
 customElements.define(`ac-panel`, ACPanelElement);
