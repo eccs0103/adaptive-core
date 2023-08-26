@@ -4,6 +4,9 @@
 Template for creating adaptive web pages.
 
 ## Feed
+### Update 2.1.0 (26.08.2023)
+- Added a timespan component.
+
 ### Update 2.0.0 (23.08.2023)
 - Modified the default structure (see `./pages/main.html`).
 - Added the `integer` function to the `Random` component.
