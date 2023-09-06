@@ -4,6 +4,9 @@
 Template for creating adaptive web pages.
 
 ## Feed
+### Update 2.1.5 (06.09.2023)
+- Added `templates.js` component.
+
 ### Update 2.1.4 (01.09.2023)
 - Updated the `database.js` component.
 - Added the ability to reset saves via a link.
