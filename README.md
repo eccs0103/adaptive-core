@@ -4,9 +4,15 @@
 Template for creating adaptive web pages.
 
 ## Feed
-### Обновление 2.2.0 (12.09.2023)
-- Изменены стили элемента `code`.
-- Изменени стили интерактивных объектов и объектов которые "притворяются" интерактивным.
+### Update 2.2.2 (19.09.2023)
+- Fixed modifying functions in `Color`.
+- Added frame time to `Engine` (see `delta`).
+- Added numerous functions to classes `Point`, `Point1D`, `Point2D`, `Point3D`, `Vector<T>`.
+- Fixed the `material` theme.
+
+### Update 2.2.0 (12.09.2023)
+- Modified styles of the `code` element.
+- Updated styles of interactive objects and objects that "pretend" to be interactive.
 
 ### Update 2.1.5 (06.09.2023)
 - Added `templates.js` component.

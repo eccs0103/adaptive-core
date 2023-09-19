@@ -132,18 +132,18 @@ body *::placeholder {
 	filter: revert;
 }
 
-input:read-only,
+/* input:read-only,
 textarea:read-only,
 [aria-readonly="true"] {
 	pointer-events: none;
 	transition: var(--time-duration);
-}
+} */
 
-:required,
+/* :required,
 [aria-required="true"] {
 	outline-color: var(--color-warn);
 	outline-style: solid;
-}
+} */
 
 :invalid,
 [aria-required="true"]:empty,
