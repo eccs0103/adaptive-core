@@ -4,6 +4,9 @@
 Template for creating adaptive web pages.
 
 ## Feed
+### Update 2.2.3 (30.09.2023)
+- Updated design of interactive elements.
+
 ### Update 2.2.2 (19.09.2023)
 - Fixed modifying functions in `Color`.
 - Added frame time to `Engine` (see `delta`).
