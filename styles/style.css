@@ -227,7 +227,12 @@ dialog.console {
 	grid-template-columns: repeat(2, auto);
 }
 
-dialog.console *:nth-child(2n) {
+dialog.console *.-key {
+	text-align: left;
+	white-space: pre;
+}
+
+dialog.console *.-value {
 	text-align: right;
 }
 
