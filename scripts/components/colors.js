@@ -102,7 +102,7 @@ class Color {
 	 */
 	static tryParse(source) {
 		let result = null;
-		for (const [format, deep] of Object.values(ColorFormats).flatMap((format) => (/** @type {Array<[String, Boolean]>} */ ([[format, false], [format, true]])))) {
+		for (const [format, deep] of Object.values(ColorFormats).flatMap((format) => (/** @type {[String, Boolean][]} */ ([[format, false], [format, true]])))) {
 			try {
 				result = Color.parse(source, format, deep);
 				break;

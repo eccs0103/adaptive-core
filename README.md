@@ -4,6 +4,9 @@
 Template for creating adaptive web pages.
 
 ## Feed
+### Update 2.2.5 (14.10.2023)
+- Updated modules.
+
 ### Update 2.2.4 (07.10.2023)
 - Updated console.
 

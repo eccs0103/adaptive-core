@@ -6,38 +6,39 @@ class Engine extends EventTarget {
 	 */
 	constructor(launch = false) {
 		super();
-		const $this = this;
 		let previous = 0;
-		requestAnimationFrame(function callback(time) {
+		const controller = new AbortController();
+		this.addEventListener(`render`, (event) => {
+			if (this.time !== 0) {
+				this.dispatchEvent(new Event(`initialize`));
+				controller.abort();
+			}
+		}, { signal: controller.signal });
+		/**
+		 * @param {DOMHighResTimeStamp} time 
+		 */
+		const callback = (time) => {
 			let current = time;
 			const difference = current - previous;
-			const differenceLimit = 1000 / $this.#FPSLimit;
+			const differenceLimit = 1000 / this.#FPSLimit;
 			if (difference > differenceLimit) {
-				if ($this.launched) {
-					$this.#time += difference;
-					$this.#FPS = 1000 / difference;
-					$this.dispatchEvent(new Event(`render`));
+				if (this.launched) {
+					this.#time += difference;
+					this.#FPS = 1000 / difference;
+					if (this.time !== 0) {
+						this.dispatchEvent(new Event(`render`));
+					}
 				}
 				previous = current;
 			}
 			requestAnimationFrame(callback);
-		});
-
+		};
+		requestAnimationFrame(callback);
 		this.launched = launch;
 	}
 	/** @type {DOMHighResTimeStamp} */ #time = 0;
 	/** @readonly */ get time() {
 		return this.#time;
-	}
-	/** @type {Number} */ #FPSLimit = Infinity;
-	get FPSLimit() {
-		return this.#FPSLimit;
-	}
-	set FPSLimit(value) {
-		if (value <= 0) {
-			throw new RangeError(`FPS limit must be higher then 0.`);
-		}
-		this.#FPSLimit = value;
 	}
 	/** @type {Number} */ #FPS = 0;
 	/** @readonly */ get FPS() {
@@ -51,28 +52,28 @@ class Engine extends EventTarget {
 		return this.#launched;
 	}
 	set launched(value) {
+		if (this.#launched !== value) {
+			this.dispatchEvent(new Event(`change`));
+		}
 		this.#launched = value;
-		this.dispatchEvent(new Event(`launch`));
+		if (this.#launched) {
+			this.dispatchEvent(new Event(`launch`));
+		}
+	}
+	/** @type {Number} */ #FPSLimit = Infinity;
+	get FPSLimit() {
+		return this.#FPSLimit;
+	}
+	set FPSLimit(value) {
+		if (value <= 0) {
+			throw new RangeError(`FPS limit must be higher then 0.`);
+		}
+		this.#FPSLimit = value;
 	}
 	/**
-	 * @param {Number} period time in miliseconds
-	 * @returns multiplier - [0, 1]
+	 * @param {Number} period 
 	 */
-	impulse(period) {
+	factor(period) {
 		return this.time % period / period;
-	}
-	/**
-	 * @param {Number} period time in miliseconds
-	 * @returns multiplier - [-1, 1]
-	 */
-	pulse(period) {
-		return Math.sin(this.impulse(period) * 2 * Math.PI);
-	}
-	/**
-	 * @param {Number} period time in miliseconds
-	 * @returns multiplier - [0, 1]
-	 */
-	bounce(period) {
-		return Math.abs(this.pulse(period));
 	}
 }

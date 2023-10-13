@@ -19,7 +19,7 @@ class Random {
 	}
 	/**
 	 * @template T 
-	 * @param {Array<T>} array 
+	 * @param {T[]} array 
 	 */
 	static item(array) {
 		return array[Random.integer(0, array.length)];

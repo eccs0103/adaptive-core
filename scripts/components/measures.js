@@ -9,12 +9,12 @@ class Point {
 		return result;
 	}
 	/**
-	 * @param  {Array<Number>} metrics 
+	 * @param  {Number[]} metrics 
 	 */
 	constructor(...metrics) {
 		this.metrics.push(...metrics);
 	}
-	/** @type {Array<Number>} */ #metrics = [];
+	/** @type {Number[]} */ #metrics = [];
 	/** @readonly */ get metrics() {
 		return this.#metrics;
 	}
@@ -46,7 +46,7 @@ class Point {
 		return `(${this.#metrics.map(metric => metric.toString(radix)).join(`, `)})`;
 	}
 	/**
-	 * @param {String | Array<String>} [locales] 
+	 * @param {String | String[]} [locales] 
 	 * @param {Intl.NumberFormatOptions} [options] 
 	 */
 	toLocaleString(locales, options) {
@@ -264,7 +264,7 @@ class Vector {
 		return `${this.begin.toString(radix)} => ${this.end.toString(radix)}`;
 	}
 	/**
-	 * @param {String | Array<String>} [locales] 
+	 * @param {String | String[]} [locales] 
 	 * @param {Intl.NumberFormatOptions} [options] 
 	 */
 	toLocaleString(locales, options) {
