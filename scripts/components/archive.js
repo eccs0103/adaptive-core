@@ -6,12 +6,12 @@
 class Archive {
 	/**
 	 * @param {String} key 
-	 * @param {T} [initial] 
+	 * @param {T} initial
 	 */
 	constructor(key, initial) {
 		this.#key = key;
 		if (localStorage.getItem(this.#key) === null) {
-			localStorage.setItem(this.#key, JSON.stringify((initial === undefined ? `` : initial), undefined, `\t`));
+			this.data = initial;
 		}
 	}
 	/** @type {String} */ #key;

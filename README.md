@@ -4,6 +4,10 @@
 Template for creating adaptive web pages.
 
 ## Feed
+### Update 2.2.6 (15.10.2023)
+- Updated modules.
+- Added the `Texture` class.
+
 ### Update 2.2.5 (14.10.2023)
 - Updated modules.
 

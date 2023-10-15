@@ -65,12 +65,12 @@ class Point1D extends Point {
 	/**
 	 * @param {Point1D} source 
 	 */
-	static toBaseVector(source) {
+	static toBaseSegment(source) {
 		const zero = source.clone();
 		for (let index = 0; index < zero.metrics.length; index++) {
 			zero.metrics[index] = 0;
 		}
-		const result = new Vector(zero, source.clone());
+		const result = new Segment(zero, source.clone());
 		return result;
 	}
 	/**
@@ -89,8 +89,8 @@ class Point1D extends Point {
 	clone() {
 		return Point1D.clone(this);
 	}
-	toBaseVector() {
-		return Point1D.toBaseVector(this);
+	toBaseSegment() {
+		return Point1D.toBaseSegment(this);
 	}
 }
 
@@ -105,12 +105,12 @@ class Point2D extends Point1D {
 	/**
 	 * @param {Point2D} source 
 	 */
-	static toBaseVector(source) {
+	static toBaseSegment(source) {
 		const zero = source.clone();
 		for (let index = 0; index < zero.metrics.length; index++) {
 			zero.metrics[index] = 0;
 		}
-		const result = new Vector(zero, source.clone());
+		const result = new Segment(zero, source.clone());
 		return result;
 	}
 	/**
@@ -130,8 +130,8 @@ class Point2D extends Point1D {
 	clone() {
 		return Point2D.clone(this);
 	}
-	toBaseVector() {
-		return Point2D.toBaseVector(this);
+	toBaseSegment() {
+		return Point2D.toBaseSegment(this);
 	}
 }
 
@@ -146,12 +146,12 @@ class Point3D extends Point2D {
 	/**
 	 * @param {Point3D} source 
 	 */
-	static toBaseVector(source) {
+	static toBaseSegment(source) {
 		const zero = source.clone();
 		for (let index = 0; index < zero.metrics.length; index++) {
 			zero.metrics[index] = 0;
 		}
-		const result = new Vector(zero, source.clone());
+		const result = new Segment(zero, source.clone());
 		return result;
 	}
 	/**
@@ -172,26 +172,26 @@ class Point3D extends Point2D {
 	clone() {
 		return Point3D.clone(this);
 	}
-	toBaseVector() {
-		return Point3D.toBaseVector(this);
+	toBaseSegment() {
+		return Point3D.toBaseSegment(this);
 	}
 }
 
 /**
  * @template {Point1D} T
  */
-class Vector {
+class Segment {
 	/**
 	 * @template {Point1D} T
-	 * @param {Vector<T>} source 
+	 * @param {Segment<T>} source 
 	 */
 	static clone(source) {
-		const result = new Vector(source.begin, source.end);
+		const result = new Segment(source.begin, source.end);
 		return result;
 	}
 	/**
 	 * @template {Point1D} T
-	 * @param {Vector<T>} source 
+	 * @param {Segment<T>} source 
 	 */
 	static toBasePoint(source) {
 		const result = source.end.clone();
@@ -231,13 +231,13 @@ class Vector {
 		this.#end = value;
 	}
 	clone() {
-		return Vector.clone(this);
+		return Segment.clone(this);
 	}
 	getLength() {
-		return Vector.getDistanceBetween(this.begin, this.end);
+		return Segment.getDistanceBetween(this.begin, this.end);
 	}
 	toBasePoint() {
-		return Vector.toBasePoint(this);
+		return Segment.toBasePoint(this);
 	}
 	/**
 	 * @param {Number} [digits] 
