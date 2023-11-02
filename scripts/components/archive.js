@@ -18,7 +18,7 @@ class Archive {
 	get data() {
 		const item = localStorage.getItem(this.#key);
 		if (item === null) {
-			throw new ReferenceError(`Key '${this.#key}' isn't defined.`);
+			throw new ReferenceError(`Key '${this.#key}' isn't defined`);
 		}
 		return (/** @type {T} */ (JSON.parse(item)));
 	}

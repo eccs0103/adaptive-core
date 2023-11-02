@@ -1,5 +1,5 @@
 // @ts-ignore
-/** @typedef {import("./engine.js")} */
+/** @typedef {import("../engine.js")} */
 
 "use strict";
 

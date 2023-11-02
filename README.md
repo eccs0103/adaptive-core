@@ -4,6 +4,10 @@
 Template for creating adaptive web pages.
 
 ## Feed
+### Update 2.3.0 (03.11.2023)
+- Updated components.
+- Components `informant.js`, `manager.js`, and `loader.js` have been consolidated into `extensions.js`.
+
 ### Update 2.2.6 (15.10.2023)
 - Updated modules.
 - Added the `Texture` class.

@@ -2,3 +2,15 @@ body {
 	position: fixed;
 	inset: 0;
 }
+
+body * {
+	position: relative;
+	/* inset: 0; */
+	/* width: 100%; */
+	/* height: 100%; */
+}
+
+div.a {
+	top: 30px;
+	width: 50%;
+}

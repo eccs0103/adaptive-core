@@ -39,6 +39,6 @@ class Random {
 			}
 			begin = end;
 		}
-		throw new ReferenceError(`Can't select value. Maybe stack is empty.`);
+		throw new ReferenceError(`Can't select value. Maybe list is empty.`);
 	}
 }
