@@ -9,7 +9,7 @@ interface Document {
 	getElement<T extends typeof HTMLElement>(type: T, selectors: string, parent?: ParentNode): InstanceType<T>;
 	// log(...data: any[]): void;
 	analysis(error: any): string;
-	prevent(message: string, locked?: number): Promise<void>;
+	prevent(message: string, locked?: boolean): Promise<void>;
 }
 
 interface Navigator {
