@@ -92,7 +92,7 @@ Document.prototype.analysis = function (error) {
 // @ts-ignore
 Document.prototype.prevent = async function (message, locked = true) {
 	if (locked) {
-		// await Manager.alert(message, `Error`);
+		await window.alertAsync(message, `Error`);
 		location.reload();
 	} else {
 		console.error(message);
