@@ -1,7 +1,7 @@
 interface Window {
-	// alertAsync(message: string, title?: string): Promise<void>;
-	// confirmAsync(message: string, title?: string): Promise<boolean>;
-	// promptAsync(message: string, title?: string): Promise<string | null>;
+	alertAsync(message: string, title?: string): Promise<void>;
+	confirmAsync(message: string, title?: string): Promise<boolean>;
+	promptAsync(message: string, title?: string): Promise<string | null>;
 	load<T>(promise: Promise<T>, duration?: number, delay?: number): Promise<T>;
 }
 

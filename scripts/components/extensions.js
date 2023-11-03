@@ -4,32 +4,32 @@
 "use strict";
 
 //#region Window
-// /**
-//  * @param {String} message 
-//  * @param {String} title
-//  */
-// // @ts-ignore
-// Window.prototype.alertAsync = function (message, title = `Message`) {
-// 	return;
-// };
+/**
+ * @param {String} message 
+ * @param {String} title
+ */
+// @ts-ignore
+Window.prototype.alertAsync = function (message, title = `Message`) {
+	return Promise.resolve(this.alert(message));
+};
 
-// /**
-//  * @param {String} message 
-//  * @param {String} title
-//  */
-// // @ts-ignore
-// Window.prototype.confirmAsync = function (message, title = `Message`) {
-// 	return;
-// };
+/**
+ * @param {String} message 
+ * @param {String} title
+ */
+// @ts-ignore
+Window.prototype.confirmAsync = function (message, title = `Message`) {
+	return Promise.resolve(this.confirm(message));
+};
 
-// /**
-//  * @param {String} message 
-//  * @param {String} title
-//  */
-// // @ts-ignore
-// Window.prototype.promptAsync = function (message, title = `Message`) {
-// 	return;
-// };
+/**
+ * @param {String} message 
+ * @param {String} title
+ */
+// @ts-ignore
+Window.prototype.promptAsync = function (message, title = `Message`) {
+	return Promise.resolve(this.prompt(message));
+};
 
 /**
  * @template T
