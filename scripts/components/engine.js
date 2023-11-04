@@ -70,10 +70,4 @@ class Engine extends EventTarget {
 		}
 		this.#FPSLimit = value;
 	}
-	/**
-	 * @param {Number} period 
-	 */
-	factor(period) {
-		return this.time % period / period;
-	}
 }

@@ -1,3 +1,14 @@
+interface Math {
+	/**
+	 * @returns [0 - 1)
+	 */
+	toFactor(value: number, period: number): number;
+	/**
+	 * @returns [-1 - 1)
+	 */
+	toSignedFactor(value: number, period: number): number;
+}
+
 interface Window {
 	alertAsync(message: string, title?: string): Promise<void>;
 	confirmAsync(message: string, title?: string): Promise<boolean>;

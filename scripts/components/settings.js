@@ -9,14 +9,14 @@ class SettingsProgenitor {
 	 * @returns {SettingsProgenitor}
 	 */
 	static import(source) {
-		throw new ReferenceError("Not implemented function");
+		throw new ReferenceError(`Not implemented function`);
 	}
 	/**
 	 * @param {SettingsProgenitor} source 
 	 * @returns {any}
 	 */
 	static export(source) {
-		throw new ReferenceError("Not implemented function");
+		throw new ReferenceError(`Not implemented function`);
 	}
 }
 
@@ -30,7 +30,7 @@ class SettingsContainer {
 	 */
 	constructor(prototype, path) {
 		this.#prototype = prototype;
-		const archive = new Archive(path, prototype.export(new this.#prototype()));
+		const archive = new Archive(path, prototype.export(Reflect.construct(this.#prototype, [])));
 		//
 		const object = prototype.import(archive.data);
 		if (!(object instanceof prototype)) {
@@ -47,6 +47,6 @@ class SettingsContainer {
 		return this.#content;
 	}
 	reset() {
-		this.#content = (/** @type {InstanceType<T>} */ (new this.#prototype()));
+		this.#content = (/** @type {InstanceType<T>} */ (Reflect.construct(this.#prototype, [])));
 	}
 }

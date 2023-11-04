@@ -3,6 +3,27 @@
 
 "use strict";
 
+//#region Math
+/**
+ * @param {Number} value 
+ * @param {Number} period 
+ * @returns [0 - 1)
+ */
+// @ts-ignore
+Math.toFactor = function (value, period) {
+	return value % period / period;
+};
+
+/**
+ * @param {Number} value 
+ * @param {Number} period 
+ * @returns [-1 - 1)
+ */
+// @ts-ignore
+Math.toSignedFactor = function (value, period) {
+	return value % period / (period / 2) - 1;
+};
+//#endregion
 //#region Window
 /**
  * @param {String} message 
