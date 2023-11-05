@@ -71,3 +71,5 @@ class Engine extends EventTarget {
 		this.#FPSLimit = value;
 	}
 }
+
+export { Engine };

@@ -4,9 +4,11 @@
 Template for creating adaptive web pages.
 
 ## Feed
-### Update 2.3.0 (03.11.2023)
-- Updated components.
+### Update 2.3.2 (05.11.2023)
+- Global module work.
 - Components `informant.js`, `manager.js`, and `loader.js` have been consolidated into `extensions.js`.
+- Component `templates.js` has been split into a directory at `/scripts/modules/templates/`.
+- The core has been adapted for imports and exports.
 
 ### Update 2.2.6 (15.10.2023)
 - Updated modules.

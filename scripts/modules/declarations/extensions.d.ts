@@ -1,11 +1,5 @@
 interface Math {
-	/**
-	 * @returns [0 - 1)
-	 */
 	toFactor(value: number, period: number): number;
-	/**
-	 * @returns [-1 - 1)
-	 */
 	toSignedFactor(value: number, period: number): number;
 }
 
@@ -16,8 +10,12 @@ interface Window {
 	load<T>(promise: Promise<T>, duration?: number, delay?: number): Promise<T>;
 }
 
+interface HTMLElement {
+	getElement<T extends typeof HTMLElement>(type: T, selectors: string): InstanceType<T>;
+}
+
 interface Document {
-	getElement<T extends typeof HTMLElement>(type: T, selectors: string, parent?: ParentNode): InstanceType<T>;
+	getElement<T extends typeof HTMLElement>(type: T, selectors: string): InstanceType<T>;
 	// log(...data: any[]): void;
 	analysis(error: any): string;
 	prevent(message: string, locked?: boolean): Promise<void>;

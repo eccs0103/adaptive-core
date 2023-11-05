@@ -42,3 +42,5 @@ class Random {
 		throw new ReferenceError(`Can't select value. Maybe list is empty.`);
 	}
 }
+
+export { Random };

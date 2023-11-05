@@ -32,3 +32,5 @@ class Archive {
 		this.data = action(this.data);
 	}
 }
+
+export { Archive };

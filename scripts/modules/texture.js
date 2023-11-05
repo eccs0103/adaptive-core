@@ -1,9 +1,7 @@
-// @ts-ignore
-/** @typedef {import("./measures.js")} */
-// @ts-ignore
-/** @typedef {import("./colors.js")} */
-
 "use strict";
+
+import { Point2D } from "./measures.js";
+import { Color } from "./colors.js";
 
 class Texture {
 	//#region Converters
@@ -265,4 +263,6 @@ class Texture {
 		return Texture.pass(this, scale);
 	}
 	//#endregion
-}
+};
+
+export { Texture };

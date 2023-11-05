@@ -85,3 +85,5 @@ class Locker extends Database {
 		await super.set(this.#key, value);
 	}
 }
+
+export { Database, Locker };

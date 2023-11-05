@@ -253,3 +253,5 @@ class Timespan {
 	}
 	//#endregion
 }
+
+export { Timespan };

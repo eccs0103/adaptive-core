@@ -1,9 +1,7 @@
-// @ts-ignore
-/** @typedef {import("./components/settings.js")} */
-// @ts-ignore
-/** @typedef {import("./components/extensions.js")} */
-
 "use strict";
+
+import { NotationProgenitor, NotationContainer } from "./modules/notation.js";
+import { } from "./modules/extensions.js";
 
 //#region Metadata
 const developer = document.getElement(HTMLMetaElement, `meta[name="author"]`).content;

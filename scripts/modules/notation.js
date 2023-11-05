@@ -1,18 +1,17 @@
-// @ts-ignore
-/** @typedef {import("./archive.js")} */
-
 "use strict";
 
-class SettingsProgenitor {
+import { Archive } from "./archive.js";
+
+class NotationProgenitor {
 	/**
 	 * @param {any} source 
-	 * @returns {SettingsProgenitor}
+	 * @returns {NotationProgenitor}
 	 */
 	static import(source) {
 		throw new ReferenceError(`Not implemented function`);
 	}
 	/**
-	 * @param {SettingsProgenitor} source 
+	 * @param {NotationProgenitor} source 
 	 * @returns {any}
 	 */
 	static export(source) {
@@ -21,9 +20,9 @@ class SettingsProgenitor {
 }
 
 /**
- * @template {typeof SettingsProgenitor} T
+ * @template {typeof NotationProgenitor} T
  */
-class SettingsContainer {
+class NotationContainer {
 	/**
 	 * @param {T} prototype 
 	 * @param {String} path 
@@ -50,3 +49,5 @@ class SettingsContainer {
 		this.#content = (/** @type {InstanceType<T>} */ (Reflect.construct(this.#prototype, [])));
 	}
 }
+
+export { NotationProgenitor, NotationContainer };

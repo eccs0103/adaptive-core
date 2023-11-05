@@ -271,3 +271,5 @@ class Segment {
 		return `${this.begin.toLocaleString(locales, options)} => ${this.end.toLocaleString(locales, options)}`;
 	}
 }
+
+export { Point, Point1D, Point2D, Point3D, Segment };

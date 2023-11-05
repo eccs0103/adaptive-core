@@ -1,7 +1,6 @@
-// @ts-ignore
-/** @typedef {import("./engine.js")} */
-
 "use strict";
+
+import { Engine } from "./engine.js";
 
 /**
  * @template {RenderingContext} T
@@ -29,3 +28,5 @@ class Display extends Engine {
 	}
 	/** @type {RenderingContext} */ #context;
 }
+
+export { Display };
