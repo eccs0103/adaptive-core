@@ -1,12 +1,14 @@
 "use strict";
 
+//#region Color formats
 /** @enum {String} */ const ColorFormats = {
 	/** @readonly */ RGB: `RGB`,
 	/** @readonly */ HSL: `HSL`,
 	/** @readonly */ HEX: `HEX`,
 };
 Object.freeze(ColorFormats);
-
+//#endregion
+//#region Color
 class Color {
 	//#region Converters
 	/**
@@ -414,5 +416,9 @@ class Color {
 	}
 	//#endregion
 }
+//#endregion
 
-export { ColorFormats, Color };
+export {
+	ColorFormats,
+	Color
+};

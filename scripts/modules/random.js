@@ -1,5 +1,6 @@
 "use strict";
 
+//#region Random
 class Random {
 	/**
 	 * @param {Number} min 
@@ -42,5 +43,8 @@ class Random {
 		throw new ReferenceError(`Can't select value. Maybe list is empty.`);
 	}
 }
+//#endregion
 
-export { Random };
+export {
+	Random
+};

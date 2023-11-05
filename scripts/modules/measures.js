@@ -1,5 +1,6 @@
 "use strict";
 
+//#region Point
 class Point {
 	/**
 	 * @param {Point} source 
@@ -53,7 +54,8 @@ class Point {
 		return `(${this.#metrics.map(metric => metric.toLocaleString(locales, options)).join(`, `)})`;
 	}
 }
-
+//#endregion
+//#region Point 1D
 class Point1D extends Point {
 	/**
 	 * @param {Point1D} source 
@@ -93,7 +95,8 @@ class Point1D extends Point {
 		return Point1D.toBaseSegment(this);
 	}
 }
-
+//#endregion
+//#region Point 2D
 class Point2D extends Point1D {
 	/**
 	 * @param {Point2D} source 
@@ -134,7 +137,8 @@ class Point2D extends Point1D {
 		return Point2D.toBaseSegment(this);
 	}
 }
-
+//#endregion
+//#region Point 3D
 class Point3D extends Point2D {
 	/**
 	 * @param {Point3D} source 
@@ -176,7 +180,8 @@ class Point3D extends Point2D {
 		return Point3D.toBaseSegment(this);
 	}
 }
-
+//#endregion
+//#region Segment
 /**
  * @template {Point1D} T
  */
@@ -271,5 +276,12 @@ class Segment {
 		return `${this.begin.toLocaleString(locales, options)} => ${this.end.toLocaleString(locales, options)}`;
 	}
 }
+//#endregion
 
-export { Point, Point1D, Point2D, Point3D, Segment };
+export {
+	Point,
+	Point1D,
+	Point2D,
+	Point3D,
+	Segment
+};

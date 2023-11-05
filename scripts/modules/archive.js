@@ -1,5 +1,6 @@
 "use strict";
 
+//#region Archive
 /**
  * @template T 
  */
@@ -32,5 +33,8 @@ class Archive {
 		this.data = action(this.data);
 	}
 }
+//#endregion
 
-export { Archive };
+export {
+	Archive
+};

@@ -1,8 +1,13 @@
 "use strict";
 
-import { Point2D } from "./measures.js";
-import { Color } from "./colors.js";
+import {
+	Point2D
+} from "./measures.js";
+import {
+	Color
+} from "./colors.js";
 
+//#region Texture
 class Texture {
 	//#region Converters
 	/**
@@ -264,5 +269,8 @@ class Texture {
 	}
 	//#endregion
 };
+//#endregion
 
-export { Texture };
+export {
+	Texture
+};

@@ -1,5 +1,6 @@
 "use strict";
 
+//#region Timespan
 class Timespan {
 	//#region Converters
 	/**
@@ -253,5 +254,8 @@ class Timespan {
 	}
 	//#endregion
 }
+//#endregion
 
-export { Timespan };
+export {
+	Timespan
+};

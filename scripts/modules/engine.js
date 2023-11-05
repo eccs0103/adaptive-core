@@ -1,5 +1,6 @@
 "use strict";
 
+//#region Engine
 class Engine extends EventTarget {
 	/**
 	 * @param {Boolean} launch
@@ -71,5 +72,8 @@ class Engine extends EventTarget {
 		this.#FPSLimit = value;
 	}
 }
+//#endregion
 
-export { Engine };
+export {
+	Engine
+};

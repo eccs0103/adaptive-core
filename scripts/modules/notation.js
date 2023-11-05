@@ -1,7 +1,10 @@
 "use strict";
 
-import { Archive } from "./archive.js";
+import {
+	Archive
+} from "./archive.js";
 
+//#region Notation progenitor
 class NotationProgenitor {
 	/**
 	 * @param {any} source 
@@ -18,7 +21,8 @@ class NotationProgenitor {
 		throw new ReferenceError(`Not implemented function`);
 	}
 }
-
+//#endregion
+//#region Notation container
 /**
  * @template {typeof NotationProgenitor} T
  */
@@ -49,5 +53,9 @@ class NotationContainer {
 		this.#content = (/** @type {InstanceType<T>} */ (Reflect.construct(this.#prototype, [])));
 	}
 }
+//#endregion
 
-export { NotationProgenitor, NotationContainer };
+export {
+	NotationProgenitor,
+	NotationContainer
+};

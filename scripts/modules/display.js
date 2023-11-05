@@ -1,7 +1,10 @@
 "use strict";
 
-import { Engine } from "./engine.js";
+import {
+	Engine
+} from "./engine.js";
 
+//#region Display
 /**
  * @template {RenderingContext} T
  */
@@ -28,5 +31,8 @@ class Display extends Engine {
 	}
 	/** @type {RenderingContext} */ #context;
 }
+//#endregion
 
-export { Display };
+export {
+	Display
+};
