@@ -1,6 +1,8 @@
 "use strict";
 
-import { } from "./structure.js";
+import {
+
+} from "./structure.js";
 
 void async function () {
 	try {
