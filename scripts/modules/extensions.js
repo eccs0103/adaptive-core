@@ -237,17 +237,16 @@ Document.prototype.getElement = function (type, selectors) {
 /**
  * @param {any} error 
  */
-// @ts-ignore
 Document.prototype.analysis = function (error) {
-	return error instanceof Error ? error.stack ?? `${error.name}: ${error.message}` : `Invalid error type.`;
+	return error instanceof Error ? error : new Error(`Undefined error type`);
 };
 
 /**
- * @param {String} message 
+ * @param {Error} error 
  * @param {Boolean} locked
  */
-// @ts-ignore
-Document.prototype.prevent = async function (message, locked = true) {
+Document.prototype.prevent = async function (error, locked = true) {
+	const message = error.stack ?? `${error.name}: ${error.message}`;
 	if (locked) {
 		await window.alertAsync(message, `Error`);
 		location.reload();

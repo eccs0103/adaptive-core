@@ -17,8 +17,8 @@ interface HTMLElement {
 interface Document {
 	getElement<T extends typeof HTMLElement>(type: T, selectors: string): InstanceType<T>;
 	// log(...data: any[]): void;
-	analysis(error: any): string;
-	prevent(message: string, locked?: boolean): Promise<void>;
+	analysis(error: any): Error;
+	prevent(message: Error, locked?: boolean): Promise<void>;
 }
 
 interface Navigator {
