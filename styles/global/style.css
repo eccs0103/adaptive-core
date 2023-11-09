@@ -140,25 +140,25 @@ body {
 	cursor: text;
 }
 
-*[contenteditable="true"]:empty::before {
+*[contenteditable]:empty::before {
 	content: attr(aria-placeholder);
 }
 
 *::placeholder,
-*[contenteditable="true"]:empty::before {
+*[contenteditable]:empty::before {
 	font-weight: normal;
 }
 
-*[contenteditable="true"].single-line {
+*[contenteditable=].single-line {
 	white-space: nowrap;
 	overflow: hidden;
 }
 
-*[contenteditable="true"].single-line br {
+*[contenteditable].single-line br {
 	display: none;
 }
 
-*[contenteditable="true"].single-line * {
+*[contenteditable].single-line * {
 	display: inline;
 	white-space: nowrap;
 }
