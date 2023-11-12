@@ -23,63 +23,21 @@ Math.toSignedFactor = function (value, period) {
 };
 //#endregion
 //#region Window
-/**
- * @param {String} message 
- * @param {String} title
- */
-Window.prototype.alertAsync = async function (message, title = `Message`) {
-	const dialogPopUp = this.document.getElement(HTMLDialogElement, `dialog.pop-up.alert`);
-	dialogPopUp.addEventListener(`click`, (event) => {
-		if (event.target === dialogPopUp) {
-			dialogPopUp.close();
-		}
-	});
-	dialogPopUp.showModal();
-	//#region Header
-	const htmlHeader = dialogPopUp.getElement(HTMLElement, `*.header`);
-	//#region Title
-	const h3Title = htmlHeader.getElement(HTMLHeadingElement, `h3`);
-	switch (title) {
-		case `Error`: {
-			h3Title.classList.add(`invalid`);
-		} break;
-		case `Warning`: {
-			h3Title.classList.add(`warn`);
-		} break;
-		default: {
-			h3Title.classList.add(`highlight`);
-		} break;
+const dialogAlert = document.getElement(HTMLDialogElement, `dialog.pop-up.alert`);
+dialogAlert.addEventListener(`click`, (event) => {
+	if (event.target === dialogAlert) {
+		dialogAlert.close();
 	}
-	h3Title.innerText = title;
-	//#endregion
-	//#endregion
-	//#region Container
-	const htmlContainer = dialogPopUp.getElement(HTMLElement, `*.container`);
-	htmlContainer.innerText = message;
-	//#endregion
-	const promise = await ( /** @type {Promise<void>} */(new Promise((resolve) => {
-		dialogPopUp.addEventListener(`close`, (event) => {
-			resolve();
-		});
-	})));
-	dialogPopUp.remove();
-	return promise;
-};
+});
 
 /**
  * @param {String} message 
  * @param {String} title
  */
-Window.prototype.confirmAsync = async function (message, title = `Message`) {
-	const dialogPopUp = this.document.getElement(HTMLDialogElement, `dialog.pop-up.confirm`);
-	dialogPopUp.addEventListener(`click`, (event) => {
-		if (event.target === dialogPopUp) {
-			dialogPopUp.close();
-		}
-	});
-	dialogPopUp.showModal();
+Window.prototype.alertAsync = function (message, title = `Message`) {
+	dialogAlert.showModal();
 	//#region Header
-	const htmlHeader = dialogPopUp.getElement(HTMLElement, `*.header`);
+	const htmlHeader = dialogAlert.getElement(HTMLElement, `*.header`);
 	//#region Title
 	const h3Title = htmlHeader.getElement(HTMLHeadingElement, `h3`);
 	switch (title) {
@@ -97,11 +55,56 @@ Window.prototype.confirmAsync = async function (message, title = `Message`) {
 	//#endregion
 	//#endregion
 	//#region Container
-	const htmlContainer = dialogPopUp.getElement(HTMLElement, `*.container`);
+	const htmlContainer = dialogAlert.getElement(HTMLElement, `*.container`);
+	htmlContainer.innerText = message;
+	//#endregion
+	const controller = new AbortController();
+	const promise = ( /** @type {Promise<void>} */(new Promise((resolve) => {
+		dialogAlert.addEventListener(`close`, (event) => {
+			resolve();
+		}, { signal: controller.signal });
+	})));
+	promise.then(controller.abort, controller.abort);
+	return promise;
+};
+
+const dialogConfirm = document.getElement(HTMLDialogElement, `dialog.pop-up.confirm`);
+dialogConfirm.addEventListener(`click`, (event) => {
+	if (event.target === dialogConfirm) {
+		dialogConfirm.close();
+	}
+});
+
+/**
+ * @param {String} message 
+ * @param {String} title
+ */
+Window.prototype.confirmAsync = function (message, title = `Message`) {
+	dialogConfirm.showModal();
+	//#region Header
+	const htmlHeader = dialogConfirm.getElement(HTMLElement, `*.header`);
+	//#region Title
+	const h3Title = htmlHeader.getElement(HTMLHeadingElement, `h3`);
+	switch (title) {
+		case `Error`: {
+			h3Title.classList.add(`invalid`);
+		} break;
+		case `Warning`: {
+			h3Title.classList.add(`warn`);
+		} break;
+		default: {
+			h3Title.classList.add(`highlight`);
+		} break;
+	}
+	h3Title.innerText = title;
+	//#endregion
+	//#endregion
+	//#region Container
+	const htmlContainer = dialogConfirm.getElement(HTMLElement, `*.container`);
 	htmlContainer.innerText = message;
 	//#endregion
 	//#region Footer
-	const htmlFooter = dialogPopUp.getElement(HTMLElement, `*.footer`);
+	const htmlFooter = dialogConfirm.getElement(HTMLElement, `*.footer`);
 	//#region Button Accept
 	const buttonAccept = htmlFooter.getElement(HTMLButtonElement, `button.highlight`);
 	//#endregion
@@ -109,35 +112,37 @@ Window.prototype.confirmAsync = async function (message, title = `Message`) {
 	const buttonDecline = htmlFooter.getElement(HTMLButtonElement, `button.invalid`);
 	//#endregion
 	//#endregion
-	const promise = await (/** @type {Promise<Boolean>} */(new Promise((resolve) => {
-		dialogPopUp.addEventListener(`close`, (event) => {
+	const controller = new AbortController();
+	const promise = (/** @type {Promise<Boolean>} */(new Promise((resolve) => {
+		dialogConfirm.addEventListener(`close`, (event) => {
 			resolve(false);
-		});
+		}, { signal: controller.signal });
 		buttonAccept.addEventListener(`click`, (event) => {
 			resolve(true);
-		});
+		}, { signal: controller.signal });
 		buttonDecline.addEventListener(`click`, (event) => {
 			resolve(false);
-		});
+		}, { signal: controller.signal });
 	})));
-	dialogPopUp.remove();
+	promise.then(controller.abort, controller.abort);
 	return promise;
 };
+
+const dialogPrompt = document.getElement(HTMLDialogElement, `dialog.pop-up.prompt`);
+dialogPrompt.addEventListener(`click`, (event) => {
+	if (event.target === dialogPrompt) {
+		dialogPrompt.close();
+	}
+});
 
 /**
  * @param {String} message 
  * @param {String} title
  */
-Window.prototype.promptAsync = async function (message, title = `Message`) {
-	const dialogPopUp = this.document.getElement(HTMLDialogElement, `dialog.pop-up.prompt`);
-	dialogPopUp.addEventListener(`click`, (event) => {
-		if (event.target === dialogPopUp) {
-			dialogPopUp.close();
-		}
-	});
-	dialogPopUp.showModal();
+Window.prototype.promptAsync = function (message, title = `Message`) {
+	dialogPrompt.showModal();
 	//#region Header
-	const htmlHeader = dialogPopUp.getElement(HTMLElement, `*.header`);
+	const htmlHeader = dialogPrompt.getElement(HTMLElement, `*.header`);
 	//#region Title
 	const h3Title = htmlHeader.getElement(HTMLHeadingElement, `h3`);
 	switch (title) {
@@ -155,11 +160,11 @@ Window.prototype.promptAsync = async function (message, title = `Message`) {
 	//#endregion
 	//#endregion
 	//#region Container
-	const htmlContainer = dialogPopUp.getElement(HTMLElement, `*.container`);
+	const htmlContainer = dialogPrompt.getElement(HTMLElement, `*.container`);
 	htmlContainer.innerText = message;
 	//#endregion
 	//#region Footer
-	const htmlFooter = dialogPopUp.getElement(HTMLElement, `*.footer`);
+	const htmlFooter = dialogPrompt.getElement(HTMLElement, `*.footer`);
 	//#region Button Accept
 	const buttonAccept = htmlFooter.getElement(HTMLButtonElement, `button.highlight`);
 	//#endregion
@@ -167,15 +172,16 @@ Window.prototype.promptAsync = async function (message, title = `Message`) {
 	const inputPrompt = htmlFooter.getElement(HTMLInputElement, `input[type="text"]`);
 	//#endregion
 	//#endregion
-	const promise = await (/** @type {Promise<String?>} */(new Promise((resolve) => {
-		dialogPopUp.addEventListener(`close`, (event) => {
+	const controller = new AbortController();
+	const promise = (/** @type {Promise<String?>} */(new Promise((resolve) => {
+		dialogPrompt.addEventListener(`close`, (event) => {
 			resolve(null);
-		});
+		}, { signal: controller.signal });
 		buttonAccept.addEventListener(`click`, (event) => {
 			resolve(inputPrompt.value);
-		});
+		}, { signal: controller.signal });
 	})));
-	dialogPopUp.remove();
+	promise.then(controller.abort, controller.abort);
 	return promise;
 };
 
