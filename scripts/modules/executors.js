@@ -1,7 +1,18 @@
 "use strict";
 
 //#region Engine
-class Engine extends EventTarget {
+/**
+ * @typedef Engine
+ * @property {Boolean} launched
+ * @property {Number} FPS
+ * @property {Number} delta
+ */
+//#endregion
+//#region Fast engine
+/**
+ * @implements {Engine}
+ */
+class FastEngine extends EventTarget {
 	/**
 	 * @param {Boolean} launch
 	 */
@@ -41,13 +52,6 @@ class Engine extends EventTarget {
 	/** @readonly */ get time() {
 		return this.#time;
 	}
-	/** @type {Number} */ #FPS = 0;
-	/** @readonly */ get FPS() {
-		return this.#FPS;
-	}
-	/** @readonly */ get delta() {
-		return 1 / this.#FPS;
-	}
 	/** @type {Boolean} */ #launched = false;
 	get launched() {
 		return this.#launched;
@@ -67,9 +71,69 @@ class Engine extends EventTarget {
 	}
 	set FPSLimit(value) {
 		if (value <= 0) {
-			throw new RangeError(`FPS limit must be higher then 0.`);
+			throw new RangeError(`FPS limit must be higher then 0`);
 		}
 		this.#FPSLimit = value;
+	}
+	/** @type {Number} */ #FPS = 0;
+	/** @readonly */ get FPS() {
+		return this.#FPS;
+	}
+	/** @readonly */ get delta() {
+		return 1 / this.#FPS;
+	}
+}
+//#endregion
+//#region Precise engine
+/**
+ * @implements {Engine}
+ */
+class PreciseEngine extends EventTarget {
+	/**
+	 * @param {Boolean} launch
+	 */
+	constructor(launch = false) {
+		super();
+		const controller = new AbortController();
+		this.addEventListener(`render`, (event) => {
+			this.dispatchEvent(new Event(`initialize`));
+			controller.abort();
+		}, { signal: controller.signal });
+		const callback = () => {
+			if (this.launched) {
+				this.dispatchEvent(new Event(`render`));
+			}
+			setTimeout(callback, this.#delta);
+		};
+		setTimeout(callback, this.#delta);
+		this.launched = launch;
+	}
+	/** @type {Boolean} */ #launched = false;
+	get launched() {
+		return this.#launched;
+	}
+	set launched(value) {
+		if (this.#launched !== value) {
+			this.dispatchEvent(new Event(`change`));
+		}
+		this.#launched = value;
+		if (this.#launched) {
+			this.dispatchEvent(new Event(`launch`));
+		}
+	}
+
+	/** @type {Number} */ #delta = (1000 / 60);
+	get FPS() {
+		return (1000 / this.#delta);
+	}
+	set FPS(value) {
+		if (value <= 0) {
+			throw new RangeError(`FPS must be higher then 0`);
+		}
+		this.#delta = (1000 / value);
+	}
+	/** @readonly */ get delta() {
+		return this.#delta * 1000;
 	}
 }
 //#endregion
@@ -77,7 +141,7 @@ class Engine extends EventTarget {
 /**
  * @template {RenderingContext} T
  */
-class Display extends Engine {
+class Display extends FastEngine {
 	/**
 	 * @param {T} context 
 	 * @param {Boolean} launched 
@@ -103,6 +167,7 @@ class Display extends Engine {
 //#endregion
 
 export {
-	Engine,
-	Display
+	FastEngine,
+	PreciseEngine,
+	Display,
 };

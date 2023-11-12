@@ -4,6 +4,11 @@
 Template for creating adaptive web pages.
 
 ## Feed
+### Update 2.3.3 (12.11.2023)
+- The fast engine has been renamed from `Engine` to `FastEngine`.
+- Added the precise engine `PreciseEngine`.
+- Improved stylization.
+
 ### Update 2.3.2 (05.11.2023)
 - Global module work.
 - Components `informant.js`, `manager.js`, and `loader.js` have been consolidated into `extensions.js`.

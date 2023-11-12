@@ -140,6 +140,11 @@ body {
 	cursor: text;
 }
 
+*:read-write,
+*[contenteditable] {
+	text-overflow: revert;
+}
+
 *[contenteditable]:empty::before {
 	content: attr(aria-placeholder);
 }
