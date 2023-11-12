@@ -118,7 +118,9 @@ Window.prototype.alertAsync = function (message, title = `Message`) {
 			resolve();
 		}, { signal: controller.signal });
 	})));
-	promise.then(controller.abort, controller.abort);
+	promise.finally(() => {
+		controller.abort();
+	});
 	return promise;
 };
 
@@ -178,7 +180,9 @@ Window.prototype.confirmAsync = function (message, title = `Message`) {
 			resolve(false);
 		}, { signal: controller.signal });
 	})));
-	promise.then(controller.abort, controller.abort);
+	promise.finally(() => {
+		controller.abort();
+	});
 	return promise;
 };
 
@@ -235,7 +239,9 @@ Window.prototype.promptAsync = function (message, title = `Message`) {
 			resolve(inputPrompt.value);
 		}, { signal: controller.signal });
 	})));
-	promise.then(controller.abort, controller.abort);
+	promise.finally(() => {
+		controller.abort();
+	});
 	return promise;
 };
 
