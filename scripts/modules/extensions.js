@@ -3,6 +3,60 @@
 
 "use strict";
 
+//#region HTML element
+/**
+ * @template {typeof HTMLElement} T
+ * @param {T} type 
+ * @param {String} selectors 
+ */
+HTMLElement.prototype.getElement = function (type, selectors) {
+	const element = this.querySelector(selectors);
+	if (!(element instanceof type)) {
+		throw new TypeError(`Element ${selectors} is missing or has invalid type`);
+	}
+	return (/** @type {InstanceType<T>} */ (element));
+};
+//#endregion
+//#region Document
+/**
+ * @template {typeof HTMLElement} T
+ * @param {T} type 
+ * @param {String} selectors 
+ */
+Document.prototype.getElement = function (type, selectors) {
+	return this.documentElement.getElement(type, selectors);
+};
+
+// /**
+//  * @param  {any[]} data 
+//  */
+// Document.prototype.log = function (...data) {
+// 	const dialogConsole = this.getElement(HTMLDialogElement, `dialog.console`);
+// 	dialogConsole.innerText = `${data.join(` `)}`;
+// 	dialogConsole.open = true;
+// };
+
+/**
+ * @param {any} error 
+ */
+Document.prototype.analysis = function (error) {
+	return error instanceof Error ? error : new Error(`Undefined error type`);
+};
+
+/**
+ * @param {Error} error 
+ * @param {Boolean} locked
+ */
+Document.prototype.prevent = async function (error, locked = true) {
+	const message = error.stack ?? `${error.name}: ${error.message}`;
+	if (locked) {
+		await window.alertAsync(message, `Error`);
+		location.reload();
+	} else {
+		console.error(message);
+	};
+};
+//#endregion
 //#region Math
 /**
 * @param {Number} value 
@@ -205,60 +259,6 @@ Window.prototype.load = async function (promise, duration = 200, delay = 0) {
 	], { duration: duration, fill: `both`, delay: delay }).finished;
 	dialogLoader.close();
 	return value;
-};
-//#endregion
-//#region HTML element
-/**
- * @template {typeof HTMLElement} T
- * @param {T} type 
- * @param {String} selectors 
- */
-HTMLElement.prototype.getElement = function (type, selectors) {
-	const element = this.querySelector(selectors);
-	if (!(element instanceof type)) {
-		throw new TypeError(`Element ${selectors} is missing or has invalid type`);
-	}
-	return (/** @type {InstanceType<T>} */ (element));
-};
-//#endregion
-//#region Document
-/**
- * @template {typeof HTMLElement} T
- * @param {T} type 
- * @param {String} selectors 
- */
-Document.prototype.getElement = function (type, selectors) {
-	return this.documentElement.getElement(type, selectors);
-};
-
-// /**
-//  * @param  {any[]} data 
-//  */
-// Document.prototype.log = function (...data) {
-// 	const dialogConsole = this.getElement(HTMLDialogElement, `dialog.console`);
-// 	dialogConsole.innerText = `${data.join(` `)}`;
-// 	dialogConsole.open = true;
-// };
-
-/**
- * @param {any} error 
- */
-Document.prototype.analysis = function (error) {
-	return error instanceof Error ? error : new Error(`Undefined error type`);
-};
-
-/**
- * @param {Error} error 
- * @param {Boolean} locked
- */
-Document.prototype.prevent = async function (error, locked = true) {
-	const message = error.stack ?? `${error.name}: ${error.message}`;
-	if (locked) {
-		await window.alertAsync(message, `Error`);
-		location.reload();
-	} else {
-		console.error(message);
-	};
 };
 //#endregion
 //#region Navigator
