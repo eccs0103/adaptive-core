@@ -120,6 +120,7 @@ Window.prototype.alertAsync = function (message, title = `Message`) {
 	})));
 	promise.finally(() => {
 		controller.abort();
+		dialogAlert.close();
 	});
 	return promise;
 };
@@ -182,6 +183,7 @@ Window.prototype.confirmAsync = function (message, title = `Message`) {
 	})));
 	promise.finally(() => {
 		controller.abort();
+		dialogConfirm.close();
 	});
 	return promise;
 };
@@ -241,6 +243,7 @@ Window.prototype.promptAsync = function (message, title = `Message`) {
 	})));
 	promise.finally(() => {
 		controller.abort();
+		dialogPrompt.close();
 	});
 	return promise;
 };
