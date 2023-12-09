@@ -20,9 +20,9 @@ class FastEngine extends EventTarget {
 		super();
 		let previous = 0;
 		const controller = new AbortController();
-		this.addEventListener(`render`, (event) => {
+		this.addEventListener(`update`, (event) => {
 			if (this.time !== 0) {
-				this.dispatchEvent(new Event(`initialize`));
+				this.dispatchEvent(new Event(`start`));
 				controller.abort();
 			}
 		}, { signal: controller.signal });
@@ -38,7 +38,7 @@ class FastEngine extends EventTarget {
 					this.#time += difference;
 					this.#FPS = 1000 / difference;
 					if (this.time !== 0) {
-						this.dispatchEvent(new Event(`render`));
+						this.dispatchEvent(new Event(`update`));
 					}
 				}
 				previous = current;
@@ -95,13 +95,13 @@ class PreciseEngine extends EventTarget {
 	constructor(launch = false) {
 		super();
 		const controller = new AbortController();
-		this.addEventListener(`render`, (event) => {
-			this.dispatchEvent(new Event(`initialize`));
+		this.addEventListener(`update`, (event) => {
+			this.dispatchEvent(new Event(`start`));
 			controller.abort();
 		}, { signal: controller.signal });
 		const callback = () => {
 			if (this.launched) {
-				this.dispatchEvent(new Event(`render`));
+				this.dispatchEvent(new Event(`update`));
 			}
 			setTimeout(callback, this.#delta);
 		};
@@ -149,20 +149,22 @@ class Display extends FastEngine {
 	constructor(context, launched = false) {
 		super(launched);
 		this.#context = context;
-		const canvas = this.#context.canvas;
-		this.addEventListener(`resize`, (event) => {
-			if (canvas instanceof HTMLCanvasElement) {
-				const { width, height } = canvas.getBoundingClientRect();
-				canvas.width = width;
-				canvas.height = height;
-				this.dispatchEvent(new Event(`render`));
-			}
-		});
+		this.#resize();
 		window.addEventListener(`resize`, (event) => {
-			this.dispatchEvent(new Event(`resize`));
+			this.#resize();
 		});
 	}
 	/** @type {RenderingContext} */ #context;
+	#resize() {
+		const canvas = this.#context.canvas;
+		if (canvas instanceof HTMLCanvasElement) {
+			const { width, height } = canvas.getBoundingClientRect();
+			canvas.width = width;
+			canvas.height = height;
+			this.dispatchEvent(new UIEvent(`resize`));
+			this.dispatchEvent(new Event(`update`));
+		}
+	}
 }
 //#endregion
 
