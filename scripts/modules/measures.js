@@ -58,6 +58,46 @@ class Point {
 //#region Point 1D
 class Point1D extends Point {
 	/**
+	 * @param {Point1D} first 
+	 * @param {Point1D} second 
+	 * @returns {Point1D}
+	 */
+	static add(first, second) {
+		return new Point1D(
+			first.x + second.x,
+		);
+	}
+	/**
+	 * @param {Point1D} first 
+	 * @param {Point1D} second 
+	 * @returns {Point1D}
+	 */
+	static subtract(first, second) {
+		return new Point1D(
+			first.x - second.x,
+		);
+	}
+	/**
+	 * @param {Point1D} target 
+	 * @param {Number} factor 
+	 * @returns {Point1D}
+	 */
+	static multiply(target, factor) {
+		return new Point1D(
+			target.x * factor,
+		);
+	}
+	/**
+	 * @param {Point1D} target 
+	 * @param {Number} factor 
+	 * @returns {Point1D}
+	 */
+	static divide(target, factor) {
+		return new Point1D(
+			target.x / factor,
+		);
+	}
+	/**
 	 * @param {Point1D} source 
 	 */
 	static clone(source) {
@@ -88,6 +128,42 @@ class Point1D extends Point {
 	set x(value) {
 		this.metrics[0] = value;
 	}
+	/**
+	 * @param {Point1D} scale 
+	 * @returns {Point1D}
+	 */
+	add(scale) {
+		const result = Point1D.add(this, scale);
+		this.x = result.x;
+		return this;
+	}
+	/**
+	 * @param {Point1D} scale 
+	 * @returns {Point1D}
+	 */
+	subtract(scale) {
+		const result = Point1D.subtract(this, scale);
+		this.x = result.x;
+		return this;
+	}
+	/**
+	 * @param {Number} factor 
+	 * @returns {Point1D}
+	 */
+	multiply(factor) {
+		const result = Point1D.multiply(this, factor);
+		this.x = result.x;
+		return this;
+	}
+	/**
+	 * @param {Number} factor 
+	 * @returns {Point1D}
+	 */
+	divide(factor) {
+		const result = Point1D.divide(this, factor);
+		this.x = result.x;
+		return this;
+	}
 	clone() {
 		return Point1D.clone(this);
 	}
@@ -98,6 +174,50 @@ class Point1D extends Point {
 //#endregion
 //#region Point 2D
 class Point2D extends Point1D {
+	/**
+	 * @param {Point2D} first 
+	 * @param {Point2D} second 
+	 * @returns {Point2D}
+	 */
+	static add(first, second) {
+		return new Point2D(
+			first.x + second.x,
+			first.y + second.y,
+		);
+	}
+	/**
+	 * @param {Point2D} first 
+	 * @param {Point2D} second 
+	 * @returns {Point2D}
+	 */
+	static subtract(first, second) {
+		return new Point2D(
+			first.x - second.x,
+			first.y - second.y,
+		);
+	}
+	/**
+	 * @param {Point2D} target 
+	 * @param {Number} factor 
+	 * @returns {Point2D}
+	 */
+	static multiply(target, factor) {
+		return new Point2D(
+			target.x * factor,
+			target.y * factor,
+		);
+	}
+	/**
+	 * @param {Point2D} target 
+	 * @param {Number} factor 
+	 * @returns {Point2D}
+	 */
+	static divide(target, factor) {
+		return new Point2D(
+			target.x / factor,
+			target.y / factor,
+		);
+	}
 	/**
 	 * @param {Point2D} source 
 	 */
@@ -130,6 +250,46 @@ class Point2D extends Point1D {
 	set y(value) {
 		this.metrics[1] = value;
 	}
+	/**
+	 * @param {Point2D} scale 
+	 * @returns {Point2D}
+	 */
+	add(scale) {
+		const result = Point2D.add(this, scale);
+		this.x = result.x;
+		this.y = result.y;
+		return this;
+	}
+	/**
+	 * @param {Point2D} scale 
+	 * @returns {Point2D}
+	 */
+	subtract(scale) {
+		const result = Point2D.subtract(this, scale);
+		this.x = result.x;
+		this.y = result.y;
+		return this;
+	}
+	/**
+	 * @param {Number} factor 
+	 * @returns {Point2D}
+	 */
+	multiply(factor) {
+		const result = Point2D.multiply(this, factor);
+		this.x = result.x;
+		this.y = result.y;
+		return this;
+	}
+	/**
+	 * @param {Number} factor 
+	 * @returns {Point2D}
+	 */
+	divide(factor) {
+		const result = Point2D.divide(this, factor);
+		this.x = result.x;
+		this.y = result.y;
+		return this;
+	}
 	clone() {
 		return Point2D.clone(this);
 	}
@@ -140,6 +300,54 @@ class Point2D extends Point1D {
 //#endregion
 //#region Point 3D
 class Point3D extends Point2D {
+	/**
+	 * @param {Point3D} first 
+	 * @param {Point3D} second 
+	 * @returns {Point3D}
+	 */
+	static add(first, second) {
+		return new Point3D(
+			first.x + second.x,
+			first.y + second.y,
+			first.z + second.z,
+		);
+	}
+	/**
+	 * @param {Point3D} first 
+	 * @param {Point3D} second 
+	 * @returns {Point3D}
+	 */
+	static subtract(first, second) {
+		return new Point3D(
+			first.x - second.x,
+			first.y - second.y,
+			first.z - second.z,
+		);
+	}
+	/**
+	 * @param {Point3D} target 
+	 * @param {Number} factor 
+	 * @returns {Point3D}
+	 */
+	static multiply(target, factor) {
+		return new Point3D(
+			target.x * factor,
+			target.y * factor,
+			target.z * factor,
+		);
+	}
+	/**
+	 * @param {Point3D} target 
+	 * @param {Number} factor 
+	 * @returns {Point3D}
+	 */
+	static divide(target, factor) {
+		return new Point3D(
+			target.x / factor,
+			target.y / factor,
+			target.z / factor,
+		);
+	}
 	/**
 	 * @param {Point3D} source 
 	 */
@@ -173,6 +381,50 @@ class Point3D extends Point2D {
 	set z(value) {
 		this.metrics[2] = value;
 	}
+	/**
+	 * @param {Point3D} scale 
+	 * @returns {Point3D}
+	 */
+	add(scale) {
+		const result = Point3D.add(this, scale);
+		this.x = result.x;
+		this.y = result.y;
+		this.z = result.z;
+		return this;
+	}
+	/**
+	 * @param {Point3D} scale 
+	 * @returns {Point3D}
+	 */
+	subtract(scale) {
+		const result = Point3D.subtract(this, scale);
+		this.x = result.x;
+		this.y = result.y;
+		this.z = result.z;
+		return this;
+	}
+	/**
+	 * @param {Number} factor 
+	 * @returns {Point3D}
+	 */
+	multiply(factor) {
+		const result = Point3D.multiply(this, factor);
+		this.x = result.x;
+		this.y = result.y;
+		this.z = result.z;
+		return this;
+	}
+	/**
+	 * @param {Number} factor 
+	 * @returns {Point3D}
+	 */
+	divide(factor) {
+		const result = Point3D.divide(this, factor);
+		this.x = result.x;
+		this.y = result.y;
+		this.z = result.z;
+		return this;
+	}
 	clone() {
 		return Point3D.clone(this);
 	}
@@ -199,9 +451,9 @@ class Segment {
 	 * @param {Segment<T>} source 
 	 */
 	static toBasePoint(source) {
-		const result = source.end.clone();
+		const result = (/** @type {T} */ (source.end.clone()));
 		for (let index = 0; index < result.metrics.length; index++) {
-			result.metrics[index] -= source.begin[index];
+			result.metrics[index] -= source.begin.metrics[index];
 		}
 		return result;
 	}

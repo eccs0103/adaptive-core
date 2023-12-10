@@ -4,6 +4,9 @@
 Template for creating adaptive web pages.
 
 ## Feed
+### Update 2.3.4 (10.12.2023)
+- Added addition, subtraction, multiplication, division functions to the `Point1D`, `Point2D`, `Point3D` classes.
+
 ### Update 2.3.3 (12.11.2023)
 - The fast engine has been renamed from `Engine` to `FastEngine`.
 - Added the precise engine `PreciseEngine`.
