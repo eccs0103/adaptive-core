@@ -4,6 +4,13 @@
 Template for creating adaptive web pages.
 
 ## Feed
+### Update 2.3.6 (24.12.2023)
+- Improved modification functions in `Color`.
+- Added conversion functions `Math.toDegrees()` and `Math.toRadians()`.
+- Improved the structure of measurers `Point`, `Point1D`, `Point2D`, `Point3D`. Added operations `+`, `-`, `*`, `/`.
+- Enhanced the constructor in `Texture`.
+- Added operations `+`, `-`, `*`, `/` in `Timespan`.
+
 ### Update 2.3.4 (10.12.2023)
 - Added addition, subtraction, multiplication, division functions to the `Point1D`, `Point2D`, `Point3D` classes.
 

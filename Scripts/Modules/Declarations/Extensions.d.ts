@@ -1,6 +1,6 @@
 interface Math {
-	toDegrees(value: number): number;
-	toRadians(value: number): number;
+	toDegrees(radians: number): number;
+	toRadians(degrees: number): number;
 	toFactor(value: number, period: number): number;
 	toSignedFactor(value: number, period: number): number;
 }

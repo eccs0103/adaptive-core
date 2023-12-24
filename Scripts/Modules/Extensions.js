@@ -59,17 +59,17 @@ Document.prototype.prevent = async function (error, locked = true) {
 //#endregion
 //#region Math
 /**
- * @param {Number} value 
+ * @param {Number} radians 
  */
-Math.toDegrees = function (value) {
-	return value / 180 * this.PI;
+Math.toDegrees = function (radians) {
+	return radians / 180 * this.PI;
 };
 
 /**
- * @param {Number} value 
+ * @param {Number} degrees 
  */
-Math.toRadians = function (value) {
-	return value / this.PI * 180;
+Math.toRadians = function (degrees) {
+	return degrees / this.PI * 180;
 };
 
 /**
