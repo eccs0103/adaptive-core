@@ -10,17 +10,19 @@ interface Window {
 	confirmAsync(message: string, title?: string): Promise<boolean>;
 	promptAsync(message: string, title?: string): Promise<string | null>;
 	load<T>(promise: Promise<T>, duration?: number, delay?: number): Promise<T>;
+	prevent(message: Error, locked?: boolean): Promise<void>;
 }
 
 interface HTMLElement {
 	getElement<T extends typeof HTMLElement>(type: T, selectors: string): InstanceType<T>;
+	tryGetElement<T extends typeof HTMLElement>(type: T, selectors: string, strict?: boolean): Promise<InstanceType<T>>;
 }
 
 interface Document {
 	getElement<T extends typeof HTMLElement>(type: T, selectors: string): InstanceType<T>;
+	tryGetElement<T extends typeof HTMLElement>(type: T, selectors: string, strict?: boolean): Promise<InstanceType<T>>;
 	// log(...data: any[]): void;
 	analysis(error: any): Error;
-	prevent(message: Error, locked?: boolean): Promise<void>;
 }
 
 interface Navigator {

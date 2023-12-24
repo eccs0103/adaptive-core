@@ -16,6 +16,23 @@ HTMLElement.prototype.getElement = function (type, selectors) {
 	}
 	return (/** @type {InstanceType<T>} */ (element));
 };
+
+/**
+ * @template {typeof HTMLElement} T
+ * @param {T} type 
+ * @param {String} selectors 
+ * @param {Boolean} strict 
+ */
+HTMLElement.prototype.tryGetElement = function (type, selectors, strict = false) {
+	return (/** @type {Promise<InstanceType<T>>} */ (new Promise((resolve, reject) => {
+		const element = this.querySelector(selectors);
+		if (element instanceof type) {
+			resolve(/** @type {InstanceType<T>} */(element));
+		} else if (strict) {
+			reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
+		}
+	})));
+};
 //#endregion
 //#region Document
 /**
@@ -25,6 +42,16 @@ HTMLElement.prototype.getElement = function (type, selectors) {
  */
 Document.prototype.getElement = function (type, selectors) {
 	return this.documentElement.getElement(type, selectors);
+};
+
+/**
+ * @template {typeof HTMLElement} T
+ * @param {T} type 
+ * @param {String} selectors 
+ * @param {Boolean} strict
+ */
+Document.prototype.tryGetElement = function (type, selectors, strict) {
+	return this.documentElement.tryGetElement(type, selectors, strict);
 };
 
 // /**
@@ -42,34 +69,22 @@ Document.prototype.getElement = function (type, selectors) {
 Document.prototype.analysis = function (error) {
 	return error instanceof Error ? error : new Error(`Undefined error type`);
 };
-
-/**
- * @param {Error} error 
- * @param {Boolean} locked
- */
-Document.prototype.prevent = async function (error, locked = true) {
-	const message = error.stack ?? `${error.name}: ${error.message}`;
-	if (locked) {
-		await window.alertAsync(message, `Error`);
-		location.reload();
-	} else {
-		console.error(message);
-	};
-};
 //#endregion
 //#region Math
+const toDegreeFactor = Math.PI / 180;
 /**
  * @param {Number} radians 
  */
 Math.toDegrees = function (radians) {
-	return radians / 180 * this.PI;
+	return radians * toDegreeFactor;
 };
 
+const toRadianFactor = 180 / Math.PI;
 /**
  * @param {Number} degrees 
  */
 Math.toRadians = function (degrees) {
-	return degrees / this.PI * 180;
+	return degrees * toRadianFactor;
 };
 
 /**
@@ -282,6 +297,20 @@ Window.prototype.load = async function (promise, duration = 200, delay = 0) {
 	], { duration: duration, fill: `both`, delay: delay }).finished;
 	dialogLoader.close();
 	return value;
+};
+
+/**
+ * @param {Error} error 
+ * @param {Boolean} locked
+ */
+Window.prototype.prevent = async function (error, locked = true) {
+	const message = error.stack ?? `${error.name}: ${error.message}`;
+	if (locked) {
+		await window.alertAsync(message, `Error`);
+		location.reload();
+	} else {
+		console.error(message);
+	};
 };
 //#endregion
 //#region Navigator
