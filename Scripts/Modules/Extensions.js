@@ -54,14 +54,35 @@ Document.prototype.tryGetElement = function (type, selectors, strict) {
 	return this.documentElement.tryGetElement(type, selectors, strict);
 };
 
-// /**
-//  * @param  {any[]} data 
-//  */
-// Document.prototype.log = function (...data) {
-// 	const dialogConsole = this.getElement(HTMLDialogElement, `dialog.console`);
-// 	dialogConsole.innerText = `${data.join(` `)}`;
-// 	dialogConsole.open = true;
-// };
+const dialogConsole = document.getElement(HTMLDialogElement, `dialog.console`);
+/**
+ * @param {any} value 
+ * @returns {String}
+ */
+function logify(value) {
+	switch (typeof (value)) {
+		case `string`: return value;
+		case `number`:
+		case `bigint`:
+		case `boolean`: return String(value);
+		case `object`: return Object.entries(value).map(([key, value]) => `${key}: ${logify(value)}`).join(`,\n`);
+		case `symbol`:
+		case `function`:
+		case `undefined`: throw new TypeError(`Value has invalid ${typeof (value)} type`);
+	}
+}
+/**
+ * @param  {any[]} data 
+ */
+Document.prototype.log = function (...data) {
+	if (data.length > 0) {
+		if (!dialogConsole.open) dialogConsole.open = true;
+		dialogConsole.innerText = data.map(item => logify(item)).join(`\n`);
+	} else {
+		if (dialogConsole.open) dialogConsole.open = false;
+	}
+
+};
 
 /**
  * @param {any} error 
