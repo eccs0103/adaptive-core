@@ -35,6 +35,9 @@ class Archive {
 }
 //#endregion
 //#region Notation progenitor
+/**
+ * @interface
+ */
 class NotationProgenitor {
 	/**
 	 * @param {any} source 

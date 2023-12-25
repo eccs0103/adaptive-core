@@ -84,6 +84,7 @@ class Point1D extends Point {
 	static clone(source) {
 		return new Point1D(source.x);
 	}
+	/** @readonly */ static get ZERO() { return new Point1D(0); }
 	/**
 	 * @param {Number} x 
 	 */
@@ -168,6 +169,7 @@ class Point2D extends Point1D {
 	static clone(source) {
 		return new Point2D(source.x, source.y);
 	}
+	/** @readonly */ static get ZERO() { return new Point2D(0, 0); }
 	/**
 	 * @param {Number} x 
 	 * @param {Number} y 
@@ -254,6 +256,7 @@ class Point3D extends Point2D {
 	static clone(source) {
 		return new Point3D(source.x, source.y, source.z);
 	}
+	/** @readonly */ static get ZERO() { return new Point3D(0, 0, 0); }
 	/**
 	 * @param {Number} x 
 	 * @param {Number} y 

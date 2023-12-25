@@ -191,11 +191,11 @@ class Texture {
 	getCell(position) {
 		const row = this.#data[position.y];
 		if (row === undefined) {
-			throw new RangeError(`Position ${position.toString()} out of range [${new Point2D(0, 0).toString()} - ${this.size.toString()})`);
+			throw new RangeError(`Position ${position.toString()} out of range [${Point2D.ZERO.toString()} - ${this.size.toString()})`);
 		}
 		const cell = row[position.x];
 		if (cell === undefined) {
-			throw new RangeError(`Position ${position.toString()} out of range [${new Point2D(0, 0).toString()} - ${this.size.toString()})`);
+			throw new RangeError(`Position ${position.toString()} out of range [${Point2D.ZERO.toString()} - ${this.size.toString()})`);
 		}
 		return cell;
 	}
@@ -206,11 +206,11 @@ class Texture {
 	setCell(position, value) {
 		const row = this.#data[position.y];
 		if (row === undefined) {
-			throw new RangeError(`Position ${position.toString()} out of range [${new Point2D(0, 0).toString()} - ${this.size.toString()})`);
+			throw new RangeError(`Position ${position.toString()} out of range [${Point2D.ZERO.toString()} - ${this.size.toString()})`);
 		}
 		const cell = row[position.x];
 		if (cell === undefined) {
-			throw new RangeError(`Position ${position.toString()} out of range [${new Point2D(0, 0).toString()} - ${this.size.toString()})`);
+			throw new RangeError(`Position ${position.toString()} out of range [${Point2D.ZERO.toString()} - ${this.size.toString()})`);
 		}
 		this.#data[position.y][position.x] = value;
 	}
