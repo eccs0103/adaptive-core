@@ -1,5 +1,5 @@
 // @ts-ignore
-/** @typedef {import("./Declarations/Extensions.d.ts")} */
+/** @typedef {import("../Declarations/Extensions.d.ts")} */
 
 "use strict";
 
