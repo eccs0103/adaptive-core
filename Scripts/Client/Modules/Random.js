@@ -45,6 +45,4 @@ class Random {
 }
 //#endregion
 
-export {
-	Random
-};
+export { Random };

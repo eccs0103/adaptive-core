@@ -256,6 +256,4 @@ class Timespan {
 }
 //#endregion
 
-export {
-	Timespan
-};
+export { Timespan };

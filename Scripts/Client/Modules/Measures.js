@@ -309,9 +309,4 @@ class Point3D extends Point2D {
 }
 //#endregion
 
-export {
-	Point,
-	Point1D,
-	Point2D,
-	Point3D,
-};
+export { Point, Point1D, Point2D, Point3D };

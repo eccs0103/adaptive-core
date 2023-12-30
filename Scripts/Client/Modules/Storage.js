@@ -88,8 +88,4 @@ class NotationContainer {
 }
 //#endregion
 
-export {
-	Archive,
-	NotationProgenitor,
-	NotationContainer
-};
+export { Archive, NotationProgenitor, NotationContainer };

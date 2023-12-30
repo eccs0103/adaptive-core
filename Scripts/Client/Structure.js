@@ -1,9 +1,6 @@
 "use strict";
 
-import {
-	NotationProgenitor,
-	NotationContainer
-} from "./Modules/Storage.js";
+import { NotationProgenitor, NotationContainer } from "./Modules/Storage.js";
 import { } from "./Modules/Extensions.js";
 
 //#region Metadata

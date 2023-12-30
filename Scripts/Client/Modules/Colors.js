@@ -408,7 +408,4 @@ class Color {
 }
 //#endregion
 
-export {
-	ColorFormats,
-	Color
-};
+export { ColorFormats, Color };
