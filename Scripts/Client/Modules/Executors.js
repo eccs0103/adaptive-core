@@ -3,9 +3,9 @@
 //#region Engine
 /**
  * @typedef Engine
- * @property {Boolean} launched
- * @property {Number} FPS
- * @property {Number} delta
+ * @property {boolean} launched
+ * @property {number} FPS
+ * @property {number} delta
  */
 //#endregion
 //#region Fast engine
@@ -14,7 +14,7 @@
  */
 class FastEngine extends EventTarget {
 	/**
-	 * @param {Boolean} launch
+	 * @param {boolean} launch
 	 */
 	constructor(launch = false) {
 		super();
@@ -52,7 +52,7 @@ class FastEngine extends EventTarget {
 	/** @readonly */ get time() {
 		return this.#time;
 	}
-	/** @type {Boolean} */ #launched = false;
+	/** @type {boolean} */ #launched = false;
 	get launched() {
 		return this.#launched;
 	}
@@ -65,7 +65,7 @@ class FastEngine extends EventTarget {
 			this.dispatchEvent(new Event(`launch`));
 		}
 	}
-	/** @type {Number} */ #FPSLimit = Infinity;
+	/** @type {number} */ #FPSLimit = Infinity;
 	get FPSLimit() {
 		return this.#FPSLimit;
 	}
@@ -75,7 +75,7 @@ class FastEngine extends EventTarget {
 		}
 		this.#FPSLimit = value;
 	}
-	/** @type {Number} */ #FPS = 0;
+	/** @type {number} */ #FPS = 0;
 	/** @readonly */ get FPS() {
 		return this.#FPS;
 	}
@@ -90,7 +90,7 @@ class FastEngine extends EventTarget {
  */
 class PreciseEngine extends EventTarget {
 	/**
-	 * @param {Boolean} launch
+	 * @param {boolean} launch
 	 */
 	constructor(launch = false) {
 		super();
@@ -108,7 +108,7 @@ class PreciseEngine extends EventTarget {
 		setTimeout(callback, this.#delta);
 		this.launched = launch;
 	}
-	/** @type {Boolean} */ #launched = false;
+	/** @type {boolean} */ #launched = false;
 	get launched() {
 		return this.#launched;
 	}
@@ -122,7 +122,7 @@ class PreciseEngine extends EventTarget {
 		}
 	}
 
-	/** @type {Number} */ #delta = (1000 / 60);
+	/** @type {number} */ #delta = (1000 / 60);
 	get FPS() {
 		return (1000 / this.#delta);
 	}
@@ -144,7 +144,7 @@ class PreciseEngine extends EventTarget {
 class Display extends FastEngine {
 	/**
 	 * @param {T} context 
-	 * @param {Boolean} launched 
+	 * @param {boolean} launched 
 	 */
 	constructor(context, launched = false) {
 		super(launched);

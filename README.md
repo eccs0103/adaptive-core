@@ -4,6 +4,9 @@
 Template for creating adaptive web pages.
 
 ## Feed
+### Update 2.3.7 (03.01.2024)
+- Optimization and quality improvement in `Measures.js`.
+
 ### Update 2.3.6 (24.12.2023)
 - Improved modification functions in `Color`.
 - Added conversion functions `Math.toDegrees()` and `Math.toRadians()`.

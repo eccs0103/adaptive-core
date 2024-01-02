@@ -1,3 +1,5 @@
+/// <reference path="../Modules/Extensions.js" />
+
 declare function alertAsync(message: string, title ?: string): Promise<void>;
 declare function confirmAsync(message: string, title ?: string): Promise<boolean>;
 declare function promptAsync(message: string, title ?: string): Promise<string | null>;

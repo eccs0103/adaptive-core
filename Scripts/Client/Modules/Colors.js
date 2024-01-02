@@ -1,7 +1,7 @@
 "use strict";
 
 //#region Color formats
-/** @enum {String} */ const ColorFormats = {
+/** @enum {string} */ const ColorFormats = {
 	/** @readonly */ RGB: `RGB`,
 	/** @readonly */ HSL: `HSL`,
 	/** @readonly */ HEX: `HEX`,
@@ -12,16 +12,16 @@ Object.freeze(ColorFormats);
 class Color {
 	//#region Converters
 	/**
-	 * @param {Number} hue [0 - 360]
-	 * @param {Number} saturation [0 - 100]
-	 * @param {Number} lightness [0 - 100]
-	 * @returns {[Number, Number, Number]} red [0 - 255], green [0 - 255], blue [0 - 255]
+	 * @param {number} hue [0 - 360]
+	 * @param {number} saturation [0 - 100]
+	 * @param {number} lightness [0 - 100]
+	 * @returns {[number, number, number]} red [0 - 255], green [0 - 255], blue [0 - 255]
 	 */
 	static #HSLtoRGB(hue, saturation, lightness) {
 		hue /= 30;
 		saturation /= 100;
 		lightness /= 100;
-		function transform(/** @type {Number} */ level) {
+		function transform(/** @type {number} */ level) {
 			const sector = (level + hue) % 12;
 			return lightness - (saturation * Math.min(lightness, 1 - lightness)) * Math.max(-1, Math.min(sector - 3, 9 - sector, 1));
 		}
@@ -32,10 +32,10 @@ class Color {
 		];
 	}
 	/**
-	 * @param {Number} red [0 - 255]
-	 * @param {Number} green [0 - 255]
-	 * @param {Number} blue [0 - 255]
-	 * @returns {[Number, Number, Number]} hue [0 - 360], saturation [0 - 100], lightness [0 - 100]
+	 * @param {number} red [0 - 255]
+	 * @param {number} green [0 - 255]
+	 * @param {number} blue [0 - 255]
+	 * @returns {[number, number, number]} hue [0 - 360], saturation [0 - 100], lightness [0 - 100]
 	 */
 	static #RGBtoHSL(red, green, blue) {
 		red /= 255;
@@ -51,7 +51,7 @@ class Color {
 	}
 	/**
 	 * @param {Color} source 
-	 * @param {Boolean} deep 
+	 * @param {boolean} deep 
 	 * @param {ColorFormats} format 
 	 */
 	static stringify(source, deep = false, format = ColorFormats.RGB) {
@@ -63,8 +63,8 @@ class Color {
 		}
 	}
 	/**
-	 * @param {String} source 
-	 * @param {Boolean} deep 
+	 * @param {string} source 
+	 * @param {boolean} deep 
 	 * @param {ColorFormats} format 
 	 */
 	static parse(source, deep = false, format = ColorFormats.RGB) {
@@ -100,10 +100,10 @@ class Color {
 		}
 	}
 	/**
-	 * @param {String} source 
+	 * @param {string} source 
 	 */
 	static tryParse(source) {
-		for (const [format, deep] of Object.values(ColorFormats).flatMap((format) => (/** @type {[String, Boolean][]} */ ([[format, false], [format, true]])))) {
+		for (const [format, deep] of Object.values(ColorFormats).flatMap((format) => (/** @type {[string, boolean][]} */ ([[format, false], [format, true]])))) {
 			try {
 				return Color.parse(source, deep, format);
 			} catch {
@@ -115,10 +115,10 @@ class Color {
 	//#endregion
 	//#region Constructors
 	/**
-	 * @param {Number} red [0 - 255]
-	 * @param {Number} green [0 - 255]
-	 * @param {Number} blue [0 - 255]
-	 * @param {Number} alpha [0 - 1]
+	 * @param {number} red [0 - 255]
+	 * @param {number} green [0 - 255]
+	 * @param {number} blue [0 - 255]
+	 * @param {number} alpha [0 - 1]
 	 */
 	static viaRGB(red, green, blue, alpha = 1) {
 		if (red < 0 || red > 255) throw new RangeError(`Property 'red' out of range: ${red}`);
@@ -134,10 +134,10 @@ class Color {
 		return result;
 	}
 	/**
-	 * @param {Number} hue [0 - 360]
-	 * @param {Number} saturation [0 - 100]
-	 * @param {Number} lightness [0 - 100]
-	 * @param {Number} alpha [0 - 1]
+	 * @param {number} hue [0 - 360]
+	 * @param {number} saturation [0 - 100]
+	 * @param {number} lightness [0 - 100]
+	 * @param {number} alpha [0 - 1]
 	 */
 	static viaHSL(hue, saturation, lightness, alpha = 1) {
 		if (hue < 0 || hue > 360) throw new RangeError(`Property 'hue' out of range: ${hue}`);
@@ -191,7 +191,7 @@ class Color {
 	/**
 	 * @param {Color} first 
 	 * @param {Color} second 
-	 * @param {Number} ratio [0 - 1]
+	 * @param {number} ratio [0 - 1]
 	 */
 	static mix(first, second, ratio = 0.5) {
 		if (ratio < 0 || ratio > 1) throw new RangeError(`Property 'ratio' out of range: ${ratio}`);
@@ -203,7 +203,7 @@ class Color {
 	}
 	/**
 	 * @param {Color} source 
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	static grayscale(source, scale = 1) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Property 'scale' out of range: ${scale}`);
@@ -216,7 +216,7 @@ class Color {
 	}
 	/**
 	 * @param {Color} source 
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	static invert(source, scale = 1) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Property 'scale' out of range: ${scale}`);
@@ -229,7 +229,7 @@ class Color {
 	}
 	/**
 	 * @param {Color} source 
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	static sepia(source, scale = 1) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Property 'scale' out of range: ${scale}`);
@@ -245,7 +245,7 @@ class Color {
 	}
 	/**
 	 * @param {Color} source 
-	 * @param {Number} angle (-∞ - ∞)
+	 * @param {number} angle (-∞ - ∞)
 	 */
 	static rotate(source, angle) {
 		let hue = Math.trunc(source.#hue + angle) % 361;
@@ -254,7 +254,7 @@ class Color {
 	}
 	/**
 	 * @param {Color} source 
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	static saturate(source, scale) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Property 'scale' out of range: ${scale}`);
@@ -262,7 +262,7 @@ class Color {
 	}
 	/**
 	 * @param {Color} source 
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	static illuminate(source, scale) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Property 'scale' out of range: ${scale}`);
@@ -270,7 +270,7 @@ class Color {
 	}
 	/**
 	 * @param {Color} source 
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	static pass(source, scale) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Property 'scale' out of range: ${scale}`);
@@ -278,7 +278,7 @@ class Color {
 	}
 	//#endregion
 	//#region Properties
-	/** @type {Number} */ #red = 0;
+	/** @type {number} */ #red = 0;
 	get red() {
 		return this.#red;
 	}
@@ -287,7 +287,7 @@ class Color {
 		this.#red = Math.trunc(value);
 		[this.#hue, this.#saturation, this.#lightness] = Color.#RGBtoHSL(this.#red, this.#green, this.#blue);
 	}
-	/** @type {Number} */ #green = 0;
+	/** @type {number} */ #green = 0;
 	get green() {
 		return this.#green;
 	}
@@ -296,7 +296,7 @@ class Color {
 		this.#green = Math.trunc(value);
 		[this.#hue, this.#saturation, this.#lightness] = Color.#RGBtoHSL(this.#red, this.#green, this.#blue);
 	}
-	/** @type {Number} */ #blue = 0;
+	/** @type {number} */ #blue = 0;
 	get blue() {
 		return this.#blue;
 	}
@@ -305,7 +305,7 @@ class Color {
 		this.#blue = Math.trunc(value);
 		[this.#hue, this.#saturation, this.#lightness] = Color.#RGBtoHSL(this.#red, this.#green, this.#blue);
 	}
-	/** @type {Number} */ #hue = 0;
+	/** @type {number} */ #hue = 0;
 	get hue() {
 		return this.#hue;
 	}
@@ -314,7 +314,7 @@ class Color {
 		this.#hue = Math.trunc(value);
 		[this.#red, this.#green, this.#blue] = Color.#HSLtoRGB(this.#hue, this.#saturation, this.#lightness);
 	}
-	/** @type {Number} */ #saturation = 0;
+	/** @type {number} */ #saturation = 0;
 	get saturation() {
 		return this.#saturation;
 	}
@@ -323,7 +323,7 @@ class Color {
 		this.#saturation = Math.trunc(value);
 		[this.#red, this.#green, this.#blue] = Color.#HSLtoRGB(this.#hue, this.#saturation, this.#lightness);
 	}
-	/** @type {Number} */ #lightness = 0;
+	/** @type {number} */ #lightness = 0;
 	get lightness() {
 		return this.#lightness;
 	}
@@ -332,7 +332,7 @@ class Color {
 		this.#lightness = Math.trunc(value);
 		[this.#red, this.#green, this.#blue] = Color.#HSLtoRGB(this.#hue, this.#saturation, this.#lightness);
 	}
-	/** @type {Number} */ #alpha = 1;
+	/** @type {number} */ #alpha = 1;
 	get alpha() {
 		return this.#alpha;
 	}
@@ -343,7 +343,7 @@ class Color {
 	//#endregion
 	//#region Methods
 	/**
-	 * @param {Boolean} deep
+	 * @param {boolean} deep
 	 * @param {ColorFormats} format 
 	 */
 	toString(deep = false, format = ColorFormats.RGB) {
@@ -357,49 +357,49 @@ class Color {
 	}
 	/**
 	 * @param {Color} other 
-	 * @param {Number} ratio [0 - 1]
+	 * @param {number} ratio [0 - 1]
 	 */
 	mix(other, ratio = 0.5) {
 		return Color.mix(this, other, ratio);
 	}
 	/**
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	grayscale(scale = 1) {
 		return Color.grayscale(this, scale);
 	}
 	/**
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	invert(scale = 1) {
 		return Color.invert(this, scale);
 	}
 	/**
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	sepia(scale = 1) {
 		return Color.sepia(this, scale);
 	}
 	/**
-	 * @param {Number} angle (-∞ - ∞)
+	 * @param {number} angle (-∞ - ∞)
 	 */
 	rotate(angle) {
 		return Color.rotate(this, angle);
 	}
 	/**
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	saturate(scale) {
 		return Color.saturate(this, scale);
 	}
 	/**
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	illuminate(scale) {
 		return Color.illuminate(this, scale);
 	}
 	/**
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	pass(scale) {
 		return Color.pass(this, scale);

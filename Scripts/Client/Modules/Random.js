@@ -3,16 +3,16 @@
 //#region Random
 class Random {
 	/**
-	 * @param {Number} min 
-	 * @param {Number} max 
+	 * @param {number} min 
+	 * @param {number} max 
 	 * @returns [min -max)
 	 */
 	static number(min, max) {
 		return Math.random() * (max - min) + min;
 	}
 	/**
-	 * @param {Number} min 
-	 * @param {Number} max 
+	 * @param {number} min 
+	 * @param {number} max 
 	 * @returns [min -max)
 	 */
 	static integer(min, max) {
@@ -27,7 +27,7 @@ class Random {
 	}
 	/**
 	 * @template T 
-	 * @param {Map<T, Number>} cases 
+	 * @param {Map<T, number>} cases 
 	 */
 	static case(cases) {
 		const summary = Array.from(cases).reduce((previous, [, percentage]) => previous + percentage, 0);

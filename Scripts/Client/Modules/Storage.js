@@ -6,7 +6,7 @@
  */
 class Archive {
 	/**
-	 * @param {String} key 
+	 * @param {string} key 
 	 * @param {T} initial
 	 */
 	constructor(key, initial) {
@@ -15,7 +15,7 @@ class Archive {
 			this.data = initial;
 		}
 	}
-	/** @type {String} */ #key;
+	/** @type {string} */ #key;
 	get data() {
 		const item = localStorage.getItem(this.#key);
 		if (item === null) {
@@ -62,7 +62,7 @@ class NotationProgenitor {
 class NotationContainer {
 	/**
 	 * @param {T} prototype 
-	 * @param {String} path 
+	 * @param {string} path 
 	 */
 	constructor(prototype, path) {
 		this.#prototype = prototype;

@@ -71,7 +71,7 @@ class Texture {
 	/**
 	 * @param {Texture} first 
 	 * @param {Texture} second 
-	 * @param {Number} ratio [0 - 1]
+	 * @param {number} ratio [0 - 1]
 	 */
 	static mix(first, second, ratio = 0.5) {
 		if (ratio < 0 || ratio > 1) throw new RangeError(`Ratio ${ratio} out of range [0 - 1]`);
@@ -84,7 +84,7 @@ class Texture {
 	}
 	/**
 	 * @param {Texture} source 
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	static grayscale(source, scale = 1) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Scale ${scale} out of range [0 - 1]`);
@@ -97,7 +97,7 @@ class Texture {
 	}
 	/**
 	 * @param {Texture} source 
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	static invert(source, scale = 1) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Scale ${scale} out of range [0 - 1]`);
@@ -110,7 +110,7 @@ class Texture {
 	}
 	/**
 	 * @param {Texture} source 
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	static sepia(source, scale = 1) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Scale ${scale} out of range [0 - 1]`);
@@ -123,7 +123,7 @@ class Texture {
 	}
 	/**
 	 * @param {Texture} source 
-	 * @param {Number} angle (-∞ - ∞)
+	 * @param {number} angle (-∞ - ∞)
 	 */
 	static rotate(source, angle) {
 		const result = source.clone();
@@ -135,7 +135,7 @@ class Texture {
 	}
 	/**
 	 * @param {Texture} source 
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	static saturate(source, scale) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Scale ${scale} out of range [0 - 1]`);
@@ -148,7 +148,7 @@ class Texture {
 	}
 	/**
 	 * @param {Texture} source 
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	static illuminate(source, scale) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Scale ${scale} out of range [0 - 1]`);
@@ -161,7 +161,7 @@ class Texture {
 	}
 	/**
 	 * @param {Texture} source 
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	static pass(source, scale) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Scale ${scale} out of range [0 - 1]`);
@@ -215,49 +215,49 @@ class Texture {
 	}
 	/**
 	 * @param {Texture} other 
-	 * @param {Number} ratio [0 - 1]
+	 * @param {number} ratio [0 - 1]
 	 */
 	mix(other, ratio = 0.5) {
 		return Texture.mix(this, other, ratio);
 	}
 	/**
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	grayscale(scale = 1) {
 		return Texture.grayscale(this, scale);
 	}
 	/**
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	invert(scale = 1) {
 		return Texture.invert(this, scale);
 	}
 	/**
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	sepia(scale = 1) {
 		return Texture.sepia(this, scale);
 	}
 	/**
-	 * @param {Number} angle (-∞ - ∞)
+	 * @param {number} angle (-∞ - ∞)
 	 */
 	rotate(angle) {
 		return Texture.rotate(this, angle);
 	}
 	/**
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	saturate(scale) {
 		return Texture.saturate(this, scale);
 	}
 	/**
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	illuminate(scale) {
 		return Texture.illuminate(this, scale);
 	}
 	/**
-	 * @param {Number} scale [0 - 1]
+	 * @param {number} scale [0 - 1]
 	 */
 	pass(scale) {
 		return Texture.pass(this, scale);

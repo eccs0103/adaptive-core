@@ -9,38 +9,38 @@ class Point {
 		return Array.from(this);
 	}
 	/**
-	 * @param {Number} [digits] 
+	 * @param {number} [digits] 
 	 */
 	toFixed(digits) {
 		return `(${this.#metrics.map(metric => metric.toFixed(digits)).join(`, `)})`;
 	}
 	/**
-	 * @param {Number} [digits] 
+	 * @param {number} [digits] 
 	 */
 	toExponential(digits) {
 		return `(${this.#metrics.map(metric => metric.toExponential(digits)).join(`, `)})`;
 	}
 	/**
-	 * @param {Number} [precision] 
+	 * @param {number} [precision] 
 	 */
 	toPrecision(precision) {
 		return `(${this.#metrics.map(metric => metric.toPrecision(precision)).join(`, `)})`;
 	}
 	/**
-	 * @param {Number} [radix] 
+	 * @param {number} [radix] 
 	 */
 	toString(radix) {
 		return `(${this.#metrics.map(metric => metric.toString(radix)).join(`, `)})`;
 	}
 	/**
-	 * @param {String | String[]} [locales] 
+	 * @param {string | string[]} [locales] 
 	 * @param {Intl.NumberFormatOptions} [options] 
 	 */
 	toLocaleString(locales, options) {
 		return `(${this.#metrics.map(metric => metric.toLocaleString(locales, options)).join(`, `)})`;
 	}
 	/**
-	 * @returns {Generator<Number>}
+	 * @returns {Generator<number>}
 	 */
 	*[Symbol.iterator]() {
 		throw new ReferenceError(`Not implemented function`);
@@ -85,35 +85,35 @@ class Point1D extends Point {
 		return new Point1D(source.x);
 	}
 	/**
-	 * @param {Number} value 
+	 * @param {number} value 
 	 * @returns {Point1D}
 	 */
 	static repeat(value) {
 		return new Point1D(value);
 	}
 	/** @readonly */ static get ZERO() { return Point1D.repeat(0); }
-	/** @type {Point1D} */ static #CONSTANT_ZERO = Point1D.ZERO;
+	/** @type {Readonly<Point1D>} */ static #CONSTANT_ZERO = Object.freeze(Point1D.ZERO);
 	/** @readonly */ static get CONSTANT_ZERO() {
-		return Object.freeze(this.#CONSTANT_ZERO);
+		return this.#CONSTANT_ZERO;
 	}
 	/** @readonly */ static get HALF() { return Point1D.repeat(0.5); }
-	/** @type {Point1D} */ static #CONSTANT_HALF = Point1D.HALF;
+	/** @type {Readonly<Point1D>} */ static #CONSTANT_HALF = Object.freeze(Point1D.HALF);
 	/** @readonly */ static get CONSTANT_HALF() {
-		return Object.freeze(this.#CONSTANT_HALF);
+		return this.#CONSTANT_HALF;
 	}
 	/** @readonly */ static get TWO() { return Point1D.repeat(2); }
-	/** @type {Point1D} */ static #CONSTANT_TWO = Point1D.TWO;
+	/** @type {Readonly<Point1D>} */ static #CONSTANT_TWO = Object.freeze(Point1D.TWO);
 	/** @readonly */ static get CONSTANT_TWO() {
-		return Object.freeze(this.#CONSTANT_TWO);
+		return this.#CONSTANT_TWO;
 	}
 	/**
-	 * @param {Number} x 
+	 * @param {number} x 
 	 */
 	constructor(x) {
 		super();
 		this.x = x;
 	}
-	/** @type {Number} */ #x = 0;
+	/** @type {number} */ #x = 0;
 	get x() {
 		return this.#x;
 	}
@@ -191,36 +191,36 @@ class Point2D extends Point1D {
 		return new Point2D(source.x, source.y);
 	}
 	/**
-	 * @param {Number} value 
+	 * @param {number} value 
 	 * @returns {Point2D}
 	 */
 	static repeat(value) {
 		return new Point2D(value, value);
 	}
 	/** @readonly */ static get ZERO() { return Point2D.repeat(0); }
-	/** @type {Point2D} */ static #CONSTANT_ZERO = Point2D.ZERO;
+	/** @type {Readonly<Point2D>} */ static #CONSTANT_ZERO = Object.freeze(Point2D.ZERO);
 	/** @readonly */ static get CONSTANT_ZERO() {
-		return Object.freeze(this.#CONSTANT_ZERO);
+		return this.#CONSTANT_ZERO;
 	}
 	/** @readonly */ static get HALF() { return Point2D.repeat(0.5); }
-	/** @type {Point2D} */ static #CONSTANT_HALF = Point2D.HALF;
+	/** @type {Readonly<Point2D>} */ static #CONSTANT_HALF = Object.freeze(Point2D.HALF);
 	/** @readonly */ static get CONSTANT_HALF() {
-		return Object.freeze(this.#CONSTANT_HALF);
+		return this.#CONSTANT_HALF;
 	}
 	/** @readonly */ static get TWO() { return Point2D.repeat(2); }
-	/** @type {Point2D} */ static #CONSTANT_TWO = Point2D.TWO;
+	/** @type {Readonly<Point2D>} */ static #CONSTANT_TWO = Object.freeze(Point2D.TWO);
 	/** @readonly */ static get CONSTANT_TWO() {
-		return Object.freeze(this.#CONSTANT_TWO);
+		return this.#CONSTANT_TWO;
 	}
 	/**
-	 * @param {Number} x 
-	 * @param {Number} y 
+	 * @param {number} x 
+	 * @param {number} y 
 	 */
 	constructor(x, y) {
 		super(x);
 		this.y = y;
 	}
-	/** @type {Number} */ #y = 0;
+	/** @type {number} */ #y = 0;
 	get y() {
 		return this.#y;
 	}
@@ -299,37 +299,37 @@ class Point3D extends Point2D {
 		return new Point3D(source.x, source.y, source.z);
 	}
 	/**
-	 * @param {Number} value 
+	 * @param {number} value 
 	 * @returns {Point3D}
 	 */
 	static repeat(value) {
 		return new Point3D(value, value, value);
 	}
 	/** @readonly */ static get ZERO() { return Point3D.repeat(0); }
-	/** @type {Point3D} */ static #CONSTANT_ZERO = Point3D.ZERO;
+	/** @type {Readonly<Point3D>} */ static #CONSTANT_ZERO = Object.freeze(Point3D.ZERO);
 	/** @readonly */ static get CONSTANT_ZERO() {
-		return Object.freeze(this.#CONSTANT_ZERO);
+		return this.#CONSTANT_ZERO;
 	}
 	/** @readonly */ static get HALF() { return Point3D.repeat(0.5); }
-	/** @type {Point3D} */ static #CONSTANT_HALF = Point3D.HALF;
+	/** @type {Readonly<Point3D>} */ static #CONSTANT_HALF = Object.freeze(Point3D.HALF);
 	/** @readonly */ static get CONSTANT_HALF() {
-		return Object.freeze(this.#CONSTANT_HALF);
+		return this.#CONSTANT_HALF;
 	}
 	/** @readonly */ static get TWO() { return Point3D.repeat(2); }
-	/** @type {Point3D} */ static #CONSTANT_TWO = Point3D.TWO;
+	/** @type {Readonly<Point3D>} */ static #CONSTANT_TWO = Object.freeze(Point3D.TWO);
 	/** @readonly */ static get CONSTANT_TWO() {
-		return Object.freeze(this.#CONSTANT_TWO);
+		return this.#CONSTANT_TWO;
 	}
 	/**
-	 * @param {Number} x 
-	 * @param {Number} y 
-	 * @param {Number} z 
+	 * @param {number} x 
+	 * @param {number} y 
+	 * @param {number} z 
 	 */
 	constructor(x, y, z) {
 		super(x, y);
 		this.z = z;
 	}
-	/** @type {Number} */ #z = 0;
+	/** @type {number} */ #z = 0;
 	get z() {
 		return this.#z;
 	}

@@ -1,5 +1,4 @@
-// @ts-ignore
-/** @typedef {import("../Declarations/Extensions.d.ts")} */
+/// <reference path="../Declarations/Extensions.d.ts" />
 
 "use strict";
 
@@ -7,7 +6,7 @@
 /**
  * @template {typeof HTMLElement} T
  * @param {T} type 
- * @param {String} selectors 
+ * @param {string} selectors 
  */
 HTMLElement.prototype.getElement = function (type, selectors) {
 	const element = this.querySelector(selectors);
@@ -20,8 +19,8 @@ HTMLElement.prototype.getElement = function (type, selectors) {
 /**
  * @template {typeof HTMLElement} T
  * @param {T} type 
- * @param {String} selectors 
- * @param {Boolean} strict 
+ * @param {string} selectors 
+ * @param {boolean} strict 
  */
 HTMLElement.prototype.tryGetElement = function (type, selectors, strict = false) {
 	return (/** @type {Promise<InstanceType<T>>} */ (new Promise((resolve, reject) => {
@@ -38,7 +37,7 @@ HTMLElement.prototype.tryGetElement = function (type, selectors, strict = false)
 /**
  * @template {typeof HTMLElement} T
  * @param {T} type 
- * @param {String} selectors 
+ * @param {string} selectors 
  */
 Document.prototype.getElement = function (type, selectors) {
 	return this.documentElement.getElement(type, selectors);
@@ -47,8 +46,8 @@ Document.prototype.getElement = function (type, selectors) {
 /**
  * @template {typeof HTMLElement} T
  * @param {T} type 
- * @param {String} selectors 
- * @param {Boolean} strict
+ * @param {string} selectors 
+ * @param {boolean} strict
  */
 Document.prototype.tryGetElement = function (type, selectors, strict) {
 	return this.documentElement.tryGetElement(type, selectors, strict);
@@ -57,7 +56,7 @@ Document.prototype.tryGetElement = function (type, selectors, strict) {
 const dialogConsole = document.getElement(HTMLDialogElement, `dialog.console`);
 /**
  * @param {any} value 
- * @returns {String}
+ * @returns {string}
  */
 function logify(value) {
 	switch (typeof (value)) {
@@ -94,7 +93,7 @@ Document.prototype.analysis = function (error) {
 //#region Math
 const toDegreeFactor = Math.PI / 180;
 /**
- * @param {Number} radians 
+ * @param {number} radians 
  */
 Math.toDegrees = function (radians) {
 	return radians * toDegreeFactor;
@@ -102,15 +101,15 @@ Math.toDegrees = function (radians) {
 
 const toRadianFactor = 180 / Math.PI;
 /**
- * @param {Number} degrees 
+ * @param {number} degrees 
  */
 Math.toRadians = function (degrees) {
 	return degrees * toRadianFactor;
 };
 
 /**
-* @param {Number} value 
-* @param {Number} period 
+* @param {number} value 
+* @param {number} period 
 * @returns [0 - 1)
 */
 Math.toFactor = function (value, period) {
@@ -118,8 +117,8 @@ Math.toFactor = function (value, period) {
 };
 
 /**
- * @param {Number} value 
- * @param {Number} period 
+ * @param {number} value 
+ * @param {number} period 
  * @returns [-1 - 1)
  */
 Math.toSignedFactor = function (value, period) {
@@ -135,8 +134,8 @@ dialogAlert.addEventListener(`click`, (event) => {
 });
 
 /**
- * @param {String} message 
- * @param {String} title
+ * @param {string} message 
+ * @param {string} title
  */
 Window.prototype.alertAsync = function (message, title = `Message`) {
 	dialogAlert.showModal();
@@ -183,8 +182,8 @@ dialogConfirm.addEventListener(`click`, (event) => {
 });
 
 /**
- * @param {String} message 
- * @param {String} title
+ * @param {string} message 
+ * @param {string} title
  */
 Window.prototype.confirmAsync = function (message, title = `Message`) {
 	dialogConfirm.showModal();
@@ -220,7 +219,7 @@ Window.prototype.confirmAsync = function (message, title = `Message`) {
 	//#endregion
 	//#endregion
 	const controller = new AbortController();
-	const promise = (/** @type {Promise<Boolean>} */(new Promise((resolve) => {
+	const promise = (/** @type {Promise<boolean>} */(new Promise((resolve) => {
 		dialogConfirm.addEventListener(`close`, (event) => {
 			resolve(false);
 		}, { signal: controller.signal });
@@ -246,8 +245,8 @@ dialogPrompt.addEventListener(`click`, (event) => {
 });
 
 /**
- * @param {String} message 
- * @param {String} title
+ * @param {string} message 
+ * @param {string} title
  */
 Window.prototype.promptAsync = function (message, title = `Message`) {
 	dialogPrompt.showModal();
@@ -283,7 +282,7 @@ Window.prototype.promptAsync = function (message, title = `Message`) {
 	//#endregion
 	//#endregion
 	const controller = new AbortController();
-	const promise = (/** @type {Promise<String?>} */(new Promise((resolve) => {
+	const promise = (/** @type {Promise<string?>} */(new Promise((resolve) => {
 		dialogPrompt.addEventListener(`close`, (event) => {
 			resolve(null);
 		}, { signal: controller.signal });
@@ -301,8 +300,8 @@ Window.prototype.promptAsync = function (message, title = `Message`) {
 /**
  * @template T
  * @param {Promise<T>} promise 
- * @param {Number} duration 
- * @param {Number} delay 
+ * @param {number} duration 
+ * @param {number} delay 
  */
 Window.prototype.load = async function (promise, duration = 200, delay = 0) {
 	const dialogLoader = document.getElement(HTMLDialogElement, `dialog.loader`);
@@ -322,7 +321,7 @@ Window.prototype.load = async function (promise, duration = 200, delay = 0) {
 
 /**
  * @param {Error} error 
- * @param {Boolean} locked
+ * @param {boolean} locked
  */
 Window.prototype.prevent = async function (error, locked = true) {
 	const message = error.stack ?? `${error.name}: ${error.message}`;
