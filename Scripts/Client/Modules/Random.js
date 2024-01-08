@@ -1,5 +1,7 @@
 "use strict";
 
+const { random, trunc } = Math;
+
 //#region Random
 class Random {
 	/**
@@ -7,31 +9,31 @@ class Random {
 	 * @param {number} max 
 	 * @returns [min -max)
 	 */
-	static number(min, max) {
-		return Math.random() * (max - min) + min;
+	number(min, max) {
+		return random() * (max - min) + min;
 	}
 	/**
 	 * @param {number} min 
 	 * @param {number} max 
 	 * @returns [min -max)
 	 */
-	static integer(min, max) {
-		return Math.trunc(Random.number(min, max));
+	integer(min, max) {
+		return trunc(this.number(min, max));
 	}
 	/**
 	 * @template T 
 	 * @param {T[]} array 
 	 */
-	static item(array) {
-		return array[Random.integer(0, array.length)];
+	item(array) {
+		return array[this.integer(0, array.length)];
 	}
 	/**
 	 * @template T 
 	 * @param {Map<T, number>} cases 
 	 */
-	static case(cases) {
-		const summary = Array.from(cases).reduce((previous, [, percentage]) => previous + percentage, 0);
-		const random = Random.number(0, summary);
+	case(cases) {
+		const summary = [...cases].reduce((previous, [, percentage]) => previous + percentage, 0);
+		const random = this.number(0, summary);
 		let begin = 0;
 		for (const [item, percentage] of cases) {
 			const end = begin + percentage;
@@ -41,6 +43,9 @@ class Random {
 			begin = end;
 		}
 		throw new RangeError(`Selector ${random} is out of range [0 - ${summary})`);
+	}
+	GUID() {
+		return `${crypto.randomUUID()}`;
 	}
 }
 //#endregion

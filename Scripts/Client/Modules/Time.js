@@ -1,5 +1,7 @@
 "use strict";
 
+const { abs, trunc } = Math;
+
 //#region Timespan
 class Timespan {
 	//#region Converters
@@ -9,13 +11,13 @@ class Timespan {
 	 */
 	static #toTime(duration) {
 		const negativity = duration < 0;
-		duration = Math.abs(duration);
+		duration = abs(duration);
 		const milliseconds = duration % 1000;
-		duration = Math.trunc(duration / 1000);
+		duration = trunc(duration / 1000);
 		const seconds = duration % 60;
-		duration = Math.trunc(duration / 60);
+		duration = trunc(duration / 60);
 		const minutes = duration % 60;
-		duration = Math.trunc(duration / 60);
+		duration = trunc(duration / 60);
 		const hours = duration;
 		return [negativity, hours, minutes, seconds, milliseconds];
 	}
@@ -74,7 +76,7 @@ class Timespan {
 	 */
 	static viaDuration(duration = 0) {
 		const result = new Timespan();
-		result.#duration = Math.trunc(duration);
+		result.#duration = trunc(duration);
 		[result.#negativity, result.#hours, result.#minutes, result.#seconds, result.#milliseconds] = Timespan.#toTime(result.#duration);
 		return result;
 	}
@@ -92,10 +94,10 @@ class Timespan {
 		if (0 > milliseconds || milliseconds > 999) throw new RangeError(`Property 'milliseconds' out of range: ${milliseconds}`);
 		const result = new Timespan();
 		result.#negativity = negativity;
-		result.#hours = Math.trunc(hours);
-		result.#minutes = Math.trunc(minutes);
-		result.#seconds = Math.trunc(seconds);
-		result.#milliseconds = Math.trunc(milliseconds);
+		result.#hours = trunc(hours);
+		result.#minutes = trunc(minutes);
+		result.#seconds = trunc(seconds);
+		result.#milliseconds = trunc(milliseconds);
 		result.#duration = Timespan.#toDuration(result.#negativity, result.#hours, result.#minutes, result.#seconds, result.#milliseconds);
 		return result;
 	}
@@ -164,7 +166,7 @@ class Timespan {
 	}
 	set duration(value) {
 		if (value < 0) throw new RangeError(`Property 'duration' out of range: ${value}`);
-		this.#duration = Math.trunc(value);
+		this.#duration = trunc(value);
 		[this.#negativity, this.#hours, this.#minutes, this.#seconds, this.#milliseconds] = Timespan.#toTime(this.#duration);
 	}
 	/** @type {boolean} */ #negativity = false;
@@ -181,7 +183,7 @@ class Timespan {
 	}
 	set hours(value) {
 		if (value < 0) throw new RangeError(`Property 'hours' out of range: ${value}`);
-		this.#hours = Math.trunc(value);
+		this.#hours = trunc(value);
 		this.#duration = Timespan.#toDuration(this.#negativity, this.#hours, this.#minutes, this.#seconds, this.#milliseconds);
 	}
 	/** @type {number} */ #minutes = 0;
@@ -190,7 +192,7 @@ class Timespan {
 	}
 	set minutes(value) {
 		if (value < 0 || value > 59) throw new RangeError(`Property 'minutes' out of range: ${value}`);
-		this.#minutes = Math.trunc(value);
+		this.#minutes = trunc(value);
 		this.#duration = Timespan.#toDuration(this.#negativity, this.#hours, this.#minutes, this.#seconds, this.#milliseconds);
 	}
 	/** @type {number} */ #seconds = 0;
@@ -199,7 +201,7 @@ class Timespan {
 	}
 	set seconds(value) {
 		if (value < 0 || value > 59) throw new RangeError(`Property 'seconds' out of range: ${value}`);
-		this.#seconds = Math.trunc(value);
+		this.#seconds = trunc(value);
 		this.#duration = Timespan.#toDuration(this.#negativity, this.#hours, this.#minutes, this.#seconds, this.#milliseconds);
 	}
 	/** @type {number} */ #milliseconds = 0;
@@ -208,7 +210,7 @@ class Timespan {
 	}
 	set milliseconds(value) {
 		if (value < 0 || value > 999) throw new RangeError(`Property 'milliseconds' out of range: ${value}`);
-		this.#milliseconds = Math.trunc(value);
+		this.#milliseconds = trunc(value);
 		this.#duration = Timespan.#toDuration(this.#negativity, this.#hours, this.#minutes, this.#seconds, this.#milliseconds);
 	}
 	//#endregion

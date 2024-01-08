@@ -4,6 +4,9 @@
 Template for creating adaptive web pages.
 
 ## Feed
+### Update 2.3.8 (08.01.2024)
+- Optimization and quality improvement in `Colors.js`, `Executors.js`, `Measures.js`, `Random.js`, `Storage.js`, `Texture.js` and `Time.js`.
+
 ### Update 2.3.7 (03.01.2024)
 - Optimization and quality improvement in `Measures.js`.
 

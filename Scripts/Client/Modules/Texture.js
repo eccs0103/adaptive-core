@@ -62,7 +62,7 @@ class Texture {
 		for (let y = 0; y < data.length; y++) {
 			/** @type {Color[]} */ const row = (data[y] = new Array(this.#size.x));
 			for (let x = 0; x < row.length; x++) {
-				/** @type {Color} */ const cell = (row[x] = Color.TRANSPARENT);
+				/** @type {Color} */ (row[x] = Color.TRANSPARENT);
 			}
 		}
 	}
@@ -185,30 +185,18 @@ class Texture {
 	 * @param {Point2D} position 
 	 */
 	getCell(position) {
-		const row = this.#data[position.y];
-		if (row === undefined) {
-			throw new RangeError(`Position ${position.toString()} out of range [${Point2D.ZERO.toString()} - ${this.size.toString()})`);
-		}
-		const cell = row[position.x];
-		if (cell === undefined) {
-			throw new RangeError(`Position ${position.toString()} out of range [${Point2D.ZERO.toString()} - ${this.size.toString()})`);
-		}
-		return cell;
+		if (0 <= position.x && position.x < this.size.x && 0 <= position.y && position.y < this.size.y) {
+			return this.#data[position.y][position.x];
+		} else throw new RangeError(`Position ${position} out of range [${Point2D.CONSTANT_ZERO} - ${this.size})`);
 	}
 	/**
 	 * @param {Point2D} position 
 	 * @param {Color} value 
 	 */
 	setCell(position, value) {
-		const row = this.#data[position.y];
-		if (row === undefined) {
-			throw new RangeError(`Position ${position.toString()} out of range [${Point2D.ZERO.toString()} - ${this.size.toString()})`);
-		}
-		const cell = row[position.x];
-		if (cell === undefined) {
-			throw new RangeError(`Position ${position.toString()} out of range [${Point2D.ZERO.toString()} - ${this.size.toString()})`);
-		}
-		this.#data[position.y][position.x] = value;
+		if (0 <= position.x && position.x < this.size.x && 0 <= position.y && position.y < this.size.y) {
+			this.#data[position.y][position.x] = value;
+		} else throw new RangeError(`Position ${position} out of range [${Point2D.CONSTANT_ZERO} - ${this.size})`);
 	}
 	clone() {
 		return Texture.clone(this);

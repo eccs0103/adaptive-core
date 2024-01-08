@@ -2,42 +2,39 @@
 
 //#region Point
 /**
- * @interface
+ * @abstract
  */
 class Point {
-	/** @readonly */ get #metrics() {
-		return Array.from(this);
-	}
 	/**
 	 * @param {number} [digits] 
 	 */
 	toFixed(digits) {
-		return `(${this.#metrics.map(metric => metric.toFixed(digits)).join(`, `)})`;
+		return `(${[...this].map(metric => metric.toFixed(digits)).join(`, `)})`;
 	}
 	/**
 	 * @param {number} [digits] 
 	 */
 	toExponential(digits) {
-		return `(${this.#metrics.map(metric => metric.toExponential(digits)).join(`, `)})`;
+		return `(${[...this].map(metric => metric.toExponential(digits)).join(`, `)})`;
 	}
 	/**
 	 * @param {number} [precision] 
 	 */
 	toPrecision(precision) {
-		return `(${this.#metrics.map(metric => metric.toPrecision(precision)).join(`, `)})`;
+		return `(${[...this].map(metric => metric.toPrecision(precision)).join(`, `)})`;
 	}
 	/**
 	 * @param {number} [radix] 
 	 */
 	toString(radix) {
-		return `(${this.#metrics.map(metric => metric.toString(radix)).join(`, `)})`;
+		return `(${[...this].map(metric => metric.toString(radix)).join(`, `)})`;
 	}
 	/**
 	 * @param {string | string[]} [locales] 
 	 * @param {Intl.NumberFormatOptions} [options] 
 	 */
 	toLocaleString(locales, options) {
-		return `(${this.#metrics.map(metric => metric.toLocaleString(locales, options)).join(`, `)})`;
+		return `(${[...this].map(metric => metric.toLocaleString(locales, options)).join(`, `)})`;
 	}
 	/**
 	 * @returns {Generator<number>}
@@ -147,6 +144,9 @@ class Point1D extends Point {
 	clone() {
 		return Point1D.clone(this);
 	}
+	/**
+	 * @returns {Generator<number>}
+	 */
 	*[Symbol.iterator]() {
 		yield this.x;
 		return;
@@ -254,6 +254,9 @@ class Point2D extends Point1D {
 	clone() {
 		return Point2D.clone(this);
 	}
+	/**
+	 * @returns {Generator<number>}
+	 */
 	*[Symbol.iterator]() {
 		yield this.x;
 		yield this.y;
@@ -363,6 +366,9 @@ class Point3D extends Point2D {
 	clone() {
 		return Point3D.clone(this);
 	}
+	/**
+	 * @returns {Generator<number>}
+	 */
 	*[Symbol.iterator]() {
 		yield this.x;
 		yield this.y;

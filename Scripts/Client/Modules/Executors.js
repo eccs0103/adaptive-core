@@ -2,17 +2,39 @@
 
 //#region Engine
 /**
- * @typedef Engine
- * @property {boolean} launched
- * @property {number} FPS
- * @property {number} delta
+ * @abstract
  */
+class Engine extends EventTarget {
+	/**
+	 * @returns {boolean}
+	 */
+	get launched() {
+		throw new ReferenceError(`Not implemented function`);
+	}
+	/**
+	 * @param {boolean} value
+	 */
+	set launched(value) {
+		throw new ReferenceError(`Not implemented function`);
+	}
+	/**
+	 * @readonly
+	 * @returns {number}
+	 */ 
+	get FPS() {
+		throw new ReferenceError(`Not implemented function`);
+	}
+	/**
+	 * @readonly
+	 * @returns {number}
+	 */ 
+	get delta() {
+		throw new ReferenceError(`Not implemented function`);
+	}
+}
 //#endregion
 //#region Fast engine
-/**
- * @implements {Engine}
- */
-class FastEngine extends EventTarget {
+class FastEngine extends Engine {
 	/**
 	 * @param {boolean} launch
 	 */
@@ -85,10 +107,7 @@ class FastEngine extends EventTarget {
 }
 //#endregion
 //#region Precise engine
-/**
- * @implements {Engine}
- */
-class PreciseEngine extends EventTarget {
+class PreciseEngine extends Engine {
 	/**
 	 * @param {boolean} launch
 	 */

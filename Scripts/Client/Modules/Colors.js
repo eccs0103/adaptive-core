@@ -1,5 +1,7 @@
 "use strict";
 
+const { min, max, trunc, abs } = Math;
+
 //#region Color formats
 /** @enum {string} */ const ColorFormats = {
 	/** @readonly */ RGB: `RGB`,
@@ -23,12 +25,12 @@ class Color {
 		lightness /= 100;
 		function transform(/** @type {number} */ level) {
 			const sector = (level + hue) % 12;
-			return lightness - (saturation * Math.min(lightness, 1 - lightness)) * Math.max(-1, Math.min(sector - 3, 9 - sector, 1));
+			return lightness - (saturation * min(lightness, 1 - lightness)) * max(-1, min(sector - 3, 9 - sector, 1));
 		}
 		return [
-			Math.trunc(transform(0) * 255),
-			Math.trunc(transform(8) * 255),
-			Math.trunc(transform(4) * 255)
+			trunc(transform(0) * 255),
+			trunc(transform(8) * 255),
+			trunc(transform(4) * 255)
 		];
 	}
 	/**
@@ -41,12 +43,12 @@ class Color {
 		red /= 255;
 		green /= 255;
 		blue /= 255;
-		const value = Math.max(red, green, blue), level = value - Math.min(red, green, blue), f = (1 - Math.abs(value + value - level - 1));
+		const value = max(red, green, blue), level = value - min(red, green, blue), f = (1 - abs(value + value - level - 1));
 		const hue = level && ((value === red) ? (green - blue) / level : ((value === green) ? 2 + (blue - red) / level : 4 + (red - green) / level));
 		return [
-			Math.trunc((hue < 0 ? hue + 6 : hue) * 60),
-			Math.trunc((f ? level / f : 0) * 100),
-			Math.trunc(((value + value - level) / 2) * 100)
+			trunc((hue < 0 ? hue + 6 : hue) * 60),
+			trunc((f ? level / f : 0) * 100),
+			trunc(((value + value - level) / 2) * 100)
 		];
 	}
 	/**
@@ -126,9 +128,9 @@ class Color {
 		if (blue < 0 || blue > 255) throw new RangeError(`Property 'blue' out of range: ${blue}`);
 		if (alpha < 0 || alpha > 1) throw new RangeError(`Property 'alpha' out of range: ${alpha}`);
 		const result = new Color();
-		result.#green = Math.trunc(green);
-		result.#red = Math.trunc(red);
-		result.#blue = Math.trunc(blue);
+		result.#green = trunc(green);
+		result.#red = trunc(red);
+		result.#blue = trunc(blue);
 		[result.#hue, result.#saturation, result.#lightness] = Color.#RGBtoHSL(result.#red, result.#green, result.#blue);
 		result.#alpha = alpha;
 		return result;
@@ -145,9 +147,9 @@ class Color {
 		if (lightness < 0 || lightness > 100) throw new RangeError(`Property 'lightness' out of range: ${lightness}`);
 		if (alpha < 0 || alpha > 1) throw new RangeError(`Property 'alpha' out of range: ${alpha}`);
 		const result = new Color();
-		result.#hue = Math.trunc(hue);
-		result.#saturation = Math.trunc(saturation);
-		result.#lightness = Math.trunc(lightness);
+		result.#hue = trunc(hue);
+		result.#saturation = trunc(saturation);
+		result.#lightness = trunc(lightness);
 		[result.#red, result.#green, result.#blue] = Color.#HSLtoRGB(result.#hue, result.#saturation, result.#lightness);
 		result.#alpha = alpha;
 		return result;
@@ -234,9 +236,9 @@ class Color {
 	static sepia(source, scale = 1) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Property 'scale' out of range: ${scale}`);
 		const
-			red = Math.max(0, Math.min(((source.#red * 0.393) + (source.#green * 0.769) + (source.#blue * 0.189)), 255)),
-			green = Math.max(0, Math.min(((source.#red * 0.349) + (source.#green * 0.686) + (source.#blue * 0.168)), 255)),
-			blue = Math.max(0, Math.min(((source.#red * 0.272) + (source.#green * 0.534) + (source.#blue * 0.131)), 255));
+			red = max(0, min(((source.#red * 0.393) + (source.#green * 0.769) + (source.#blue * 0.189)), 255)),
+			green = max(0, min(((source.#red * 0.349) + (source.#green * 0.686) + (source.#blue * 0.168)), 255)),
+			blue = max(0, min(((source.#red * 0.272) + (source.#green * 0.534) + (source.#blue * 0.131)), 255));
 		return Color.viaRGB(
 			source.#red + (red - source.#red) * scale,
 			source.#green + (green - source.#green) * scale,
@@ -248,7 +250,7 @@ class Color {
 	 * @param {number} angle (-∞ - ∞)
 	 */
 	static rotate(source, angle) {
-		let hue = Math.trunc(source.#hue + angle) % 361;
+		let hue = trunc(source.#hue + angle) % 361;
 		if (hue < 0) hue += 360;
 		return Color.viaHSL(hue, source.#saturation, source.#lightness);
 	}
@@ -284,7 +286,7 @@ class Color {
 	}
 	set red(value) {
 		if (value < 0 || value > 255) throw new RangeError(`Property 'red' out of range: ${value}`);
-		this.#red = Math.trunc(value);
+		this.#red = trunc(value);
 		[this.#hue, this.#saturation, this.#lightness] = Color.#RGBtoHSL(this.#red, this.#green, this.#blue);
 	}
 	/** @type {number} */ #green = 0;
@@ -293,7 +295,7 @@ class Color {
 	}
 	set green(value) {
 		if (value < 0 || value > 255) throw new RangeError(`Property 'green' out of range: ${value}`);
-		this.#green = Math.trunc(value);
+		this.#green = trunc(value);
 		[this.#hue, this.#saturation, this.#lightness] = Color.#RGBtoHSL(this.#red, this.#green, this.#blue);
 	}
 	/** @type {number} */ #blue = 0;
@@ -302,7 +304,7 @@ class Color {
 	}
 	set blue(value) {
 		if (value < 0 || value > 255) throw new RangeError(`Property 'blue' out of range: ${value}`);
-		this.#blue = Math.trunc(value);
+		this.#blue = trunc(value);
 		[this.#hue, this.#saturation, this.#lightness] = Color.#RGBtoHSL(this.#red, this.#green, this.#blue);
 	}
 	/** @type {number} */ #hue = 0;
@@ -311,7 +313,7 @@ class Color {
 	}
 	set hue(value) {
 		if (value < 0 || value > 360) throw new RangeError(`Property 'hue' out of range: ${value}`);
-		this.#hue = Math.trunc(value);
+		this.#hue = trunc(value);
 		[this.#red, this.#green, this.#blue] = Color.#HSLtoRGB(this.#hue, this.#saturation, this.#lightness);
 	}
 	/** @type {number} */ #saturation = 0;
@@ -320,7 +322,7 @@ class Color {
 	}
 	set saturation(value) {
 		if (value < 0 || value > 100) throw new RangeError(`Property 'saturation' out of range: ${value}`);
-		this.#saturation = Math.trunc(value);
+		this.#saturation = trunc(value);
 		[this.#red, this.#green, this.#blue] = Color.#HSLtoRGB(this.#hue, this.#saturation, this.#lightness);
 	}
 	/** @type {number} */ #lightness = 0;
@@ -329,7 +331,7 @@ class Color {
 	}
 	set lightness(value) {
 		if (value < 0 || value > 100) throw new RangeError(`Property 'lightness' out of range: ${value}`);
-		this.#lightness = Math.trunc(value);
+		this.#lightness = trunc(value);
 		[this.#red, this.#green, this.#blue] = Color.#HSLtoRGB(this.#hue, this.#saturation, this.#lightness);
 	}
 	/** @type {number} */ #alpha = 1;

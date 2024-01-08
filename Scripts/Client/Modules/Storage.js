@@ -17,10 +17,9 @@ class Archive {
 	}
 	/** @type {string} */ #key;
 	get data() {
-		const item = localStorage.getItem(this.#key);
-		if (item === null) {
+		const item = localStorage.getItem(this.#key) ?? (() => {
 			throw new ReferenceError(`Key '${this.#key}' isn't defined`);
-		}
+		})();
 		return (/** @type {T} */ (JSON.parse(item)));
 	}
 	set data(value) {
@@ -36,7 +35,7 @@ class Archive {
 //#endregion
 //#region Notation progenitor
 /**
- * @interface
+ * @abstract
  */
 class NotationProgenitor {
 	/**
