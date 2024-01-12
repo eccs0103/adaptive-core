@@ -91,7 +91,7 @@ Document.prototype.analysis = function (error) {
 };
 //#endregion
 //#region Math
-const toDegreeFactor = Math.PI / 180;
+const toDegreeFactor = 180 / Math.PI;
 /**
  * @param {number} radians 
  */
@@ -99,7 +99,7 @@ Math.toDegrees = function (radians) {
 	return radians * toDegreeFactor;
 };
 
-const toRadianFactor = 180 / Math.PI;
+const toRadianFactor = Math.PI / 180;
 /**
  * @param {number} degrees 
  */
@@ -110,19 +110,19 @@ Math.toRadians = function (degrees) {
 /**
 * @param {number} value 
 * @param {number} period 
-* @returns [0 - 1)
+* @returns [0 - 1]
 */
 Math.toFactor = function (value, period) {
-	return value % period / period;
+	return value % (period + 1) / period;
 };
 
 /**
  * @param {number} value 
  * @param {number} period 
- * @returns [-1 - 1)
+ * @returns [-1 - 1]
  */
 Math.toSignedFactor = function (value, period) {
-	return value % period / (period / 2) - 1;
+	return value % (period + 1) / period * 2 - 1;
 };
 //#endregion
 //#region Window
@@ -305,18 +305,20 @@ Window.prototype.promptAsync = function (message, title = `Message`) {
  */
 Window.prototype.load = async function (promise, duration = 200, delay = 0) {
 	const dialogLoader = document.getElement(HTMLDialogElement, `dialog.loader`);
-	dialogLoader.showModal();
-	await dialogLoader.animate([
-		{ opacity: `0` },
-		{ opacity: `1` },
-	], { duration: duration, fill: `both` }).finished;
-	const value = await promise;
-	await dialogLoader.animate([
-		{ opacity: `1` },
-		{ opacity: `0` },
-	], { duration: duration, fill: `both`, delay: delay }).finished;
-	dialogLoader.close();
-	return value;
+	try {
+		dialogLoader.showModal();
+		await dialogLoader.animate([
+			{ opacity: `0` },
+			{ opacity: `1` },
+		], { duration: duration, fill: `both` }).finished;
+		return await promise;
+	} finally {
+		await dialogLoader.animate([
+			{ opacity: `1` },
+			{ opacity: `0` },
+		], { duration: duration, fill: `both`, delay: delay }).finished;
+		dialogLoader.close();
+	}
 };
 
 /**

@@ -4,6 +4,13 @@
 Template for creating adaptive web pages.
 
 ## Feed
+### Patch 2.4.0 (12.01.2024)
+- Добавлены описания для `Math.toFactor` и `Math.toSignedFactor`.
+- Исправлены диапазоны функций `Math.toFactor` и `Math.toSignedFactor` которые не включали в результат максимальное значение.
+- Исправлены функции `Math.toDegrees` и `Math.toRadians` которые работали наоборот.
+- Исправлена фукнция `Window.load` который не закрывал панель при отклонении `promise`.
+- Улучшена стилизация `:disabled` объектов.
+
 ### Update 2.3.8 (08.01.2024)
 - Optimization and quality improvement in `Colors.js`, `Executors.js`, `Measures.js`, `Random.js`, `Storage.js`, `Texture.js` and `Time.js`.
 
