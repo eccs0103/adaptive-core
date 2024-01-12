@@ -5,11 +5,11 @@ Template for creating adaptive web pages.
 
 ## Feed
 ### Patch 2.4.0 (12.01.2024)
-- Добавлены описания для `Math.toFactor` и `Math.toSignedFactor`.
-- Исправлены диапазоны функций `Math.toFactor` и `Math.toSignedFactor` которые не включали в результат максимальное значение.
-- Исправлены функции `Math.toDegrees` и `Math.toRadians` которые работали наоборот.
-- Исправлена фукнция `Window.load` который не закрывал панель при отклонении `promise`.
-- Улучшена стилизация `:disabled` объектов.
+- Added descriptions for `Math.toFactor` and `Math.toSignedFactor`.
+- Fixed the ranges of the functions `Math.toFactor` and `Math.toSignedFactor`, which did not include the maximum value in the result.
+- Fixed the functions `Math.toDegrees` and `Math.toRadians`, which were working the opposite way.
+- Fixed the `Window.load` function that did not close the panel on `promise` rejection.
+- Improved styling of `:disabled` objects.
 
 ### Update 2.3.8 (08.01.2024)
 - Optimization and quality improvement in `Colors.js`, `Executors.js`, `Measures.js`, `Random.js`, `Storage.js`, `Texture.js` and `Time.js`.
