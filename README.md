@@ -4,6 +4,9 @@
 Template for creating adaptive web pages.
 
 ## Feed
+### Update 2.4.1 (17.01.2024)
+- Added the `Math.between` function.
+
 ### Patch 2.4.0 (12.01.2024)
 - Added descriptions for `Math.toFactor` and `Math.toSignedFactor`.
 - Fixed the ranges of the functions `Math.toFactor` and `Math.toSignedFactor`, which did not include the maximum value in the result.
