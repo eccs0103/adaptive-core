@@ -6,6 +6,7 @@ Template for creating adaptive web pages.
 ## Feed
 ### Update 2.4.1 (17.01.2024)
 - Added the `Math.between` function.
+- Enhanced the program structure.
 
 ### Patch 2.4.0 (12.01.2024)
 - Added descriptions for `Math.toFactor` and `Math.toSignedFactor`.
