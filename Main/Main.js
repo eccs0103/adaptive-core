@@ -1,6 +1,6 @@
 "use strict";
 
-import { } from "./Structure.js";
+import { } from "../Scripts/Structure.js";
 
 try {
 	// Your code goes here
