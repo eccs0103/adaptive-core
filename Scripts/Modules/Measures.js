@@ -378,4 +378,55 @@ class Point3D extends Point2D {
 }
 //#endregion
 
-export { Point, Point1D, Point2D, Point3D };
+//#region Matrix
+/**
+ * @template Item 
+ */
+class Matrix {
+	/**
+	 * @param {Readonly<Point2D>} size 
+	 * @param {Item} [initial] 
+	 */
+	constructor(size, initial) {
+		this.#size = size.clone();
+		/** @type {Item[][]} */ const data = (this.#data = new Array(this.#size.y));
+		for (let y = 0; y < data.length; y++) {
+			/** @type {Item[]} */ const row = (data[y] = new Array(this.#size.x));
+			for (let x = 0; x < row.length; x++) {
+				if (initial !== undefined) {
+					/** @type {Item} */ (row[x] == initial);
+				}
+			}
+		}
+	}
+	/** @type {Point2D} */ #size;
+	/** @readonly */ get size() {
+		return Object.freeze(this.#size);
+	}
+	/** @type {Item[][]} */ #data;
+	/**
+	 * @param {Readonly<Point2D>} position 
+	 * @returns {Item}
+	 */
+	get(position) {
+		const matrix = this.#data;
+		if (matrix === undefined) return matrix;
+		const row = matrix[position.y];
+		if (row === undefined) return row;
+		return row[position.x];
+	}
+	/**
+	 * @param {Readonly<Point2D>} position 
+	 * @param {Item} value
+	 */
+	set(position, value) {
+		if (this.#data === undefined) this.#data = new Array(this.#size.y);
+		const matrix = this.#data;
+		if (matrix[position.y] === undefined) matrix[position.y] = new Array(this.#size.x);
+		const row = matrix[position.y];
+		row[position.x] = value;
+	}
+};
+//#endregion
+
+export { Point, Point1D, Point2D, Point3D, Matrix };

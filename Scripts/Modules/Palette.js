@@ -1,5 +1,7 @@
 "use strict";
 
+import { Matrix, Point2D } from "./Measures.js";
+
 const { min, max, trunc, abs } = Math;
 
 //#region Color formats
@@ -410,4 +412,251 @@ class Color {
 }
 //#endregion
 
-export { ColorFormats, Color };
+//#region Texture
+/**
+ * @extends {Matrix<Color>}
+ */
+class Texture extends Matrix {
+	//#region Converters
+	/**
+	 * @param {Texture} texture 
+	 */
+	static toImageData(texture) {
+		const imageData = new ImageData(texture.size.x, texture.size.y);
+		const data = imageData.data;
+		for (let y = 0; y < texture.size.y; y++) {
+			for (let x = 0; x < texture.size.x; x++) {
+				const position = new Point2D(x, y);
+				const index = texture.size.x * y + x;
+				const color = texture.get(position);
+				data[index * 4 + 0] = color.red;
+				data[index * 4 + 1] = color.green;
+				data[index * 4 + 2] = color.blue;
+				data[index * 4 + 3] = color.alpha;
+			}
+		}
+		return imageData;
+	}
+	/**
+	 * @param {ImageData} imageData 
+	 */
+	static fromImageData(imageData) {
+		const texture = new Texture(new Point2D(imageData.width, imageData.height));
+		const data = imageData.data;
+		for (let y = 0; y < texture.size.y; y++) {
+			for (let x = 0; x < texture.size.x; x++) {
+				const position = new Point2D(x, y);
+				const index = texture.size.x * y + x;
+				const color = Color.viaRGB(
+					data[index * 4 + 0],
+					data[index * 4 + 1],
+					data[index * 4 + 2],
+					data[index * 4 + 3],
+				);
+				texture.set(position, color);
+			}
+		}
+		return texture;
+	}
+	//#endregion
+	//#region Contructors
+	/**
+	 * @param {Texture} texture 
+	 */
+	static clone(texture) {
+		const result = new Texture(texture.size);
+		for (let y = 0; y < texture.size.y; y++) {
+			for (let x = 0; x < texture.size.x; x++) {
+				const position = new Point2D(x, y);
+				texture.set(position, texture.get(position).clone());
+			}
+		}
+		return texture;
+	}
+	/**
+	 * @param {Readonly<Point2D>} size 
+	 */
+	constructor(size) {
+		super(size, Color.TRANSPARENT);
+	}
+	//#endregion
+	//#region Modifiers
+	/**
+	 * @param {Texture} first 
+	 * @param {Texture} second 
+	 * @param {number} ratio [0 - 1]
+	 */
+	static mix(first, second, ratio = 0.5) {
+		if (ratio < 0 || ratio > 1) throw new RangeError(`Ratio ${ratio} out of range [0 - 1]`);
+		const result = first.clone();
+		for (let y = 0; y < result.size.y; y++) {
+			for (let x = 0; x < result.size.x; x++) {
+				const position = new Point2D(x, y);
+				result.set(position, first.get(position).mix(second.get(position), ratio));
+			}
+		}
+		return result;
+	}
+	/**
+	 * @param {Texture} source 
+	 * @param {number} scale [0 - 1]
+	 */
+	static grayscale(source, scale = 1) {
+		if (scale < 0 || scale > 1) throw new RangeError(`Scale ${scale} out of range [0 - 1]`);
+		const result = source.clone();
+		for (let y = 0; y < result.size.y; y++) {
+			for (let x = 0; x < result.size.x; x++) {
+				const position = new Point2D(x, y);
+				result.set(position, source.get(position).grayscale(scale));
+			}
+		}
+		return result;
+	}
+	/**
+	 * @param {Texture} source 
+	 * @param {number} scale [0 - 1]
+	 */
+	static invert(source, scale = 1) {
+		if (scale < 0 || scale > 1) throw new RangeError(`Scale ${scale} out of range [0 - 1]`);
+		const result = source.clone();
+		for (let y = 0; y < result.size.y; y++) {
+			for (let x = 0; x < result.size.x; x++) {
+				const position = new Point2D(x, y);
+				result.set(position, source.get(position).invert(scale));
+			}
+		}
+		return result;
+	}
+	/**
+	 * @param {Texture} source 
+	 * @param {number} scale [0 - 1]
+	 */
+	static sepia(source, scale = 1) {
+		if (scale < 0 || scale > 1) throw new RangeError(`Scale ${scale} out of range [0 - 1]`);
+		const result = source.clone();
+		for (let y = 0; y < result.size.y; y++) {
+			for (let x = 0; x < result.size.x; x++) {
+				const position = new Point2D(x, y);
+				result.set(position, source.get(position).sepia(scale));
+			}
+		}
+		return result;
+	}
+	/**
+	 * @param {Texture} source 
+	 * @param {number} angle (-∞ - ∞)
+	 */
+	static rotate(source, angle) {
+		const result = source.clone();
+		for (let y = 0; y < result.size.y; y++) {
+			for (let x = 0; x < result.size.x; x++) {
+				const position = new Point2D(x, y);
+				result.set(position, source.get(position).rotate(angle));
+			}
+		}
+		return result;
+	}
+	/**
+	 * @param {Texture} source 
+	 * @param {number} scale [0 - 1]
+	 */
+	static saturate(source, scale) {
+		if (scale < 0 || scale > 1) throw new RangeError(`Scale ${scale} out of range [0 - 1]`);
+		const result = source.clone();
+		for (let y = 0; y < result.size.y; y++) {
+			for (let x = 0; x < result.size.x; x++) {
+				const position = new Point2D(x, y);
+				result.set(position, source.get(position).saturate(scale));
+			}
+		}
+		return result;
+	}
+	/**
+	 * @param {Texture} source 
+	 * @param {number} scale [0 - 1]
+	 */
+	static illuminate(source, scale) {
+		if (scale < 0 || scale > 1) throw new RangeError(`Scale ${scale} out of range [0 - 1]`);
+		const result = source.clone();
+		for (let y = 0; y < result.size.y; y++) {
+			for (let x = 0; x < result.size.x; x++) {
+				const position = new Point2D(x, y);
+				result.set(position, source.get(position).illuminate(scale));
+			}
+		}
+		return result;
+	}
+	/**
+	 * @param {Texture} source 
+	 * @param {number} scale [0 - 1]
+	 */
+	static pass(source, scale) {
+		if (scale < 0 || scale > 1) throw new RangeError(`Scale ${scale} out of range [0 - 1]`);
+		const result = source.clone();
+		for (let y = 0; y < result.size.y; y++) {
+			for (let x = 0; x < result.size.x; x++) {
+				const position = new Point2D(x, y);
+				result.set(position, source.get(position).pass(scale));
+			}
+		}
+		return result;
+	}
+	//#endregion
+	//#region Methods
+	clone() {
+		return Texture.clone(this);
+	}
+	/**
+	 * @param {Texture} other 
+	 * @param {number} ratio [0 - 1]
+	 */
+	mix(other, ratio = 0.5) {
+		return Texture.mix(this, other, ratio);
+	}
+	/**
+	 * @param {number} scale [0 - 1]
+	 */
+	grayscale(scale = 1) {
+		return Texture.grayscale(this, scale);
+	}
+	/**
+	 * @param {number} scale [0 - 1]
+	 */
+	invert(scale = 1) {
+		return Texture.invert(this, scale);
+	}
+	/**
+	 * @param {number} scale [0 - 1]
+	 */
+	sepia(scale = 1) {
+		return Texture.sepia(this, scale);
+	}
+	/**
+	 * @param {number} angle (-∞ - ∞)
+	 */
+	rotate(angle) {
+		return Texture.rotate(this, angle);
+	}
+	/**
+	 * @param {number} scale [0 - 1]
+	 */
+	saturate(scale) {
+		return Texture.saturate(this, scale);
+	}
+	/**
+	 * @param {number} scale [0 - 1]
+	 */
+	illuminate(scale) {
+		return Texture.illuminate(this, scale);
+	}
+	/**
+	 * @param {number} scale [0 - 1]
+	 */
+	pass(scale) {
+		return Texture.pass(this, scale);
+	}
+	//#endregion
+};
+//#endregion
+
+export { ColorFormats, Color, Texture };
