@@ -117,53 +117,10 @@ class Point1D extends Point {
 	/**
 	 * Gets a one-dimensional point with zero value.
 	 * @readonly
-	 * @returns {Readonly<Point1D>}
+	 * @returns {Point1D}
 	 */
 	static get ZERO() {
 		return Point1D.repeat(0);
-	}
-	/** @type {Readonly<Point1D>} */ static #CONSTANT_ZERO = Object.freeze(Point1D.ZERO);
-	/**
-	 * Gets a constant representing a one-dimensional point with zero value.
-	 * @readonly
-	 * @returns {Readonly<Point1D>}
-	 */
-	static get CONSTANT_ZERO() {
-		return this.#CONSTANT_ZERO;
-	}
-	/**
-	 * Gets a one-dimensional point with a value of 0.5.
-	 * @readonly
-	 * @returns {Readonly<Point1D>}
-	 */
-	static get HALF() {
-		return Point1D.repeat(0.5);
-	}
-	/** @type {Readonly<Point1D>} */ static #CONSTANT_HALF = Object.freeze(Point1D.HALF);
-	/**
-	 * Gets a constant representing a one-dimensional point with a value of 0.5.
-	 * @readonly
-	 * @returns {Readonly<Point1D>}
-	 */
-	static get CONSTANT_HALF() {
-		return this.#CONSTANT_HALF;
-	}
-	/**
-	 * Gets a one-dimensional point with a value of 2.
-	 * @readonly
-	 * @returns {Readonly<Point1D>}
-	 */
-	static get TWO() {
-		return Point1D.repeat(2);
-	}
-	/** @type {Readonly<Point1D>} */ static #CONSTANT_TWO = Object.freeze(Point1D.TWO);
-	/**
-	 * Gets a constant representing a one-dimensional point with a value of 2.
-	 * @readonly
-	 * @returns {Readonly<Point1D>}
-	 */
-	static get CONSTANT_TWO() {
-		return this.#CONSTANT_TWO;
 	}
 	/**
 	 * Creates a new one-dimensional point.
@@ -296,7 +253,7 @@ class Point2D extends Point1D {
 	/**
 	 * Gets a two-dimensional point with zero value.
 	 * @readonly
-	 * @returns {Readonly<Point2D>}
+	 * @returns {Point2D}
 	 */
 	static get ZERO() {
 		return Point2D.repeat(0);
@@ -434,7 +391,7 @@ class Point3D extends Point2D {
 	/**
 	 * Gets a two-dimensional point with zero value.
 	 * @readonly
-	 * @returns {Readonly<Point3D>}
+	 * @returns {Point3D}
 	 */
 	static get ZERO() {
 		return Point3D.repeat(0);
