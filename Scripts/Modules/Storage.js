@@ -2,12 +2,14 @@
 
 //#region Archive
 /**
- * @template T 
+ * Generic class for managing data stored in the browser's local storage.
+ * @template T - The type of data to be stored.
  */
 class Archive {
 	/**
-	 * @param {string} key 
-	 * @param {T} initial
+	 * Creates an instance of the Archive class.
+	 * @param {string} key - The key to identify the data in local storage.
+	 * @param {T} initial - The initial value of the data if not already stored.
 	 */
 	constructor(key, initial) {
 		this.#key = key;
@@ -16,17 +18,26 @@ class Archive {
 		}
 	}
 	/** @type {string} */ #key;
+	/**
+	 * Gets the stored data from local storage.
+	 * @returns {T}
+	 */
 	get data() {
 		const item = localStorage.getItem(this.#key) ?? (() => {
 			throw new ReferenceError(`Key '${this.#key}' isn't defined`);
 		})();
 		return (/** @type {T} */ (JSON.parse(item)));
 	}
+	/**
+	 * Sets the data to be stored in local storage.
+	 * @param {T} value - The data to be stored.
+	 */
 	set data(value) {
 		localStorage.setItem(this.#key, JSON.stringify(value, undefined, `\t`));
 	}
 	/**
-	 * @param {(value: T) => T} action 
+	 * Applies an action to modify the stored data.
+	 * @param {(value: T) => T} action - The function that modifies the current data.
 	 */
 	change(action) {
 		this.data = action(this.data);
@@ -35,19 +46,24 @@ class Archive {
 //#endregion
 //#region Notation progenitor
 /**
+ * Abstract base class representing the progenitor for notation systems.
  * @abstract
  */
 class NotationProgenitor {
 	/**
-	 * @param {any} source 
-	 * @returns {NotationProgenitor}
+	 * Imports data from a given source into an instance of NotationProgenitor.
+	 * @param {any} source - The source data to be imported.
+	 * @returns {NotationProgenitor} - An instance of the NotationProgenitor class.
+	 * @throws {ReferenceError} - If the function is not implemented by the derived class.
 	 */
 	static import(source) {
 		throw new ReferenceError(`Not implemented function`);
 	}
 	/**
-	 * @param {NotationProgenitor} source 
-	 * @returns {any}
+	 * Exports data from an instance of NotationProgenitor.
+	 * @param {NotationProgenitor} source - The instance of NotationProgenitor to be exported.
+	 * @returns {any} - The exported data.
+	 * @throws {ReferenceError} - If the function is not implemented by the derived class.
 	 */
 	static export(source) {
 		throw new ReferenceError(`Not implemented function`);
@@ -56,12 +72,15 @@ class NotationProgenitor {
 //#endregion
 //#region Notation container
 /**
- * @template {typeof NotationProgenitor} T
+ * Generic container class for managing instances of NotationProgenitor and storing them in an archive.
+ * @template {typeof NotationProgenitor} T - The type of NotationProgenitor to be used.
  */
 class NotationContainer {
 	/**
-	 * @param {T} prototype 
-	 * @param {string} path 
+	 * Creates an instance of NotationContainer.
+	 * @param {T} prototype - The prototype of the notation system.
+	 * @param {string} path - The key to identify the data in local storage.
+	 * @throws {TypeError} - If the return type of the import function is not the same as the prototype.
 	 */
 	constructor(prototype, path) {
 		this.#prototype = prototype;
@@ -78,9 +97,17 @@ class NotationContainer {
 	}
 	/** @type {T} */ #prototype;
 	/** @type {InstanceType<T>} */ #content;
+	/**
+	 * Gets the current content stored in the container.
+	 * @readonly
+	 * @returns {InstanceType<T>}
+	 */
 	get content() {
 		return this.#content;
 	}
+	/**
+	 * Resets the content to a new instance of the prototype.
+	 */
 	reset() {
 		this.#content = (/** @type {InstanceType<T>} */ (Reflect.construct(this.#prototype, [])));
 	}
@@ -88,10 +115,14 @@ class NotationContainer {
 //#endregion
 
 //#region Store
+/**
+ * Represents a client-side storage using IndexedDB.
+ */
 class Store {
 	/**
-	 * @param {string} database 
-	 * @param {string} store
+	 * Creates a new instance of the Store class.
+	 * @param {string} database - The name of the IndexedDB database.
+	 * @param {string} store - The name of the object store within the database.
 	 */
 	constructor(database, store) {
 		let requestDatabaseOpen = indexedDB.open(database);
@@ -115,8 +146,9 @@ class Store {
 	/** @type {string} */ #store;
 	/** @type {Promise<IDBDatabase>} */ #promiseDatabaseOpen;
 	/**
-	 * @param {string} key 
-	 * @returns {Promise<any>}
+	 * Retrieves the value associated with the specified key from the store.
+	 * @param {string} key - The key to retrieve the value for.
+	 * @returns {Promise<any>} - A promise resolving to the value associated with the key.
 	 */
 	async get(key) {
 		const database = await this.#promiseDatabaseOpen;
@@ -134,8 +166,10 @@ class Store {
 		}
 	}
 	/**
-	 * @param {string} key 
-	 * @param {any} value
+	 * Sets the value associated with the specified key in the store.
+	 * @param {string} key - The key to set the value for.
+	 * @param {any} value - The value to set.
+	 * @returns {Promise<void>} - A promise indicating the completion of the set operation.
 	 */
 	async set(key, value) {
 		const database = await this.#promiseDatabaseOpen;
@@ -145,7 +179,7 @@ class Store {
 		const controller = new AbortController();
 		try {
 			return await new Promise((resolve, reject) => {
-				requestPutValue.addEventListener(`success`, () => resolve(requestPutValue.result), { signal: controller.signal });
+				requestPutValue.addEventListener(`success`, () => resolve(), { signal: controller.signal });
 				requestPutValue.addEventListener(`error`, () => reject(requestPutValue.error), { signal: controller.signal });
 			});
 		} finally {
@@ -156,13 +190,15 @@ class Store {
 //#endregion
 //#region Locker
 /**
- * @template T
+ * Represents a locker that extends the Store class for storing a single value under a specific key.
+ * @template T - The type of value to be stored.
  */
 class Locker extends Store {
 	/**
-	 * @param {string} database 
-	 * @param {string} store 
-	 * @param {string} key 
+	 * Creates a new instance of the Locker class.
+	 * @param {string} database - The name of the IndexedDB database.
+	 * @param {string} store - The name of the object store within the database.
+	 * @param {string} key - The key under which the value will be stored.
 	 */
 	constructor(database, store, key) {
 		super(database, store);
@@ -170,13 +206,16 @@ class Locker extends Store {
 	}
 	/** @type {string} */ #key;
 	/**
-	 * @returns {Promise<T>}
+	 * Retrieves the value stored under the specified key in the locker.
+	 * @returns {Promise<T>} - A promise resolving to the stored value.
 	 */
 	async get() {
 		return await super.get(this.#key);
 	}
 	/**
-	 * @param {T} value 
+	 * Sets the value to be stored under the specified key in the locker.
+	 * @param {T} value - The value to be stored.
+	 * @returns {Promise<void>} - A promise indicating the completion of the set operation.
 	 */
 	// @ts-ignore
 	async set(value) {

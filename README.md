@@ -4,6 +4,15 @@
 Template for creating adaptive web pages.
 
 ## Feed
+### Update 2.5.0 (26.01.2024)
+- Added comments with descriptions to all modules.
+- `Display` renamed to `FastDisplay`. Added `PreciseDisplay`.
+- Class `Random` moved to `Generators.js`.
+- Unnecessary fields removed from classes `Point1D`, `Point2D`, `Point3D`.
+- Added class `Matrix` to `Measures.js`.
+- Classes `Color` and `Texture` moved to `Palette.js`.
+- Class `Database` renamed to `Storage` and moved, along with class `Locker`, to `Storage.js`.
+
 ### Update 2.4.1 (17.01.2024)
 - Added the `Math.between` function.
 - Enhanced the program structure.
