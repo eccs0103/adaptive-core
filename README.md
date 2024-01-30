@@ -1,7 +1,8 @@
 # Adaptive Webpage Template
 
 ## Information
-Template for creating adaptive web pages.
+Template for creating adaptive web pages.\
+**Version backward compatibility is NOT supported.**
 
 ## Feed
 ### Update 2.5.0 (26.01.2024)
