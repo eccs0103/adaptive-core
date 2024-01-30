@@ -49,11 +49,14 @@ class Color {
 		red /= 255;
 		green /= 255;
 		blue /= 255;
-		const value = max(red, green, blue), level = value - min(red, green, blue), f = (1 - abs(value + value - level - 1));
-		const hue = level && ((value === red) ? (green - blue) / level : ((value === green) ? 2 + (blue - red) / level : 4 + (red - green) / level));
+		const
+			value = max(red, green, blue),
+			level = value - min(red, green, blue),
+			factor = 1 - abs(value + value - level - 1),
+			hue = level && (value === red ? (green - blue) / level : ((value === green) ? 2 + (blue - red) / level : 4 + (red - green) / level));
 		return [
 			trunc((hue < 0 ? hue + 6 : hue) * 60),
-			trunc((f ? level / f : 0) * 100),
+			trunc((factor ? level / factor : 0) * 100),
 			trunc(((value + value - level) / 2) * 100)
 		];
 	}
