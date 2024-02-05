@@ -2,11 +2,90 @@
 
 "use strict";
 
+//#region Math
+/**
+ * Clamps a value between a minimum and maximum value.
+ * @param {number} value The value to be clamped.
+ * @param {number} min The minimum allowed value.
+ * @param {number} max The maximum allowed value.
+ * @returns {number} The clamped value.
+ */
+Math.between = function (value, min, max) {
+	return Math.min(Math.max(min, value), max);
+};
+
+const toDegreeFactor = 180 / Math.PI;
+/**
+ * Converts radians to degrees.
+ * @param {number} radians The angle in radians.
+ * @returns {number} The equivalent angle in degrees.
+ */
+Math.toDegrees = function (radians) {
+	return radians * toDegreeFactor;
+};
+
+const toRadianFactor = Math.PI / 180;
+/**
+ * Converts degrees to radians.
+ * @param {number} degrees The angle in degrees.
+ * @returns {number} The equivalent angle in radians.
+ */
+Math.toRadians = function (degrees) {
+	return degrees * toRadianFactor;
+};
+
+/**
+ * Converts a value to a factor within the range [0, 1] based on a specified period.
+ * @param {number} value The value to convert.
+ * @param {number} period The period to use for conversion.
+ * @returns {number} The converted factor within the range [0, 1].
+ */
+Math.toFactor = function (value, period) {
+	return value % (period + 1) / period;
+};
+
+/**
+ * Converts a value to a factor within the range [0, 1] based on a specified period.
+ * @param {number} value The value to convert.
+ * @param {number} period The period to use for conversion.
+ * @returns {number} The converted factor within the range [0, 1].
+ */
+Math.toSignedFactor = function (value, period) {
+	return value % (period + 1) / period * 2 - 1;
+};
+//#endregion
+//#region Promise
+/**
+ * @template T
+ * @param {() => T | PromiseLike<T>} action The action to execute.
+ * @returns {Promise<T>} A promise that resolves with the result of the action.
+ */
+Promise.constructor.prototype.fulfill = function (action) {
+	return new Promise((resolve, reject) => {
+		try {
+			resolve(action());
+		} catch (error) {
+			reject(error);
+		}
+	});
+};
+//#endregion
+//#region Error
+/**
+ * @param {any} error The error object to generate.
+ * @returns {Error} The generated error object.
+ */
+Error.constructor.prototype.generate = function (error) {
+	return error instanceof Error ? error : new Error(`Undefined error type`);
+};
+//#endregion
+
 //#region HTML element
 /**
  * @template {typeof HTMLElement} T
- * @param {T} type 
- * @param {string} selectors 
+ * @param {T} type The type of element to retrieve.
+ * @param {string} selectors The selectors to search for the element.
+ * @returns {InstanceType<T>} The element instance.
  */
 HTMLElement.prototype.getElement = function (type, selectors) {
 	const element = this.querySelector(selectors);
@@ -18,26 +97,28 @@ HTMLElement.prototype.getElement = function (type, selectors) {
 
 /**
  * @template {typeof HTMLElement} T
- * @param {T} type 
- * @param {string} selectors 
- * @param {boolean} strict 
+ * @param {T} type The type of element to retrieve.
+ * @param {string} selectors The selectors to search for the element.
+ * @param {boolean} strict Whether to reject if the element is missing or has an invalid type.
+ * @returns {Promise<InstanceType<T>>} A promise that resolves to the element instance.
  */
 HTMLElement.prototype.tryGetElement = function (type, selectors, strict = false) {
-	return (/** @type {Promise<InstanceType<T>>} */ (new Promise((resolve, reject) => {
+	return new Promise((resolve, reject) => {
 		const element = this.querySelector(selectors);
 		if (element instanceof type) {
 			resolve(/** @type {InstanceType<T>} */(element));
 		} else if (strict) {
 			reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
 		}
-	})));
+	});
 };
 //#endregion
 //#region Document
 /**
  * @template {typeof HTMLElement} T
- * @param {T} type 
- * @param {string} selectors 
+ * @param {T} type The type of element to retrieve.
+ * @param {string} selectors The selectors to search for the element.
+ * @returns {InstanceType<T>} The element instance.
  */
 Document.prototype.getElement = function (type, selectors) {
 	return this.documentElement.getElement(type, selectors);
@@ -45,94 +126,13 @@ Document.prototype.getElement = function (type, selectors) {
 
 /**
  * @template {typeof HTMLElement} T
- * @param {T} type 
- * @param {string} selectors 
- * @param {boolean} strict
+ * @param {T} type The type of element to retrieve.
+ * @param {string} selectors The selectors to search for the element.
+ * @param {boolean} strict Whether to reject if the element is missing or has an invalid type.
+ * @returns {Promise<InstanceType<T>>} A promise that resolves to the element instance.
  */
 Document.prototype.tryGetElement = function (type, selectors, strict) {
 	return this.documentElement.tryGetElement(type, selectors, strict);
-};
-
-const dialogConsole = document.getElement(HTMLDialogElement, `dialog.console`);
-/**
- * @param {any} value 
- * @returns {string}
- */
-function logify(value) {
-	switch (typeof (value)) {
-		case `string`: return value;
-		case `number`:
-		case `bigint`:
-		case `boolean`: return String(value);
-		case `object`: return Object.entries(value).map(([key, value]) => `${key}: ${logify(value)}`).join(`,\n`);
-		case `symbol`:
-		case `function`:
-		case `undefined`: throw new TypeError(`Value has invalid ${typeof (value)} type`);
-	}
-}
-/**
- * @param  {any[]} data 
- */
-Document.prototype.log = function (...data) {
-	if (data.length > 0) {
-		if (!dialogConsole.open) dialogConsole.open = true;
-		dialogConsole.innerText = data.map(item => logify(item)).join(`\n`);
-	} else {
-		if (dialogConsole.open) dialogConsole.open = false;
-	}
-
-};
-
-/**
- * @param {any} error 
- */
-Document.prototype.analysis = function (error) {
-	return error instanceof Error ? error : new Error(`Undefined error type`);
-};
-//#endregion
-//#region Math
-/**
- * @param {number} value 
- * @param {number} min 
- * @param {number} max 
- * @returns {number}
- */
-Math.between = function (value, min, max) {
-	return Math.min(Math.max(min, value), max);
-};
-
-const toDegreeFactor = 180 / Math.PI;
-/**
- * @param {number} radians 
- */
-Math.toDegrees = function (radians) {
-	return radians * toDegreeFactor;
-};
-
-const toRadianFactor = Math.PI / 180;
-/**
- * @param {number} degrees 
- */
-Math.toRadians = function (degrees) {
-	return degrees * toRadianFactor;
-};
-
-/**
-* @param {number} value 
-* @param {number} period 
-* @returns [0 - 1]
-*/
-Math.toFactor = function (value, period) {
-	return value % (period + 1) / period;
-};
-
-/**
- * @param {number} value 
- * @param {number} period 
- * @returns [-1 - 1]
- */
-Math.toSignedFactor = function (value, period) {
-	return value % (period + 1) / period * 2 - 1;
 };
 //#endregion
 //#region Window
@@ -144,8 +144,10 @@ dialogAlert.addEventListener(`click`, (event) => {
 });
 
 /**
- * @param {string} message 
- * @param {string} title
+ * Asynchronously displays an alert message.
+ * @param {string} message The message to display.
+ * @param {string} title The title of the alert.
+ * @returns {Promise<void>} A promise that resolves when the alert is closed.
  */
 Window.prototype.alertAsync = function (message, title = `Message`) {
 	dialogAlert.showModal();
@@ -192,8 +194,10 @@ dialogConfirm.addEventListener(`click`, (event) => {
 });
 
 /**
- * @param {string} message 
- * @param {string} title
+ * Asynchronously displays a confirmation dialog.
+ * @param {string} message The message to display.
+ * @param {string} title The title of the confirmation dialog.
+ * @returns {Promise<boolean>} A promise that resolves to true if the user confirms, and false otherwise.
  */
 Window.prototype.confirmAsync = function (message, title = `Message`) {
 	dialogConfirm.showModal();
@@ -255,8 +259,10 @@ dialogPrompt.addEventListener(`click`, (event) => {
 });
 
 /**
- * @param {string} message 
- * @param {string} title
+ * Asynchronously displays a prompt dialog.
+ * @param {string} message The message to display.
+ * @param {string} title The title of the prompt dialog.
+ * @returns {Promise<string|null>} A promise that resolves to the user's input value if accepted, or null if canceled.
  */
 Window.prototype.promptAsync = function (message, title = `Message`) {
 	dialogPrompt.showModal();
@@ -308,10 +314,12 @@ Window.prototype.promptAsync = function (message, title = `Message`) {
 };
 
 /**
+ * Asynchronously loads a promise with a loading animation.
  * @template T
- * @param {Promise<T>} promise 
- * @param {number} duration 
- * @param {number} delay 
+ * @param {Promise<T>} promise The promise to load.
+ * @param {number} duration The duration of the loading animation.
+ * @param {number} delay The delay before the loading animation starts.
+ * @returns {Promise<T>} A promise that resolves to the result of the input promise.
  */
 Window.prototype.load = async function (promise, duration = 200, delay = 0) {
 	const dialogLoader = document.getElement(HTMLDialogElement, `dialog.loader`);
@@ -332,10 +340,12 @@ Window.prototype.load = async function (promise, duration = 200, delay = 0) {
 };
 
 /**
- * @param {Error} error 
- * @param {boolean} locked
+ * Asynchronously handles an error, displaying it in an alert or console.
+ * @param {Error} error The error to handle.
+ * @param {boolean} locked Indicates whether the application should be locked after displaying the error.
+ * @returns {Promise<void>} A promise that resolves once the error handling is complete.
  */
-Window.prototype.prevent = async function (error, locked = true) {
+Window.prototype.stabilize = async function (error, locked = true) {
 	const message = error.stack ?? `${error.name}: ${error.message}`;
 	if (locked) {
 		await window.alertAsync(message, `Error`);
@@ -344,10 +354,43 @@ Window.prototype.prevent = async function (error, locked = true) {
 		console.error(message);
 	};
 };
+
+const dialogConsole = document.getElement(HTMLDialogElement, `dialog.console`);
+/**
+ * @param {any} value 
+ * @returns {string}
+ */
+function logify(value) {
+	switch (typeof (value)) {
+		case `string`: return value;
+		case `number`:
+		case `bigint`:
+		case `boolean`: return String(value);
+		case `object`: return Object.entries(value).map(([key, value]) => `${key}: ${logify(value)}`).join(`,\n`);
+		case `symbol`:
+		case `function`:
+		case `undefined`: throw new TypeError(`Value has invalid ${typeof (value)} type`);
+	}
+}
+/**
+ * Logs data to the console dialog.
+ * @param  {any[]} data The data to log.
+ * @returns {void}
+ */
+Window.prototype.log = function (...data) {
+	if (data.length > 0) {
+		if (!dialogConsole.open) dialogConsole.open = true;
+		dialogConsole.innerText = data.map(item => logify(item)).join(`\n`);
+	} else {
+		if (dialogConsole.open) dialogConsole.open = false;
+	}
+};
 //#endregion
 //#region Navigator
 /**
- * @param {File} file 
+ * Downloads the specified file.
+ * @param {File} file The file to download.
+ * @returns {void}
  */
 Navigator.prototype.download = function (file) {
 	const aLink = document.createElement(`a`);
@@ -359,6 +402,10 @@ Navigator.prototype.download = function (file) {
 };
 //#endregion
 //#region Location
+/**
+ * Parses the search part of the URL and returns it as a map.
+ * @returns {Map<string, string>} A map containing the search parameters.
+ */
 Location.prototype.getSearchMap = function () {
 	return new Map(window.decodeURI(location.search.replace(/^\??/, ``)).split(`&`).filter(item => item).map((item) => {
 		const [key, value] = item.split(`=`, 2);

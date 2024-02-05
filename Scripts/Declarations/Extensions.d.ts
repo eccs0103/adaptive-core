@@ -1,185 +1,155 @@
 /// <reference path="../Modules/Extensions.js" />
 
-/**
- * Displays asynchronous alerts.
- * @param message - The message to be displayed in the alert.
- * @param title - The title of the alert. Optional.
- * @returns A promise that resolves when the user acknowledges the alert.
- */
-declare function alertAsync(message: string, title?: string): Promise<void>;
-/**
- * Displays asynchronous confirmation dialogs.
- * @param message - The message to be displayed in the confirmation dialog.
- * @param title - The title of the confirmation dialog. Optional.
- * @returns A promise that resolves with a boolean indicating whether the user confirmed.
- */
-declare function confirmAsync(message: string, title?: string): Promise<boolean>;
-/**
- * Displays asynchronous prompt dialogs.
- * @param message - The message to be displayed in the prompt dialog.
- * @param title - The title of the prompt dialog. Optional.
- * @returns A promise that resolves with the user-entered value or null if canceled.
- */
-declare function promptAsync(message: string, title?: string): Promise<string | null>;
-/**
- * Delays the resolution of a promise, providing an optional duration and delay.
- * @template T
- * @param promise - The promise to be delayed.
- * @param duration - The duration of the animations in milliseconds. Optional.
- * @param delay - The delay before the loading ends in milliseconds. Optional.
- * @returns A promise that resolves with the result of the original promise.
- */
-declare function load<T>(promise: Promise<T>, duration?: number, delay?: number): Promise<T>;
-/**
- * Prevents the execution of further code by rejecting with the provided error.
- * @param message - The error to be rejected.
- * @param locked - Indicates whether the prevention is locked. Optional.
- * @returns A promise that rejects with the provided error.
- */
-declare function prevent(message: Error, locked?: boolean): Promise<void>;
-
-interface Window {
-	/**
-	 * Displays asynchronous alerts.
-	 * @param message - The message to be displayed in the alert.
-	 * @param title - The title of the alert. Optional.
-	 * @returns A promise that resolves when the user acknowledges the alert.
-	 */
-	alertAsync(message: string, title?: string): Promise<void>;
-	/**
-	 * Displays asynchronous confirmation dialogs.
-	 * @param message - The message to be displayed in the confirmation dialog.
-	 * @param title - The title of the confirmation dialog. Optional.
-	 * @returns A promise that resolves with a boolean indicating whether the user confirmed.
-	 */
-	confirmAsync(message: string, title?: string): Promise<boolean>;
-	/**
-	 * Displays asynchronous prompt dialogs.
-	 * @param message - The message to be displayed in the prompt dialog.
-	 * @param title - The title of the prompt dialog. Optional.
-	 * @returns A promise that resolves with the user-entered value or null if canceled.
-	 */
-	promptAsync(message: string, title?: string): Promise<string | null>;
-	/**
-	 * Delays the resolution of a promise, providing an optional duration and delay.
-	 * @template T
-	 * @param promise - The promise to be delayed.
-	 * @param duration - The duration of the animations in milliseconds. Optional.
-	 * @param delay - The delay before the loading ends in milliseconds. Optional.
-	 * @returns A promise that resolves with the result of the original promise.
-	 */
-	load<T>(promise: Promise<T>, duration?: number, delay?: number): Promise<T>;
-	/**
-	 * Prevents the execution of further code by rejecting with the provided error.
-	 * @param message - The error to be rejected.
-	 * @param locked - Indicates whether the prevention is locked. Optional.
-	 * @returns A promise that rejects with the provided error.
-	 */
-	prevent(message: Error, locked?: boolean): Promise<void>;
-}
-
 interface Math {
 	/**
 	 * Clamps a value between a minimum and maximum value.
-	 * @param value - The value to be clamped.
-	 * @param min - The minimum allowed value.
-	 * @param max - The maximum allowed value.
+	 * @param value The value to be clamped.
+	 * @param min The minimum allowed value.
+	 * @param max The maximum allowed value.
 	 * @returns The clamped value.
 	 */
 	between(value: number, min: number, max: number): number;
 	/**
 	 * Converts radians to degrees.
-	 * @param radians - The angle in radians.
+	 * @param radians The angle in radians.
 	 * @returns The equivalent angle in degrees.
 	 */
 	toDegrees(radians: number): number;
 	/**
 	 * Converts degrees to radians.
-	 * @param degrees - The angle in degrees.
+	 * @param degrees The angle in degrees.
 	 * @returns The equivalent angle in radians.
 	 */
 	toRadians(degrees: number): number;
 	/**
 	 * Converts a value to a factor within the range [0, 1] based on a specified period.
+	 * @param value The value to convert.
+	 * @param period The period to use for conversion.
 	 * @returns The converted factor within the range [0, 1].
 	 */
 	toFactor(value: number, period: number): number;
 	/**
-	 * Converts a value to a signed factor within the range [-1, 1] based on a specified period.
-	 * @returns The converted signed factor within the range [-1, 1].
+	 * Converts a value to a factor within the range [0, 1] based on a specified period.
+	 * @param value The value to convert.
+	 * @param period The period to use for conversion.
+	 * @returns The converted factor within the range [0, 1].
 	 */
 	toSignedFactor(value: number, period: number): number;
 }
 
-interface HTMLElement {
+interface PromiseConstructor {
 	/**
-	 * Retrieves the first child element matching the specified type and selectors.
 	 * @template T
-	 * @param type - The type of HTMLElement to retrieve.
-	 * @param selectors - The CSS selectors used to filter the elements.
-	 * @returns The first child element matching the specified type and selectors.
+	 * @param action The action to execute.
+	 * @returns A promise that resolves with the result of the action.
 	 */
-	getElement<T extends typeof HTMLElement>(type: T, selectors: string): InstanceType<T>;
-
-	/**
-	 * Attempts to retrieve the first child element matching the specified type and selectors asynchronously.
-	 * @template T
-	 * @param type - The type of HTMLElement to retrieve.
-	 * @param selectors - The CSS selectors used to filter the elements.
-	 * @param strict - Indicates whether strict retrieval is enforced. Optional.
-	 * @returns A promise that resolves with the first child element.
-	 */
-	tryGetElement<T extends typeof HTMLElement>(type: T, selectors: string, strict?: boolean): Promise<InstanceType<T>>;
+	fulfill<T>(action: () => T | PromiseLike<T>): Promise<T>;
 }
 
-/**
- * Extends the Document interface with utility functions related to element retrieval, logging, and error analysis.
- */
-interface Document {
+interface ErrorConstructor {
 	/**
-	 * Retrieves the first child element matching the specified type and selectors.
+	 * @param error The error object to generate.
+	 * @returns The generated error object.
+	 */
+	generate(error: any): Error;
+}
+
+interface HTMLElement {
+	/**
 	 * @template T
-	 * @param type - The type of HTMLElement to retrieve.
-	 * @param selectors - The CSS selectors used to filter the elements.
-	 * @returns The first child element matching the specified type and selectors.
+	 * @param type The type of element to retrieve.
+	 * @param selectors The selectors to search for the element.
+	 * @returns The element instance.
 	 */
 	getElement<T extends typeof HTMLElement>(type: T, selectors: string): InstanceType<T>;
 
 	/**
-	 * Attempts to retrieve the first child element matching the specified type and selectors asynchronously.
 	 * @template T
-	 * @param type - The type of HTMLElement to retrieve.
-	 * @param selectors - The CSS selectors used to filter the elements.
-	 * @param strict - Indicates whether strict retrieval is enforced. Optional.
-	 * @returns A promise that resolves with the first child element.
+	 * @param type The type of element to retrieve.
+	 * @param selectors The selectors to search for the element.
+	 * @param strict Whether to reject if the element is missing or has an invalid type.
+	 * @returns A promise that resolves to the element instance.
 	 */
-	tryGetElement<T extends typeof HTMLElement>(type: T, selectors: string, strict?: boolean): Promise<InstanceType<T>>;
+	tryGetElement<T extends typeof HTMLElement>(type: T, selectors: string, strict: boolean = false): Promise<InstanceType<T>>;
+}
+
+interface Document {
+	/**
+	 * @template T
+	 * @param type The type of element to retrieve.
+	 * @param selectors The selectors to search for the element.
+	 * @returns The element instance.
+	 */
+	getElement<T extends typeof HTMLElement>(type: T, selectors: string): InstanceType<T>;
 
 	/**
-	 * Logs the provided data to the document.
-	 * @param data - The data to be logged.
+	 * @template T
+	 * @param type The type of element to retrieve.
+	 * @param selectors The selectors to search for the element.
+	 * @param strict Whether to reject if the element is missing or has an invalid type.
+	 * @returns A promise that resolves to the element instance.
+	 */
+	tryGetElement<T extends typeof HTMLElement>(type: T, selectors: string, strict: boolean = false): Promise<InstanceType<T>>;
+}
+
+interface Window {
+	/**
+	 * Asynchronously displays an alert message.
+	 * @param message The message to display.
+	 * @param title The title of the alert.
+	 * @returns A promise that resolves when the alert is closed.
+	 */
+	alertAsync(message: string, title: string = `Message`): Promise<void>;
+	/**
+	 * Asynchronously displays a confirmation dialog.
+	 * @param message The message to display.
+	 * @param title The title of the confirmation dialog.
+	 * @returns A promise that resolves to true if the user confirms, and false otherwise.
+	 */
+	confirmAsync(message: string, title: string = `Message`): Promise<boolean>;
+	/**
+	 * Asynchronously displays a prompt dialog.
+	 * @param message The message to display.
+	 * @param title The title of the prompt dialog.
+	 * @returns A promise that resolves to the user's input value if accepted, or null if canceled.
+	 */
+	promptAsync(message: string, title: string = `Message`): Promise<string?>;
+	/**
+	 * Asynchronously loads a promise with a loading animation.
+	 * @template T
+	 * @param promise The promise to load.
+	 * @param duration The duration of the loading animation.
+	 * @param delay The delay before the loading animation starts.
+	 * @returns A promise that resolves to the result of the input promise.
+	 */
+	load<T>(promise: Promise<T>, duration: number = 200, delay: number = 0): Promise<T>;
+	/**
+	 * Asynchronously handles an error, displaying it in an alert or console.
+	 * @param error The error to handle.
+	 * @param locked Indicates whether the application should be locked after displaying the error.
+	 * @returns A promise that resolves once the error handling is complete.
+	 */
+	stabilize(error: Error, locked: boolean = true): Promise<void>;
+	/**
+	 * Logs data to the console dialog.
+	 * @param data The data to log.
+	 * @returns 
 	 */
 	log(...data: any[]): void;
-
-	/**
-	 * Analyzes errors.
-	 * @param error - The error to be analyzed.
-	 * @returns The analyzed error.
-	 */
-	analysis(error: any): Error;
 }
 
 interface Navigator {
 	/**
-	 * Initiates a download for the specified file.
-	 * @param file - The file to be downloaded.
+	 * Downloads the specified file.
+	 * @param file The file to download.
+	 * @returns 
 	 */
 	download(file: File): void;
 }
 
 interface Location {
 	/**
-	 * Retrieves the search parameters as a map.
+	 * Parses the search part of the URL and returns it as a map.
 	 * @returns A map containing the search parameters.
 	 */
 	getSearchMap(): Map<string, string>;

@@ -8,7 +8,7 @@
 class Point {
 	/**
 	 * Converts the point to a string with a fixed number of decimal places for each metric.
-	 * @param {number} [digits] - The number of digits to appear after the decimal point for each metric.
+	 * @param {number} [digits] The number of digits to appear after the decimal point for each metric.
 	 * @returns {string} A string representation of the point with fixed decimal places.
 	 */
 	toFixed(digits) {
@@ -16,7 +16,7 @@ class Point {
 	}
 	/**
 	 * Converts the point to a string using exponential notation for each metric.
-	 * @param {number} [digits] - The number of digits to appear after the decimal point for each metric.
+	 * @param {number} [digits] The number of digits to appear after the decimal point for each metric.
 	 * @returns {string} A string representation of the point using exponential notation.
 	 */
 	toExponential(digits) {
@@ -24,7 +24,7 @@ class Point {
 	}
 	/**
 	 * Converts the point to a string with a specified precision for each metric.
-	 * @param {number} [precision] - The number of significant digits for each metric.
+	 * @param {number} [precision] The number of significant digits for each metric.
 	 * @returns {string} A string representation of the point with specified precision.
 	 */
 	toPrecision(precision) {
@@ -32,7 +32,7 @@ class Point {
 	}
 	/**
 	 * Converts the point to a string, using a specified radix for each metric.
-	 * @param {number} [radix] - An integer between 2 and 36 specifying the base to use for representing numeric values.
+	 * @param {number} [radix] An integer between 2 and 36 specifying the base to use for representing numeric values.
 	 * @returns {string} A string representation of the point in the specified radix.
 	 */
 	toString(radix) {
@@ -40,8 +40,8 @@ class Point {
 	}
 	/**
 	 * Converts the point to a localized string using the specified locales and formatting options for each metric.
-	 * @param {Intl.LocalesArgument} [locales] - A string with a BCP 47 language tag, or an array of such strings.
-	 * @param {Intl.NumberFormatOptions} [options] - An object with some or all of the properties of the Intl.NumberFormat object.
+	 * @param {Intl.LocalesArgument} [locales] A string with a BCP 47 language tag, or an array of such strings.
+	 * @param {Intl.NumberFormatOptions} [options] An object with some or all of the properties of the Intl.NumberFormat object.
 	 * @returns {string} A localized string representation of the point.
 	 */
 	toLocaleString(locales, options) {
@@ -64,8 +64,8 @@ class Point {
 class Point1D extends Point {
 	/**
 	 * Adds two one-dimensional points.
-	 * @param {Readonly<Point1D>} first - The first point.
-	 * @param {Readonly<Point1D>} second - The second point.
+	 * @param {Readonly<Point1D>} first The first point.
+	 * @param {Readonly<Point1D>} second The second point.
 	 * @returns {Point1D} A new point representing the sum of the input points.
 	 */
 	static [`+`](first, second) {
@@ -73,8 +73,8 @@ class Point1D extends Point {
 	}
 	/**
 	 * Subtracts the second one-dimensional point from the first.
-	 * @param {Readonly<Point1D>} first - The first point.
-	 * @param {Readonly<Point1D>} second - The second point.
+	 * @param {Readonly<Point1D>} first The first point.
+	 * @param {Readonly<Point1D>} second The second point.
 	 * @returns {Point1D} A new point representing the difference between the input points.
 	 */
 	static [`-`](first, second) {
@@ -82,8 +82,8 @@ class Point1D extends Point {
 	}
 	/**
 	 * Multiplies two one-dimensional points.
-	 * @param {Readonly<Point1D>} first - The first point.
-	 * @param {Readonly<Point1D>} second - The second point.
+	 * @param {Readonly<Point1D>} first The first point.
+	 * @param {Readonly<Point1D>} second The second point.
 	 * @returns {Point1D} A new point representing the product of the input points.
 	 */
 	static [`*`](first, second) {
@@ -91,8 +91,8 @@ class Point1D extends Point {
 	}
 	/**
 	 * Divides the first one-dimensional point by the second.
-	 * @param {Readonly<Point1D>} first - The first point.
-	 * @param {Readonly<Point1D>} second - The second point.
+	 * @param {Readonly<Point1D>} first The first point.
+	 * @param {Readonly<Point1D>} second The second point.
 	 * @returns {Point1D} A new point representing the quotient of the input points.
 	 */
 	static [`/`](first, second) {
@@ -100,7 +100,7 @@ class Point1D extends Point {
 	}
 	/**
 	 * Creates a clone of a one-dimensional point.
-	 * @param {Readonly<Point1D>} source - The point to clone.
+	 * @param {Readonly<Point1D>} source The point to clone.
 	 * @returns {Point1D} A new point with the same value as the input point.
 	 */
 	static clone(source) {
@@ -108,7 +108,7 @@ class Point1D extends Point {
 	}
 	/**
 	 * Creates a one-dimensional point with the specified value.
-	 * @param {number} value - The value of the one-dimensional point.
+	 * @param {number} value The value of the one-dimensional point.
 	 * @returns {Point1D} A new one-dimensional point with the specified value.
 	 */
 	static repeat(value) {
@@ -124,7 +124,7 @@ class Point1D extends Point {
 	}
 	/**
 	 * Creates a new one-dimensional point.
-	 * @param {number} x - The value of the point along the x-axis.
+	 * @param {number} x The value of the point along the x-axis.
 	 */
 	constructor(x) {
 		super();
@@ -145,7 +145,7 @@ class Point1D extends Point {
 	}
 	/**
 	 * Adds another point to this point.
-	 * @param {Readonly<Point1D>} other - The point to add.
+	 * @param {Readonly<Point1D>} other The point to add.
 	 * @returns {Point1D} A new point representing the sum of this point and the input point.
 	 */
 	[`+`](other) {
@@ -153,7 +153,7 @@ class Point1D extends Point {
 	}
 	/**
 	 * Subtracts another point from this point.
-	 * @param {Readonly<Point1D>} other - The point to subtract.
+	 * @param {Readonly<Point1D>} other The point to subtract.
 	 * @returns {Point1D} A new point representing the difference between this point and the input point.
 	 */
 	[`-`](other) {
@@ -161,7 +161,7 @@ class Point1D extends Point {
 	}
 	/**
 	 * Multiplies this point by another point.
-	 * @param {Readonly<Point1D>} other - The point to multiply by.
+	 * @param {Readonly<Point1D>} other The point to multiply by.
 	 * @returns {Point1D} A new point representing the product of this point and the input point.
 	 */
 	[`*`](other) {
@@ -169,7 +169,7 @@ class Point1D extends Point {
 	}
 	/**
 	 * Divides this point by another point.
-	 * @param {Readonly<Point1D>} other - The point to divide by.
+	 * @param {Readonly<Point1D>} other The point to divide by.
 	 * @returns {Point1D} A new point representing the quotient of this point and the input point.
 	 */
 	[`/`](other) {
@@ -200,8 +200,8 @@ class Point1D extends Point {
 class Point2D extends Point1D {
 	/**
 	 * Adds two two-dimensional points.
-	 * @param {Readonly<Point2D>} first - The first point.
-	 * @param {Readonly<Point2D>} second - The second point.
+	 * @param {Readonly<Point2D>} first The first point.
+	 * @param {Readonly<Point2D>} second The second point.
 	 * @returns {Point2D} A new point representing the sum of the input points.
 	 */
 	static [`+`](first, second) {
@@ -209,8 +209,8 @@ class Point2D extends Point1D {
 	}
 	/**
 	 * Subtracts the second two-dimensional point from the first.
-	 * @param {Readonly<Point2D>} first - The first point.
-	 * @param {Readonly<Point2D>} second - The second point.
+	 * @param {Readonly<Point2D>} first The first point.
+	 * @param {Readonly<Point2D>} second The second point.
 	 * @returns {Point2D} A new point representing the difference between the input points.
 	 */
 	static [`-`](first, second) {
@@ -218,8 +218,8 @@ class Point2D extends Point1D {
 	}
 	/**
 	 * Multiplies two two-dimensional points.
-	 * @param {Readonly<Point2D>} first - The first point.
-	 * @param {Readonly<Point2D>} second - The second point.
+	 * @param {Readonly<Point2D>} first The first point.
+	 * @param {Readonly<Point2D>} second The second point.
 	 * @returns {Point2D} A new point representing the product of the input points.
 	 */
 	static [`*`](first, second) {
@@ -227,8 +227,8 @@ class Point2D extends Point1D {
 	}
 	/**
 	 * Divides the first two-dimensional point by the second.
-	 * @param {Readonly<Point2D>} first - The first point.
-	 * @param {Readonly<Point2D>} second - The second point.
+	 * @param {Readonly<Point2D>} first The first point.
+	 * @param {Readonly<Point2D>} second The second point.
 	 * @returns {Point2D} A new point representing the quotient of the input points.
 	 */
 	static [`/`](first, second) {
@@ -236,7 +236,7 @@ class Point2D extends Point1D {
 	}
 	/**
 	 * Creates a clone of a two-dimensional point.
-	 * @param {Readonly<Point2D>} source - The point to clone.
+	 * @param {Readonly<Point2D>} source The point to clone.
 	 * @returns {Point2D} A new point with the same value as the input point.
 	 */
 	static clone(source) {
@@ -244,7 +244,7 @@ class Point2D extends Point1D {
 	}
 	/**
 	 * Creates a two-dimensional point with the specified value.
-	 * @param {number} value - The value of the two-dimensional point.
+	 * @param {number} value The value of the two-dimensional point.
 	 * @returns {Point2D} A new two-dimensional point with the specified value.
 	 */
 	static repeat(value) {
@@ -260,8 +260,8 @@ class Point2D extends Point1D {
 	}
 	/**
 	 * Creates a new two-dimensional point.
-	 * @param {number} x - The value of the point along the x-axis.
-	 * @param {number} y - The value of the point along the y-axis.
+	 * @param {number} x The value of the point along the x-axis.
+	 * @param {number} y The value of the point along the y-axis.
 	 */
 	constructor(x, y) {
 		super(x);
@@ -282,7 +282,7 @@ class Point2D extends Point1D {
 	}
 	/**
 	 * Adds another point to this point.
-	 * @param {Readonly<Point2D>} other - The point to add.
+	 * @param {Readonly<Point2D>} other The point to add.
 	 * @returns {Point2D} A new point representing the sum of this point and the input point.
 	 */
 	[`+`](other) {
@@ -290,7 +290,7 @@ class Point2D extends Point1D {
 	}
 	/**
 	 * Subtracts another point from this point.
-	 * @param {Readonly<Point2D>} other - The point to subtract.
+	 * @param {Readonly<Point2D>} other The point to subtract.
 	 * @returns {Point2D} A new point representing the difference between this point and the input point.
 	 */
 	[`-`](other) {
@@ -298,7 +298,7 @@ class Point2D extends Point1D {
 	}
 	/**
 	 * Multiplies this point by another point.
-	 * @param {Readonly<Point2D>} other - The point to multiply by.
+	 * @param {Readonly<Point2D>} other The point to multiply by.
 	 * @returns {Point2D} A new point representing the product of this point and the input point.
 	 */
 	[`*`](other) {
@@ -306,7 +306,7 @@ class Point2D extends Point1D {
 	}
 	/**
 	 * Divides this point by another point.
-	 * @param {Readonly<Point2D>} other - The point to divide by.
+	 * @param {Readonly<Point2D>} other The point to divide by.
 	 * @returns {Point2D} A new point representing the quotient of this point and the input point.
 	 */
 	[`/`](other) {
@@ -338,8 +338,8 @@ class Point2D extends Point1D {
 class Point3D extends Point2D {
 	/**
 	 * Adds two two-dimensional points.
-	 * @param {Readonly<Point3D>} first - The first point.
-	 * @param {Readonly<Point3D>} second - The second point.
+	 * @param {Readonly<Point3D>} first The first point.
+	 * @param {Readonly<Point3D>} second The second point.
 	 * @returns {Point3D} A new point representing the sum of the input points.
 	 */
 	static [`+`](first, second) {
@@ -347,8 +347,8 @@ class Point3D extends Point2D {
 	}
 	/**
 	 * Subtracts the second two-dimensional point from the first.
-	 * @param {Readonly<Point3D>} first - The first point.
-	 * @param {Readonly<Point3D>} second - The second point.
+	 * @param {Readonly<Point3D>} first The first point.
+	 * @param {Readonly<Point3D>} second The second point.
 	 * @returns {Point3D} A new point representing the difference between the input points.
 	 */
 	static [`-`](first, second) {
@@ -356,8 +356,8 @@ class Point3D extends Point2D {
 	}
 	/**
 	 * Multiplies two two-dimensional points.
-	 * @param {Readonly<Point3D>} first - The first point.
-	 * @param {Readonly<Point3D>} second - The second point.
+	 * @param {Readonly<Point3D>} first The first point.
+	 * @param {Readonly<Point3D>} second The second point.
 	 * @returns {Point3D} A new point representing the product of the input points.
 	 */
 	static [`*`](first, second) {
@@ -365,8 +365,8 @@ class Point3D extends Point2D {
 	}
 	/**
 	 * Divides the first two-dimensional point by the second.
-	 * @param {Readonly<Point3D>} first - The first point.
-	 * @param {Readonly<Point3D>} second - The second point.
+	 * @param {Readonly<Point3D>} first The first point.
+	 * @param {Readonly<Point3D>} second The second point.
 	 * @returns {Point3D} A new point representing the quotient of the input points.
 	 */
 	static [`/`](first, second) {
@@ -374,7 +374,7 @@ class Point3D extends Point2D {
 	}
 	/**
 	 * Creates a clone of a two-dimensional point.
-	 * @param {Readonly<Point3D>} source - The point to clone.
+	 * @param {Readonly<Point3D>} source The point to clone.
 	 * @returns {Point3D} A new point with the same value as the input point.
 	 */
 	static clone(source) {
@@ -382,7 +382,7 @@ class Point3D extends Point2D {
 	}
 	/**
 	 * Creates a two-dimensional point with the specified value.
-	 * @param {number} value - The value of the two-dimensional point.
+	 * @param {number} value The value of the two-dimensional point.
 	 * @returns {Point3D} A new two-dimensional point with the specified value.
 	 */
 	static repeat(value) {
@@ -398,9 +398,9 @@ class Point3D extends Point2D {
 	}
 	/**
 	 * Creates a new two-dimensional point.
-	 * @param {number} x - The value of the point along the x-axis.
-	 * @param {number} y - The value of the point along the y-axis.
-	 * @param {number} z - The value of the point along the z-axis.
+	 * @param {number} x The value of the point along the x-axis.
+	 * @param {number} y The value of the point along the y-axis.
+	 * @param {number} z The value of the point along the z-axis.
 	 */
 	constructor(x, y, z) {
 		super(x, y);
@@ -421,7 +421,7 @@ class Point3D extends Point2D {
 	}
 	/**
 	 * Adds another point to this point.
-	 * @param {Readonly<Point3D>} other - The point to add.
+	 * @param {Readonly<Point3D>} other The point to add.
 	 * @returns {Point3D} A new point representing the sum of this point and the input point.
 	 */
 	[`+`](other) {
@@ -429,7 +429,7 @@ class Point3D extends Point2D {
 	}
 	/**
 	 * Subtracts another point from this point.
-	 * @param {Readonly<Point3D>} other - The point to subtract.
+	 * @param {Readonly<Point3D>} other The point to subtract.
 	 * @returns {Point3D} A new point representing the difference between this point and the input point.
 	 */
 	[`-`](other) {
@@ -437,7 +437,7 @@ class Point3D extends Point2D {
 	}
 	/**
 	 * Multiplies this point by another point.
-	 * @param {Readonly<Point3D>} other - The point to multiply by.
+	 * @param {Readonly<Point3D>} other The point to multiply by.
 	 * @returns {Point3D} A new point representing the product of this point and the input point.
 	 */
 	[`*`](other) {
@@ -445,7 +445,7 @@ class Point3D extends Point2D {
 	}
 	/**
 	 * Divides this point by another point.
-	 * @param {Readonly<Point3D>} other - The point to divide by.
+	 * @param {Readonly<Point3D>} other The point to divide by.
 	 * @returns {Point3D} A new point representing the quotient of this point and the input point.
 	 */
 	[`/`](other) {
@@ -479,8 +479,8 @@ class Point3D extends Point2D {
 class Matrix {
 	/**
 	 * Initializes a new instance of the Matrix class.
-	 * @param {Readonly<Point2D>} size - The size of the matrix.
-	 * @param {Item} [initial] - The initial value for all matrix elements.
+	 * @param {Readonly<Point2D>} size The size of the matrix.
+	 * @param {Item} [initial] The initial value for all matrix elements.
 	 */
 	constructor(size, initial) {
 		this.#size = size.clone();
@@ -505,8 +505,8 @@ class Matrix {
 	/** @type {Item[][]} */ #data;
 	/**
 	 * Gets the value at the specified position in the matrix.
-	 * @param {Readonly<Point2D>} position - The position in the matrix.
-	 * @returns {Item} - The value at the specified position.
+	 * @param {Readonly<Point2D>} position The position in the matrix.
+	 * @returns {Item} The value at the specified position.
 	 */
 	get(position) {
 		const matrix = this.#data;
@@ -517,8 +517,8 @@ class Matrix {
 	}
 	/**
 	 * Sets the value at the specified position in the matrix.
-	 * @param {Readonly<Point2D>} position - The position in the matrix.
-	 * @param {Item} value - The value to set.
+	 * @param {Readonly<Point2D>} position The position in the matrix.
+	 * @param {Item} value The value to set.
 	 */
 	set(position, value) {
 		if (this.#data === undefined) this.#data = new Array(this.#size.y);

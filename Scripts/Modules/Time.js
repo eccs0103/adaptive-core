@@ -10,8 +10,8 @@ class Timespan {
 	//#region Converters
 	/**
 	 * Converts a duration in milliseconds to its time components.
-	 * @param {number} duration - The duration in milliseconds.
-	 * @returns {[boolean, number, number, number, number]} - An array representing negativity, hours, minutes, seconds, and milliseconds.
+	 * @param {number} duration The duration in milliseconds.
+	 * @returns {[boolean, number, number, number, number]} An array representing negativity, hours, minutes, seconds, and milliseconds.
 	 */
 	static #toTime(duration) {
 		const negativity = duration < 0;
@@ -27,21 +27,21 @@ class Timespan {
 	}
 	/**
 	 * Converts time components to a duration in milliseconds.
-	 * @param {boolean} negativity - Indicates if the duration is negative.
-	 * @param {number} hours - The hours component.
-	 * @param {number} minutes - The minutes component.
-	 * @param {number} seconds - The seconds component.
-	 * @param {number} milliseconds - The milliseconds component.
-	 * @returns {number} - The duration in milliseconds.
+	 * @param {boolean} negativity Indicates if the duration is negative.
+	 * @param {number} hours The hours component.
+	 * @param {number} minutes The minutes component.
+	 * @param {number} seconds The seconds component.
+	 * @param {number} milliseconds The milliseconds component.
+	 * @returns {number} The duration in milliseconds.
 	 */
 	static #toDuration(negativity, hours, minutes, seconds, milliseconds) {
 		return (negativity ? -1 : 1) * ((((hours) * 60 + minutes) * 60 + seconds) * 1000 + milliseconds);
 	}
 	/**
 	 * Converts a Timespan object to a formatted string representation.
-	 * @param {Timespan} timespan - The Timespan object to convert.
-	 * @param {boolean} full - Indicates whether to include all time components (hours, minutes, milliseconds).
-	 * @returns {string} - The formatted string representation of the Timespan.
+	 * @param {Timespan} timespan The Timespan object to convert.
+	 * @param {boolean} full Indicates whether to include all time components (hours, minutes, milliseconds).
+	 * @returns {string} The formatted string representation of the Timespan.
 	 */
 	static stringify(timespan, full = true) {
 		const { negativity, hours, minutes, seconds, milliseconds } = timespan;
@@ -62,9 +62,9 @@ class Timespan {
 	}
 	/**
 	 * Parses a string representation of a duration and returns a Timespan object.
-	 * @param {string} string - The string representation of the duration.
-	 * @returns {Timespan} - The Timespan object representing the parsed duration.
-	 * @throws {SyntaxError} - If the string representation is invalid.
+	 * @param {string} string The string representation of the duration.
+	 * @returns {Timespan} The Timespan object representing the parsed duration.
+	 * @throws {SyntaxError} If the string representation is invalid.
 	 */
 	static parse(string) {
 		const match = /(-)?(?:(?:(\d+):)?(\d+):)?(\d+)(?:\.(\d+))?/.exec(string);
@@ -83,8 +83,8 @@ class Timespan {
 	//#region Constructors
 	/**
 	 * Creates a Timespan object based on a duration in milliseconds.
-	 * @param {number} duration - The duration in milliseconds. Default is 0.
-	 * @returns {Timespan} - The Timespan object representing the specified duration.
+	 * @param {number} duration The duration in milliseconds. Default is 0.
+	 * @returns {Timespan} The Timespan object representing the specified duration.
 	 */
 	static viaDuration(duration = 0) {
 		const result = new Timespan();
@@ -94,13 +94,13 @@ class Timespan {
 	}
 	/**
 	 * Creates a Timespan object based on time components.
-	 * @param {boolean} negativity - Indicates if the duration is negative.
-	 * @param {number} hours - The hours component (non-negative).
-	 * @param {number} minutes - The minutes component (0-59).
-	 * @param {number} seconds - The seconds component (0-59).
-	 * @param {number} milliseconds - The milliseconds component (0-999).
-	 * @returns {Timespan} - The Timespan object representing the specified time components.
-	 * @throws {RangeError} - If any time component is out of its valid range.
+	 * @param {boolean} negativity Indicates if the duration is negative.
+	 * @param {number} hours The hours component (non-negative).
+	 * @param {number} minutes The minutes component (0-59).
+	 * @param {number} seconds The seconds component (0-59).
+	 * @param {number} milliseconds The milliseconds component (0-999).
+	 * @returns {Timespan} The Timespan object representing the specified time components.
+	 * @throws {RangeError} If any time component is out of its valid range.
 	 */
 	static viaTime(negativity = false, hours = 0, minutes = 0, seconds = 0, milliseconds = 0) {
 		if (0 > hours) throw new RangeError(`Property 'hours' out of range: ${hours}`);
@@ -118,8 +118,8 @@ class Timespan {
 	}
 	/**
 	 * Creates a clone of a Timespan object.
-	 * @param {Timespan} source - The Timespan object to clone.
-	 * @returns {Timespan} - The cloned Timespan object.
+	 * @param {Timespan} source The Timespan object to clone.
+	 * @returns {Timespan} The cloned Timespan object.
 	 */
 	static clone(source) {
 		const result = new Timespan();
@@ -173,44 +173,44 @@ class Timespan {
 	//#region Modifiers
 	/**
 	 * Adds two Timespan instances.
-	 * @param {Timespan} first - The first Timespan.
-	 * @param {Timespan} second - The second Timespan.
-	 * @returns {Timespan} - The result of adding two Timespan instances.
+	 * @param {Timespan} first The first Timespan.
+	 * @param {Timespan} second The second Timespan.
+	 * @returns {Timespan} The result of adding two Timespan instances.
 	 */
 	static [`+`](first, second) {
 		return Timespan.viaDuration(first.#duration + second.#duration);
 	}
 	/**
 	 * Subtracts the second Timespan from the first Timespan.
-	 * @param {Timespan} first - The first Timespan.
-	 * @param {Timespan} second - The second Timespan.
-	 * @returns {Timespan} - The result of subtracting the second Timespan from the first Timespan.
+	 * @param {Timespan} first The first Timespan.
+	 * @param {Timespan} second The second Timespan.
+	 * @returns {Timespan} The result of subtracting the second Timespan from the first Timespan.
 	 */
 	static [`-`](first, second) {
 		return Timespan.viaDuration(first.#duration - second.#duration);
 	}
 	/**
 	 * Multiplies the duration of a Timespan by a factor.
-	 * @param {Timespan} timespan - The Timespan to be multiplied.
-	 * @param {number} factor - The multiplication factor.
-	 * @returns {Timespan} - The result of multiplying the Timespan duration by the factor.
+	 * @param {Timespan} timespan The Timespan to be multiplied.
+	 * @param {number} factor The multiplication factor.
+	 * @returns {Timespan} The result of multiplying the Timespan duration by the factor.
 	 */
 	static [`*`](timespan, factor) {
 		return Timespan.viaDuration(timespan.#duration * factor);
 	}
 	/**
 	 * Divides the duration of a Timespan by a factor.
-	 * @param {Timespan} timespan - The Timespan to be divided.
-	 * @param {number} factor - The division factor.
-	 * @returns {Timespan} - The result of dividing the Timespan duration by the factor.
+	 * @param {Timespan} timespan The Timespan to be divided.
+	 * @param {number} factor The division factor.
+	 * @returns {Timespan} The result of dividing the Timespan duration by the factor.
 	 */
 	static [`/`](timespan, factor) {
 		return Timespan.viaDuration(timespan.#duration / factor);
 	}
 	/**
 	 * Inverts the sign of a Timespan's duration.
-	 * @param {Timespan} timespan - The Timespan to be inverted.
-	 * @returns {Timespan} - The result of inverting the sign of the Timespan duration.
+	 * @param {Timespan} timespan The Timespan to be inverted.
+	 * @returns {Timespan} The result of inverting the sign of the Timespan duration.
 	 */
 	static invert(timespan) {
 		return Timespan.viaDuration(-1 * timespan.#duration);
@@ -226,7 +226,7 @@ class Timespan {
 	}
 	/** 
 	 * Sets the duration of the Timespan.
-	 * @throws {RangeError} - If the value is less than 0.
+	 * @throws {RangeError} If the value is less than 0.
 	 */
 	set duration(value) {
 		if (value < 0) throw new RangeError(`Property 'duration' out of range: ${value}`);
@@ -311,61 +311,61 @@ class Timespan {
 	//#region Methods
 	/** 
 	 * Converts the Timespan to a string representation.
-	 * @param {boolean} full - If true, includes all components in the string.
-	 * @returns {string} - The string representation of the Timespan.
+	 * @param {boolean} full If true, includes all components in the string.
+	 * @returns {string} The string representation of the Timespan.
 	 */
 	toString(full = true) {
 		return Timespan.stringify(this, full);
 	}
 	/** 
 	 * Converts the Timespan to its primitive value.
-	 * @returns {number} - The primitive value of the Timespan (duration).
+	 * @returns {number} The primitive value of the Timespan (duration).
 	 */
 	[Symbol.toPrimitive]() {
 		return this.#duration;
 	}
 	/** 
 	 * Creates a clone of the Timespan.
-	 * @returns {Timespan} - A new Timespan instance that is a copy of the original.
+	 * @returns {Timespan} A new Timespan instance that is a copy of the original.
 	 */
 	clone() {
 		return Timespan.clone(this);
 	}
 	/** 
 	 * Adds two Timespan instances.
-	 * @param {Timespan} other - The Timespan to add.
-	 * @returns {Timespan} - A new Timespan representing the sum of the two Timespans.
+	 * @param {Timespan} other The Timespan to add.
+	 * @returns {Timespan} A new Timespan representing the sum of the two Timespans.
 	 */
 	[`+`](other) {
 		return Timespan[`+`](this, other);
 	}
 	/** 
 	 * Subtracts one Timespan from another.
-	 * @param {Timespan} other - The Timespan to subtract.
-	 * @returns {Timespan} - A new Timespan representing the difference between the two Timespans.
+	 * @param {Timespan} other The Timespan to subtract.
+	 * @returns {Timespan} A new Timespan representing the difference between the two Timespans.
 	 */
 	[`-`](other) {
 		return Timespan[`-`](this, other);
 	}
 	/** 
 	 * Multiplies the duration of the Timespan by a factor.
-	 * @param {number} factor - The factor to multiply by.
-	 * @returns {Timespan} - A new Timespan representing the multiplied duration.
+	 * @param {number} factor The factor to multiply by.
+	 * @returns {Timespan} A new Timespan representing the multiplied duration.
 	 */
 	[`*`](factor) {
 		return Timespan[`*`](this, factor);
 	}
 	/** 
 	 * Divides the duration of the Timespan by a factor.
-	 * @param {number} factor - The factor to divide by.
-	 * @returns {Timespan} - A new Timespan representing the divided duration.
+	 * @param {number} factor The factor to divide by.
+	 * @returns {Timespan} A new Timespan representing the divided duration.
 	 */
 	[`/`](factor) {
 		return Timespan[`/`](this, factor);
 	}
 	/** 
 	 * Inverts the duration of the Timespan (changes its sign).
-	 * @returns {Timespan} - A new Timespan with the inverted duration.
+	 * @returns {Timespan} A new Timespan with the inverted duration.
 	 */
 	invert() {
 		return Timespan.invert(this);

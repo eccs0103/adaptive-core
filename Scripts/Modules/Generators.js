@@ -9,8 +9,8 @@ const { random, trunc } = Math;
 class Random {
 	/**
 	 * Generates a random number within the specified range.
-	 * @param {number} min - The minimum value of the range.
-	 * @param {number} max - The maximum value of the range.
+	 * @param {number} min The minimum value of the range.
+	 * @param {number} max The maximum value of the range.
 	 * @returns {number} A random number within the range [min, max).
 	 */
 	number(min, max) {
@@ -18,8 +18,8 @@ class Random {
 	}
 	/**
 	 * Generates a random integer within the specified range.
-	 * @param {number} min - The minimum value of the range.
-	 * @param {number} max - The maximum value of the range.
+	 * @param {number} min The minimum value of the range.
+	 * @param {number} max The maximum value of the range.
 	 * @returns {number} A random integer within the range [min, max).
 	 */
 	integer(min, max) {
@@ -28,7 +28,7 @@ class Random {
 	/**
 	 * Retrieves a random item from the provided array.
 	 * @template T
-	 * @param {T[]} array - The array from which to select a random item.
+	 * @param {T[]} array The array from which to select a random item.
 	 * @returns {T} A randomly selected item from the array.
 	 */
 	item(array) {
@@ -37,7 +37,7 @@ class Random {
 	/**
 	 * Selects a case from the provided map based on their relative percentages.
 	 * @template T
-	 * @param {Map<T, number>} cases - A map where each key represents a case, and the value is the percentage weight of that case.
+	 * @param {Map<T, number>} cases A map where each key represents a case, and the value is the percentage weight of that case.
 	 * @returns {T} The selected case based on their percentages.
 	 * @throws {RangeError} If the selected value is out of range [0, summary).
 	 */
