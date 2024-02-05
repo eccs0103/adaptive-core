@@ -70,7 +70,7 @@ interface HTMLElement {
 	 * @param strict Whether to reject if the element is missing or has an invalid type.
 	 * @returns A promise that resolves to the element instance.
 	 */
-	tryGetElement<T extends typeof HTMLElement>(type: T, selectors: string, strict: boolean = false): Promise<InstanceType<T>>;
+	tryGetElement<T extends typeof HTMLElement>(type: T, selectors: string, strict?: boolean): Promise<InstanceType<T>>;
 }
 
 interface Document {
@@ -89,7 +89,7 @@ interface Document {
 	 * @param strict Whether to reject if the element is missing or has an invalid type.
 	 * @returns A promise that resolves to the element instance.
 	 */
-	tryGetElement<T extends typeof HTMLElement>(type: T, selectors: string, strict: boolean = false): Promise<InstanceType<T>>;
+	tryGetElement<T extends typeof HTMLElement>(type: T, selectors: string, strict?: boolean): Promise<InstanceType<T>>;
 }
 
 interface Window {
@@ -99,21 +99,21 @@ interface Window {
 	 * @param title The title of the alert.
 	 * @returns A promise that resolves when the alert is closed.
 	 */
-	alertAsync(message: string, title: string = `Message`): Promise<void>;
+	alertAsync(message: string, title?: string): Promise<void>;
 	/**
 	 * Asynchronously displays a confirmation dialog.
 	 * @param message The message to display.
 	 * @param title The title of the confirmation dialog.
 	 * @returns A promise that resolves to true if the user confirms, and false otherwise.
 	 */
-	confirmAsync(message: string, title: string = `Message`): Promise<boolean>;
+	confirmAsync(message: string, title?: string): Promise<boolean>;
 	/**
 	 * Asynchronously displays a prompt dialog.
 	 * @param message The message to display.
 	 * @param title The title of the prompt dialog.
 	 * @returns A promise that resolves to the user's input value if accepted, or null if canceled.
 	 */
-	promptAsync(message: string, title: string = `Message`): Promise<string?>;
+	promptAsync(message: string, title?: string): Promise<string?>;
 	/**
 	 * Asynchronously loads a promise with a loading animation.
 	 * @template T
@@ -122,27 +122,68 @@ interface Window {
 	 * @param delay The delay before the loading animation starts.
 	 * @returns A promise that resolves to the result of the input promise.
 	 */
-	load<T>(promise: Promise<T>, duration: number = 200, delay: number = 0): Promise<T>;
+	load<T>(promise: Promise<T>, duration?: number, delay?: number): Promise<T>;
 	/**
 	 * Asynchronously handles an error, displaying it in an alert or console.
 	 * @param error The error to handle.
 	 * @param locked Indicates whether the application should be locked after displaying the error.
 	 * @returns A promise that resolves once the error handling is complete.
 	 */
-	stabilize(error: Error, locked: boolean = true): Promise<void>;
+	stabilize(error: Error, locked?: boolean): Promise<void>;
 	/**
 	 * Logs data to the console dialog.
 	 * @param data The data to log.
-	 * @returns 
 	 */
 	log(...data: any[]): void;
 }
+
+/**
+ * Asynchronously displays an alert message.
+ * @param message The message to display.
+ * @param title The title of the alert.
+ * @returns A promise that resolves when the alert is closed.
+ */
+declare function alertAsync(message: string, title?: string): Promise<void>;
+/**
+ * Asynchronously displays a confirmation dialog.
+ * @param message The message to display.
+ * @param title The title of the confirmation dialog.
+ * @returns A promise that resolves to true if the user confirms, and false otherwise.
+ */
+declare function confirmAsync(message: string, title?: string): Promise<boolean>;
+/**
+ * Asynchronously displays a prompt dialog.
+ * @param message The message to display.
+ * @param title The title of the prompt dialog.
+ * @returns A promise that resolves to the user's input value if accepted, or null if canceled.
+ */
+declare function promptAsync(message: string, title?: string): Promise<string?>;
+/**
+ * Asynchronously loads a promise with a loading animation.
+ * @template T
+ * @param promise The promise to load.
+ * @param duration The duration of the loading animation.
+ * @param delay The delay before the loading animation starts.
+ * @returns A promise that resolves to the result of the input promise.
+ */
+declare function load<T>(promise: Promise<T>, duration?: number, delay?: number): Promise<T>;
+/**
+ * Asynchronously handles an error, displaying it in an alert or console.
+ * @param error The error to handle.
+ * @param locked Indicates whether the application should be locked after displaying the error.
+ * @returns A promise that resolves once the error handling is complete.
+ */
+declare function stabilize(error: Error, locked?: boolean): Promise<void>;
+/**
+ * Logs data to the console dialog.
+ * @param data The data to log.
+ */
+declare function log(...data: any[]): void;
 
 interface Navigator {
 	/**
 	 * Downloads the specified file.
 	 * @param file The file to download.
-	 * @returns 
 	 */
 	download(file: File): void;
 }

@@ -225,6 +225,7 @@ class PreciseEngine extends Engine {
 }
 //#endregion
 
+
 //#region Fast display
 /**
  * Represents a fast display using a rendering context.
