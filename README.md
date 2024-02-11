@@ -5,6 +5,11 @@ Template for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### Update 2.5.2 (12.02.2024)
+- Added function `Error.analyze` which analyzes the error and returns a description.
+- Added functions `HTMLElement.getElements` and `HTMLElement.tryGetElements` which are counterparts of functions `HTMLElement.getElement` and `HTMLElement.tryGetElement` for multiple elements.
+- Added theme `HighContrast`.
+
 ### Update 2.5.0 (26.01.2024)
 - Added comments with descriptions to all modules.
 - `Display` renamed to `FastDisplay`. Added `PreciseDisplay`.

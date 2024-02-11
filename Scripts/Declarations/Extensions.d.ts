@@ -48,6 +48,12 @@ interface PromiseConstructor {
 
 interface ErrorConstructor {
 	/**
+	 * Analyzes the error and returns a descriptive string.
+	 * @param error The error object to analyze.
+	 * @returns A descriptive string representing the error.
+	 */
+	analyze(error: Error): string;
+	/**
 	 * @param error The error object to generate.
 	 * @returns The generated error object.
 	 */
@@ -56,40 +62,84 @@ interface ErrorConstructor {
 
 interface HTMLElement {
 	/**
+	 * Retrieves an element of the specified type and selectors.
 	 * @template T
 	 * @param type The type of element to retrieve.
 	 * @param selectors The selectors to search for the element.
 	 * @returns The element instance.
+	 * @throws If the element is missing or has an invalid type.
 	 */
 	getElement<T extends typeof HTMLElement>(type: T, selectors: string): InstanceType<T>;
-
 	/**
+	 * Tries to retrieve an element of the specified type and selectors.
 	 * @template T
 	 * @param type The type of element to retrieve.
 	 * @param selectors The selectors to search for the element.
 	 * @param strict Whether to reject if the element is missing or has an invalid type.
 	 * @returns A promise that resolves to the element instance.
+	 * @throws If the element is missing or has an invalid type and strict mode is enabled.
 	 */
 	tryGetElement<T extends typeof HTMLElement>(type: T, selectors: string, strict?: boolean): Promise<InstanceType<T>>;
+	/**
+	 * Retrieves elements of the specified type and selectors.
+	 * @template T
+	 * @param type The type of elements to retrieve.
+	 * @param selectors The selectors to search for the elements.
+	 * @returns The NodeList of element instances.
+	 * @throws If any element is missing or has an invalid type.
+	 */
+	getElements<T extends typeof HTMLElement>(type: T, selectors: string): NodeListOf<InstanceType<T>>;
+	/**
+	 * Tries to retrieve elements of the specified type and selectors.
+	 * @template T
+	 * @param type The type of elements to retrieve.
+	 * @param selectors The selectors to search for the elements.
+	 * @param strict Whether to reject if any element is missing or has an invalid type.
+	 * @returns A promise that resolves to the NodeList of element instances.
+	 * @throws If any element is missing or has an invalid type and strict mode is enabled.
+	 */
+	tryGetElements<T extends typeof HTMLElement>(type: T, selectors: string, strict?: boolean): Promise<NodeListOf<InstanceType<T>>>;
 }
 
 interface Document {
 	/**
+	 * Retrieves an element of the specified type and selectors.
 	 * @template T
 	 * @param type The type of element to retrieve.
 	 * @param selectors The selectors to search for the element.
 	 * @returns The element instance.
+	 * @throws If the element is missing or has an invalid type.
 	 */
 	getElement<T extends typeof HTMLElement>(type: T, selectors: string): InstanceType<T>;
-
 	/**
+	 * Tries to retrieve an element of the specified type and selectors.
 	 * @template T
 	 * @param type The type of element to retrieve.
 	 * @param selectors The selectors to search for the element.
 	 * @param strict Whether to reject if the element is missing or has an invalid type.
 	 * @returns A promise that resolves to the element instance.
+	 * @throws If the element is missing or has an invalid type and strict mode is enabled.
 	 */
 	tryGetElement<T extends typeof HTMLElement>(type: T, selectors: string, strict?: boolean): Promise<InstanceType<T>>;
+	/**
+	 * Retrieves elements of the specified type and selectors.
+	 * @template T
+	 * @param type The type of elements to retrieve.
+	 * @param selectors The selectors to search for the elements.
+	 * @returns The NodeList of element instances.
+	 * @throws If any element is missing or has an invalid type.
+	 */
+	getElements<T extends typeof HTMLElement>(type: T, selectors: string): NodeListOf<InstanceType<T>>;
+	/**
+	 * Tries to retrieve elements of the specified type and selectors.
+	 * @template T
+	 * @param type The type of elements to retrieve.
+	 * @param selectors The selectors to search for the elements.
+	 * @param strict Whether to reject if any element is missing or has an invalid type.
+	 * @returns A promise that resolves to the NodeList of element instances.
+	 * @throws If any element is missing or has an invalid type and strict mode is enabled.
+	 */
+	tryGetElements<T extends typeof HTMLElement>(type: T, selectors: string, strict?: boolean): Promise<NodeListOf<InstanceType<T>>>;
 }
 
 interface Window {

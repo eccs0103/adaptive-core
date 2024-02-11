@@ -72,6 +72,15 @@ Promise.constructor.prototype.fulfill = function (action) {
 //#endregion
 //#region Error
 /**
+ * Analyzes the error and returns a descriptive string.
+ * @param {Error} error The error object to analyze.
+ * @returns {string} A descriptive string representing the error.
+ */
+Error.constructor.prototype.analyze = function (error) {
+	return error.stack ?? `${error.name}: ${error.message}`;
+};
+
+/**
  * @param {any} error The error object to generate.
  * @returns {Error} The generated error object.
  */
@@ -79,28 +88,30 @@ Error.constructor.prototype.generate = function (error) {
 	return error instanceof Error ? error : new Error(`Undefined error type`);
 };
 //#endregion
-
 //#region HTML element
 /**
+ * Retrieves an element of the specified type and selectors.
  * @template {typeof HTMLElement} T
  * @param {T} type The type of element to retrieve.
  * @param {string} selectors The selectors to search for the element.
  * @returns {InstanceType<T>} The element instance.
+ * @throws {TypeError} If the element is missing or has an invalid type.
  */
 HTMLElement.prototype.getElement = function (type, selectors) {
 	const element = this.querySelector(selectors);
-	if (!(element instanceof type)) {
-		throw new TypeError(`Element ${selectors} is missing or has invalid type`);
-	}
-	return (/** @type {InstanceType<T>} */ (element));
+	if (element instanceof type) {
+		return (/** @type {InstanceType<T>} */ (element));
+	} else throw new TypeError(`Element ${selectors} is missing or has invalid type`);
 };
 
 /**
+ * Tries to retrieve an element of the specified type and selectors.
  * @template {typeof HTMLElement} T
  * @param {T} type The type of element to retrieve.
  * @param {string} selectors The selectors to search for the element.
  * @param {boolean} strict Whether to reject if the element is missing or has an invalid type.
  * @returns {Promise<InstanceType<T>>} A promise that resolves to the element instance.
+ * @throws {TypeError} If the element is missing or has an invalid type and strict mode is enabled.
  */
 HTMLElement.prototype.tryGetElement = function (type, selectors, strict = false) {
 	return new Promise((resolve, reject) => {
@@ -112,27 +123,91 @@ HTMLElement.prototype.tryGetElement = function (type, selectors, strict = false)
 		}
 	});
 };
+
+/**
+ * Retrieves elements of the specified type and selectors.
+ * @template {typeof HTMLElement} T
+ * @param {T} type The type of elements to retrieve.
+ * @param {string} selectors The selectors to search for the elements.
+ * @returns {NodeListOf<InstanceType<T>>} The NodeList of element instances.
+ * @throws {TypeError} If any element is missing or has an invalid type.
+ */
+HTMLElement.prototype.getElements = function (type, selectors) {
+	const elements = this.querySelectorAll(selectors);
+	if (Array.from(elements).every(element => element instanceof type)) {
+		return (/** @type {NodeListOf<InstanceType<T>>} */ (elements));
+	} else throw new TypeError(`Element ${selectors} is missing or has invalid type`);
+};
+
+/**
+ * Tries to retrieve elements of the specified type and selectors.
+ * @template {typeof HTMLElement} T
+ * @param {T} type The type of elements to retrieve.
+ * @param {string} selectors The selectors to search for the elements.
+ * @param {boolean} strict Whether to reject if any element is missing or has an invalid type.
+ * @returns {Promise<NodeListOf<InstanceType<T>>>} A promise that resolves to the NodeList of element instances.
+ * @throws {TypeError} If any element is missing or has an invalid type and strict mode is enabled.
+ */
+HTMLElement.prototype.tryGetElements = function (type, selectors, strict = false) {
+	return new Promise((resolve, reject) => {
+		const elements = this.querySelectorAll(selectors);
+		if (Array.from(elements).every(element => element instanceof type)) {
+			resolve(/** @type {NodeListOf<InstanceType<T>>} */(elements));
+		} else if (strict) {
+			reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
+		}
+	});
+};
 //#endregion
 //#region Document
 /**
+ * Retrieves an element of the specified type and selectors.
  * @template {typeof HTMLElement} T
  * @param {T} type The type of element to retrieve.
  * @param {string} selectors The selectors to search for the element.
  * @returns {InstanceType<T>} The element instance.
+ * @throws {TypeError} If the element is missing or has an invalid type.
  */
 Document.prototype.getElement = function (type, selectors) {
 	return this.documentElement.getElement(type, selectors);
 };
 
 /**
+ * Tries to retrieve an element of the specified type and selectors.
  * @template {typeof HTMLElement} T
  * @param {T} type The type of element to retrieve.
  * @param {string} selectors The selectors to search for the element.
  * @param {boolean} strict Whether to reject if the element is missing or has an invalid type.
  * @returns {Promise<InstanceType<T>>} A promise that resolves to the element instance.
+ * @throws {TypeError} If the element is missing or has an invalid type and strict mode is enabled.
  */
-Document.prototype.tryGetElement = function (type, selectors, strict) {
+Document.prototype.tryGetElement = function (type, selectors, strict = false) {
 	return this.documentElement.tryGetElement(type, selectors, strict);
+};
+
+/**
+ * Retrieves elements of the specified type and selectors.
+ * @template {typeof HTMLElement} T
+ * @param {T} type The type of elements to retrieve.
+ * @param {string} selectors The selectors to search for the elements.
+ * @returns {NodeListOf<InstanceType<T>>} The NodeList of element instances.
+ * @throws {TypeError} If any element is missing or has an invalid type.
+ */
+Document.prototype.getElements = function (type, selectors) {
+	return this.documentElement.getElements(type, selectors);
+};
+
+/**
+ * Tries to retrieve elements of the specified type and selectors.
+ * @template {typeof HTMLElement} T
+ * @param {T} type The type of elements to retrieve.
+ * @param {string} selectors The selectors to search for the elements.
+ * @param {boolean} strict Whether to reject if any element is missing or has an invalid type.
+ * @returns {Promise<NodeListOf<InstanceType<T>>>} A promise that resolves to the NodeList of element instances.
+ * @throws {TypeError} If any element is missing or has an invalid type and strict mode is enabled.
+ */
+Document.prototype.tryGetElements = function (type, selectors, strict = false) {
+	return this.documentElement.tryGetElements(type, selectors, strict);
 };
 //#endregion
 //#region Window
@@ -346,12 +421,11 @@ Window.prototype.load = async function (promise, duration = 200, delay = 0) {
  * @returns {Promise<void>} A promise that resolves once the error handling is complete.
  */
 Window.prototype.stabilize = async function (error, locked = true) {
-	const message = error.stack ?? `${error.name}: ${error.message}`;
 	if (locked) {
-		await window.alertAsync(message, `Error`);
+		await window.alertAsync(Error.analyze(error), `Error`);
 		location.reload();
 	} else {
-		console.error(message);
+		console.error(Error.analyze(error));
 	};
 };
 
