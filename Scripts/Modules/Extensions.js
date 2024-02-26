@@ -2,6 +2,175 @@
 
 "use strict";
 
+//#region Number
+/**
+ * Imports a number from the source.
+ * @param {unknown} source The source to import.
+ * @param {string} name The name of the source.
+ * @returns {number} The imported number.
+ * @throws {ReferenceError} If the source is undefined.
+ * @throws {TypeError} If the source is not a number.
+ */
+Number.import = function (source, name = `source`) {
+	if (source === undefined) {
+		throw new ReferenceError(`${name.replace(/^\w/, (part) => part.toUpperCase())} is not defined`);
+	}
+	if (typeof (source) !== `number`) {
+		throw new TypeError(`Unable to import ${(name)} due it's ${typename(source)} type`);
+	}
+	const result = source.valueOf();
+	return result;
+};
+
+/**
+ * Exports the number value.
+ * @returns {number} The exported number.
+ */
+Number.prototype.export = function () {
+	const result = this.valueOf();
+	return result;
+};
+//#endregion
+//#region Boolean
+/**
+ * Imports a boolean from the source.
+ * @param {unknown} source The source to import.
+ * @param {string} name The name of the source.
+ * @returns {boolean} The imported boolean.
+ * @throws {ReferenceError} If the source is undefined.
+ * @throws {TypeError} If the source is not a boolean.
+ */
+Boolean.import = function (source, name = `source`) {
+	if (source === undefined) {
+		throw new ReferenceError(`${name.replace(/^\w/, (part) => part.toUpperCase())} is not defined`);
+	}
+	if (typeof (source) !== `boolean`) {
+		throw new TypeError(`Unable to import ${(name)} due it's ${typename(source)} type`);
+	}
+	const result = source.valueOf();
+	return result;
+};
+
+/**
+ * Exports the boolean value.
+ * @returns {boolean} The exported boolean.
+ */
+Boolean.prototype.export = function () {
+	const result = this.valueOf();
+	return result;
+};
+//#endregion
+//#region String
+/**
+ * Imports a string from the source.
+ * @param {unknown} source The source to import.
+ * @param {string} name The name of the source.
+ * @returns {string} The imported string.
+ * @throws {ReferenceError} If the source is undefined.
+ * @throws {TypeError} If the source is not a string.
+ */
+String.import = function (source, name = `source`) {
+	if (source === undefined) {
+		throw new ReferenceError(`${name.replace(/^\w/, (part) => part.toUpperCase())} is not defined`);
+	}
+	if (typeof (source) !== `string`) {
+		throw new TypeError(`Unable to import ${(name)} due it's ${typename(source)} type`);
+	}
+	const result = source.valueOf();
+	return result;
+};
+
+/**
+ * Exports the string value.
+ * @returns {string} The exported string.
+ */
+String.prototype.export = function () {
+	const result = this.valueOf();
+	return result;
+};
+//#endregion
+//#region Function
+/**
+ * Not implemented function to import source.
+ * @param {unknown} source The source to import.
+ * @param {string} name The name of the source.
+ * @returns {any} The imported value.
+ * @throws {ReferenceError} If the function is called.
+ */
+Function.prototype.import = function (source, name = `source`) {
+	throw new ReferenceError(`Not implemented function`);
+};
+
+/**
+ * Not implemented function to export source.
+ * @returns {any} The exported value.
+ * @throws {ReferenceError} If the function is called.
+ */
+Function.prototype.export = function () {
+	throw new ReferenceError(`Not implemented function`);
+};
+//#endregion
+//#region Object
+/**
+ * Imports an object from the source.
+ * @param {unknown} source The source to import.
+ * @param {string} name The name of the source.
+ * @returns {Object} The imported object.
+ * @throws {ReferenceError} If the source is undefined.
+ * @throws {TypeError} If the source is not an object or is null.
+ */
+Object.import = function (source, name = `source`) {
+	if (source === undefined) {
+		throw new ReferenceError(`${name.replace(/^\w/, (part) => part.toUpperCase())} is not defined`);
+	}
+	if (typeof (source) !== `object`) {
+		throw new TypeError(`Unable to import ${(name)} due it's ${typename(source)} type`);
+	}
+	if (source === null) {
+		throw new TypeError(`Unable to import ${(name)} due it's ${typename(null)} type`);
+	}
+	const result = source.valueOf(); //TODO check
+	return result;
+};
+
+/**
+ * Exports the object value.
+ * @returns {Object} The exported object.
+ */
+Object.prototype.export = function () {
+	const result = this.valueOf();
+	return result;
+};
+//#endregion
+//#region Array
+/**
+ * Imports an array from the source.
+ * @param {unknown} source The source to import.
+ * @param {string} name The name of the source.
+ * @returns {any[]} The imported array.
+ * @throws {ReferenceError} If the source is undefined.
+ * @throws {TypeError} If the source is not an array or if any element cannot be imported.
+ */
+Array.import = function (source, name = `source`) {
+	if (source === undefined) {
+		throw new ReferenceError(`${name.replace(/^\w/, (part) => part.toUpperCase())} is not defined`);
+	}
+	if (!(source instanceof Array)) {
+		throw new TypeError(`Unable to import ${name} due it's ${typename(source)} type`);
+	}
+	const result = Array.from(source);
+	return result;
+};
+
+/**
+ * Exports the array value.
+ * @returns {this[]} The exported array.
+ */
+Array.prototype.export = function () {
+	const result = this.map(item => item.export());
+	return result;
+};
+//#endregion
 //#region Math
 /**
  * Clamps a value between a minimum and maximum value.
@@ -60,7 +229,7 @@ Math.toSignedFactor = function (value, period) {
  * @param {() => T | PromiseLike<T>} action The action to execute.
  * @returns {Promise<T>} A promise that resolves with the result of the action.
  */
-Promise.constructor.prototype.fulfill = function (action) {
+Promise.fulfill = function (action) {
 	return new Promise((resolve, reject) => {
 		try {
 			resolve(action());
@@ -72,32 +241,34 @@ Promise.constructor.prototype.fulfill = function (action) {
 //#endregion
 //#region Error
 /**
- * Analyzes the error and returns a descriptive string.
- * @param {Error} error The error object to analyze.
- * @returns {string} A descriptive string representing the error.
- */
-Error.constructor.prototype.analyze = function (error) {
-	return error.stack ?? `${error.name}: ${error.message}`;
-};
-
-/**
  * @param {any} error The error object to generate.
  * @returns {Error} The generated error object.
  */
-Error.constructor.prototype.generate = function (error) {
+Error.generate = function (error) {
 	return error instanceof Error ? error : new Error(`Undefined error type`);
 };
+
+/**
+ * @returns {string}
+ */
+Error.prototype.toString = function () {
+	let text = this.stack ?? `${this.name}: ${this.message}`;
+	if (this.cause !== undefined) {
+		text += ` cause of:\n\r${Error.generate(this.cause)}`;
+	}
+	return text;
+};
 //#endregion
-//#region HTML element
+//#region Element
 /**
  * Retrieves an element of the specified type and selectors.
- * @template {typeof HTMLElement} T
+ * @template {typeof Element} T
  * @param {T} type The type of element to retrieve.
  * @param {string} selectors The selectors to search for the element.
  * @returns {InstanceType<T>} The element instance.
  * @throws {TypeError} If the element is missing or has an invalid type.
  */
-HTMLElement.prototype.getElement = function (type, selectors) {
+Element.prototype.getElement = function (type, selectors) {
 	const element = this.querySelector(selectors);
 	if (element instanceof type) {
 		return (/** @type {InstanceType<T>} */ (element));
@@ -106,14 +277,14 @@ HTMLElement.prototype.getElement = function (type, selectors) {
 
 /**
  * Tries to retrieve an element of the specified type and selectors.
- * @template {typeof HTMLElement} T
+ * @template {typeof Element} T
  * @param {T} type The type of element to retrieve.
  * @param {string} selectors The selectors to search for the element.
  * @param {boolean} strict Whether to reject if the element is missing or has an invalid type.
  * @returns {Promise<InstanceType<T>>} A promise that resolves to the element instance.
  * @throws {TypeError} If the element is missing or has an invalid type and strict mode is enabled.
  */
-HTMLElement.prototype.tryGetElement = function (type, selectors, strict = false) {
+Element.prototype.tryGetElement = function (type, selectors, strict = false) {
 	return new Promise((resolve, reject) => {
 		const element = this.querySelector(selectors);
 		if (element instanceof type) {
@@ -125,14 +296,49 @@ HTMLElement.prototype.tryGetElement = function (type, selectors, strict = false)
 };
 
 /**
+ * Retrieves the closest ancestor element of the specified type and selectors.
+ * @template {typeof Element} T
+ * @param {T} type The type of element to retrieve.
+ * @param {string} selectors The selectors to search for the element.
+ * @returns {InstanceType<T>} The element instance.
+ * @throws {TypeError} If the element is missing or has an invalid type.
+ */
+Element.prototype.getClosest = function (type, selectors) {
+	const element = this.closest(selectors);
+	if (element instanceof type) {
+		return (/** @type {InstanceType<T>} */ (element));
+	} else throw new TypeError(`Element ${selectors} is missing or has invalid type`);
+};
+
+/**
+ * Tries to retrieve the closest ancestor element of the specified type and selectors.
+ * @template {typeof Element} T
+ * @param {T} type The type of element to retrieve.
+ * @param {string} selectors The selectors to search for the element.
+ * @param {boolean} strict Whether to reject if the element is missing or has an invalid type.
+ * @returns {Promise<InstanceType<T>>} A promise that resolves to the element instance.
+ * @throws {TypeError} If the element is missing or has an invalid type and strict mode is enabled.
+ */
+Element.prototype.tryGetClosest = function (type, selectors, strict = false) {
+	return new Promise((resolve, reject) => {
+		const element = this.closest(selectors);
+		if (element instanceof type) {
+			resolve(/** @type {InstanceType<T>} */(element));
+		} else if (strict) {
+			reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
+		}
+	});
+};
+
+/**
  * Retrieves elements of the specified type and selectors.
- * @template {typeof HTMLElement} T
+ * @template {typeof Element} T
  * @param {T} type The type of elements to retrieve.
  * @param {string} selectors The selectors to search for the elements.
  * @returns {NodeListOf<InstanceType<T>>} The NodeList of element instances.
  * @throws {TypeError} If any element is missing or has an invalid type.
  */
-HTMLElement.prototype.getElements = function (type, selectors) {
+Element.prototype.getElements = function (type, selectors) {
 	const elements = this.querySelectorAll(selectors);
 	if (Array.from(elements).every(element => element instanceof type)) {
 		return (/** @type {NodeListOf<InstanceType<T>>} */ (elements));
@@ -141,14 +347,14 @@ HTMLElement.prototype.getElements = function (type, selectors) {
 
 /**
  * Tries to retrieve elements of the specified type and selectors.
- * @template {typeof HTMLElement} T
+ * @template {typeof Element} T
  * @param {T} type The type of elements to retrieve.
  * @param {string} selectors The selectors to search for the elements.
  * @param {boolean} strict Whether to reject if any element is missing or has an invalid type.
  * @returns {Promise<NodeListOf<InstanceType<T>>>} A promise that resolves to the NodeList of element instances.
  * @throws {TypeError} If any element is missing or has an invalid type and strict mode is enabled.
  */
-HTMLElement.prototype.tryGetElements = function (type, selectors, strict = false) {
+Element.prototype.tryGetElements = function (type, selectors, strict = false) {
 	return new Promise((resolve, reject) => {
 		const elements = this.querySelectorAll(selectors);
 		if (Array.from(elements).every(element => element instanceof type)) {
@@ -162,7 +368,7 @@ HTMLElement.prototype.tryGetElements = function (type, selectors, strict = false
 //#region Document
 /**
  * Retrieves an element of the specified type and selectors.
- * @template {typeof HTMLElement} T
+ * @template {typeof Element} T
  * @param {T} type The type of element to retrieve.
  * @param {string} selectors The selectors to search for the element.
  * @returns {InstanceType<T>} The element instance.
@@ -174,7 +380,7 @@ Document.prototype.getElement = function (type, selectors) {
 
 /**
  * Tries to retrieve an element of the specified type and selectors.
- * @template {typeof HTMLElement} T
+ * @template {typeof Element} T
  * @param {T} type The type of element to retrieve.
  * @param {string} selectors The selectors to search for the element.
  * @param {boolean} strict Whether to reject if the element is missing or has an invalid type.
@@ -187,7 +393,7 @@ Document.prototype.tryGetElement = function (type, selectors, strict = false) {
 
 /**
  * Retrieves elements of the specified type and selectors.
- * @template {typeof HTMLElement} T
+ * @template {typeof Element} T
  * @param {T} type The type of elements to retrieve.
  * @param {string} selectors The selectors to search for the elements.
  * @returns {NodeListOf<InstanceType<T>>} The NodeList of element instances.
@@ -199,7 +405,7 @@ Document.prototype.getElements = function (type, selectors) {
 
 /**
  * Tries to retrieve elements of the specified type and selectors.
- * @template {typeof HTMLElement} T
+ * @template {typeof Element} T
  * @param {T} type The type of elements to retrieve.
  * @param {string} selectors The selectors to search for the elements.
  * @param {boolean} strict Whether to reject if any element is missing or has an invalid type.
@@ -211,12 +417,33 @@ Document.prototype.tryGetElements = function (type, selectors, strict = false) {
 };
 //#endregion
 //#region Window
+/**
+ * Gets the type name of a value.
+ * @param {unknown} value The value to get the type name of.
+ * @returns {string} The type name of the value.
+ */
+Window.prototype.typename = function (value) {
+	if (value === undefined) return `Undefined`;
+	else if (value === null) return `Null`;
+	else return value.constructor.name;
+};
+
 const dialogAlert = document.getElement(HTMLDialogElement, `dialog.pop-up.alert`);
 dialogAlert.addEventListener(`click`, (event) => {
 	if (event.target === dialogAlert) {
 		dialogAlert.close();
 	}
 });
+
+/**
+ * Retrieves the data path based on developer and application name metadata.
+ * @returns {string} The data path.
+ */
+Window.prototype.getDataPath = function () {
+	const developer = document.getElement(HTMLMetaElement, `meta[name="author"]`).content;
+	const title = document.getElement(HTMLMetaElement, `meta[name="application-name"]`).content;
+	return `${developer}.${title}`;
+};
 
 /**
  * Asynchronously displays an alert message.
@@ -415,48 +642,15 @@ Window.prototype.load = async function (promise, duration = 200, delay = 0) {
 };
 
 /**
- * Asynchronously handles an error, displaying it in an alert or console.
+ * Asynchronously handles an error, displaying it in an alert.
  * @param {Error} error The error to handle.
- * @param {boolean} locked Indicates whether the application should be locked after displaying the error.
+ * @param {boolean} reload Indicates whether the application should be reloaded after displaying the error.
  * @returns {Promise<void>} A promise that resolves once the error handling is complete.
  */
-Window.prototype.stabilize = async function (error, locked = true) {
-	if (locked) {
-		await window.alertAsync(Error.analyze(error), `Error`);
+Window.prototype.stabilize = async function (error, reload = true) {
+	await window.alertAsync(error.toString(), `Error`);
+	if (reload) {
 		location.reload();
-	} else {
-		console.error(Error.analyze(error));
-	};
-};
-
-const dialogConsole = document.getElement(HTMLDialogElement, `dialog.console`);
-/**
- * @param {any} value 
- * @returns {string}
- */
-function logify(value) {
-	switch (typeof (value)) {
-		case `string`: return value;
-		case `number`:
-		case `bigint`:
-		case `boolean`: return String(value);
-		case `object`: return Object.entries(value).map(([key, value]) => `${key}: ${logify(value)}`).join(`,\n`);
-		case `symbol`:
-		case `function`:
-		case `undefined`: throw new TypeError(`Value has invalid ${typeof (value)} type`);
-	}
-}
-/**
- * Logs data to the console dialog.
- * @param  {any[]} data The data to log.
- * @returns {void}
- */
-Window.prototype.log = function (...data) {
-	if (data.length > 0) {
-		if (!dialogConsole.open) dialogConsole.open = true;
-		dialogConsole.innerText = data.map(item => logify(item)).join(`\n`);
-	} else {
-		if (dialogConsole.open) dialogConsole.open = false;
 	}
 };
 //#endregion

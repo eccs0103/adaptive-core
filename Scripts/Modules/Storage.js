@@ -46,72 +46,49 @@ class Archive {
 	}
 }
 //#endregion
-//#region Notation progenitor
+//#region Archive manager
 /**
- * Abstract base class representing the progenitor for notation systems.
- * @abstract
+ * Manages the lifecycle of an archive.
+ * @template {Function & { new(...args: any): any }} T
  */
-class NotationProgenitor {
+class ArchiveManager {
 	/**
-	 * Imports data from a given source into an instance of NotationProgenitor.
-	 * @param {any} source The source data to be imported.
-	 * @returns {NotationProgenitor} An instance of the NotationProgenitor class.
-	 * @throws {ReferenceError} If the function is not implemented by the derived class.
+	 * Creates an instance of the ArchiveManager class.
+	 * @param {string} path The path to the archive in local storage.
+	 * @param {T} prototype The prototype of the archive.
+	 * @param {any[]} args The arguments to initialize the archive.
 	 */
-	static import(source) {
-		throw new ReferenceError(`Not implemented function`);
-	}
-	/**
-	 * Exports data from an instance of NotationProgenitor.
-	 * @param {NotationProgenitor} source The instance of NotationProgenitor to be exported.
-	 * @returns {any} The exported data.
-	 * @throws {ReferenceError} If the function is not implemented by the derived class.
-	 */
-	static export(source) {
-		throw new ReferenceError(`Not implemented function`);
-	}
-}
-//#endregion
-//#region Notation container
-/**
- * Generic container class for managing instances of NotationProgenitor and storing them in an archive.
- * @template {typeof NotationProgenitor} T The type of NotationProgenitor to be used.
- */
-class NotationContainer {
-	/**
-	 * Creates an instance of NotationContainer.
-	 * @param {T} prototype The prototype of the notation system.
-	 * @param {string} path The key to identify the data in local storage.
-	 * @throws {TypeError} If the return type of the import function is not the same as the prototype.
-	 */
-	constructor(prototype, path) {
-		this.#prototype = prototype;
-		const archive = new Archive(path, prototype.export(Reflect.construct(this.#prototype, [])));
-		//
-		const object = prototype.import(archive.data);
-		if (!(object instanceof prototype)) {
-			throw new TypeError(`The return type of the import function must be the same as the prototype`);
+	constructor(path, prototype, ...args) {
+		this.#assembler = Reflect.construct.bind(Reflect.construct, prototype, args);
+		const archive = new Archive(path, this.#assembler().export());
+
+		const data = prototype.import(archive.data, `archive data`);
+		if (!(data instanceof prototype)) {
+			throw new TypeError(`Imported data ${(data)} type does not match ${(prototype)}`);
 		}
-		this.#content = (/** @type {InstanceType<T>} */ (object));
+		this.#data = (/** @type {InstanceType<T>} */ (data));
 		window.addEventListener(`beforeunload`, (event) => {
-			archive.data = prototype.export(this.#content);
+			archive.data = this.#data.export();
 		});
 	}
-	/** @type {T} */ #prototype;
-	/** @type {InstanceType<T>} */ #content;
+	/** @type {() => InstanceType<T>} */
+	#assembler;
+	/** @type {InstanceType<T>} */
+	#data;
 	/**
-	 * Gets the current content stored in the container.
-	 * @readonly
-	 * @returns {InstanceType<T>}
+	 * Gets the current data from the archive.
+	 * @returns {InstanceType<T>} The current data.
 	 */
-	get content() {
-		return this.#content;
+	get data() {
+		return this.#data;
 	}
 	/**
-	 * Resets the content to a new instance of the prototype.
+	 * Reassembles the archive.
+	 * @returns {InstanceType<T>} The reassembled data.
 	 */
-	reset() {
-		this.#content = (/** @type {InstanceType<T>} */ (Reflect.construct(this.#prototype, [])));
+	reassemble() {
+		this.#data = this.#assembler();
+		return this.data;
 	}
 }
 //#endregion
@@ -244,4 +221,4 @@ class Locker extends Store {
 }
 //#endregion
 
-export { Archive, NotationProgenitor, NotationContainer, Store, Locker };
+export { Archive, ArchiveManager, Store, Locker };

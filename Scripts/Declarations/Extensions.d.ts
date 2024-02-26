@@ -1,4 +1,122 @@
 /// <reference path="../Modules/Extensions.js" />
+/// (?<!throws )\{[\w<>\[\]]+\} 
+
+interface NumberConstructor {
+	/**
+	 * Imports a number from the source.
+	 * @param source The source to import.
+	 * @param name The name of the source.
+	 * @returns The imported number.
+	 * @throws {ReferenceError} If the source is undefined.
+	 * @throws {TypeError} If the source is not a number.
+	 */
+	import(source: unknown, name?: string): number;
+}
+
+interface Number {
+	/**
+	 * Exports the number value.
+	 * @returns The exported number.
+	 */
+	export(): number;
+}
+
+interface BooleanConstructor {
+	/**
+	 * Imports a boolean from the source.
+	 * @param source The source to import.
+	 * @param name The name of the source.
+	 * @returns The imported boolean.
+	 * @throws {ReferenceError} If the source is undefined.
+	 * @throws {TypeError} If the source is not a boolean.
+	 */
+	import(source: unknown, name?: string): boolean;
+}
+
+interface Boolean {
+	/**
+	 * Exports the boolean value.
+	 * @returns The exported boolean.
+	 */
+	export(): boolean;
+}
+
+interface StringConstructor {
+	/**
+	 * Imports a string from the source.
+	 * @param source The source to import.
+	 * @param name The name of the source.
+	 * @returns The imported string.
+	 * @throws {ReferenceError} If the source is undefined.
+	 * @throws {TypeError} If the source is not a string.
+	 */
+	import(source: unknown, name?: string): string;
+}
+
+interface String {
+	/**
+	 * Exports the string value.
+	 * @returns The exported string.
+	 */
+	export(): string;
+}
+
+interface Function {
+	/**
+	 * Not implemented function to import source.
+	 * @param source The source to import.
+	 * @param name The name of the source.
+	 * @returns The imported value.
+	 * @throws {ReferenceError} If the function is called.
+	 */
+	import(source: unknown, name?: string): any;
+	/**
+	 * Not implemented function to export source.
+	 * @returns The exported value.
+	 * @throws {ReferenceError} If the function is called.
+	 */
+	export(): any;
+}
+
+interface ObjectConstructor {
+	/**
+	 * Imports an object from the source.
+	 * @param source The source to import.
+	 * @param name The name of the source.
+	 * @returns The imported object.
+	 * @throws {ReferenceError} If the source is undefined.
+	 * @throws {TypeError} If the source is not an object or is null.
+	 */
+	import(source: unknown, name?: string): Object;
+}
+
+interface Object {
+	/**
+	 * Exports the object value.
+	 * @returns The exported object.
+	 */
+	export(): Object;
+}
+
+interface ArrayConstructor {
+	/**
+	 * Imports an array from the source.
+	 * @param source The source to import.
+	 * @param name The name of the source.
+	 * @returns The imported array.
+	 * @throws {ReferenceError} If the source is undefined.
+	 * @throws {TypeError} If the source is not an array or if any element cannot be imported.
+	 */
+	import(source: unknown, name?: string): any[];
+}
+
+interface Array<T extends Function> {
+	/**
+	 * Exports the array value.
+	 * @returns The exported array.
+	 */
+	export(): T[];
+}
 
 interface Math {
 	/**
@@ -48,28 +166,30 @@ interface PromiseConstructor {
 
 interface ErrorConstructor {
 	/**
-	 * Analyzes the error and returns a descriptive string.
-	 * @param error The error object to analyze.
-	 * @returns A descriptive string representing the error.
-	 */
-	analyze(error: Error): string;
-	/**
 	 * @param error The error object to generate.
 	 * @returns The generated error object.
 	 */
 	generate(error: any): Error;
 }
 
-interface HTMLElement {
+interface Error {
+	/**
+	 * Returns a descriptive string.
+	 * @returns A descriptive string representing the error.
+	 */
+	toString(): string;
+}
+
+interface Element {
 	/**
 	 * Retrieves an element of the specified type and selectors.
 	 * @template T
 	 * @param type The type of element to retrieve.
 	 * @param selectors The selectors to search for the element.
 	 * @returns The element instance.
-	 * @throws If the element is missing or has an invalid type.
+	 * @throws {TypeError} If the element is missing or has an invalid type.
 	 */
-	getElement<T extends typeof HTMLElement>(type: T, selectors: string): InstanceType<T>;
+	getElement<T extends typeof Element>(type: T, selectors: string): InstanceType<T>;
 	/**
 	 * Tries to retrieve an element of the specified type and selectors.
 	 * @template T
@@ -77,18 +197,37 @@ interface HTMLElement {
 	 * @param selectors The selectors to search for the element.
 	 * @param strict Whether to reject if the element is missing or has an invalid type.
 	 * @returns A promise that resolves to the element instance.
-	 * @throws If the element is missing or has an invalid type and strict mode is enabled.
+	 * @throws {TypeError} If the element is missing or has an invalid type and strict mode is enabled.
 	 */
-	tryGetElement<T extends typeof HTMLElement>(type: T, selectors: string, strict?: boolean): Promise<InstanceType<T>>;
+	tryGetElement<T extends typeof Element>(type: T, selectors: string, strict?: boolean): Promise<InstanceType<T>>;
+	/**
+	 * Retrieves the closest ancestor element of the specified type and selectors.
+	 * @template T
+	 * @param type The type of element to retrieve.
+	 * @param selectors The selectors to search for the element.
+	 * @returns The element instance.
+	 * @throws {TypeError} If the element is missing or has an invalid type.
+	 */
+	getClosest<T extends typeof Element>(type: T, selectors: string): InstanceType<T>;
+	/**
+	 * Tries to retrieve the closest ancestor element of the specified type and selectors.
+	 * @template T
+	 * @param type The type of element to retrieve.
+	 * @param selectors The selectors to search for the element.
+	 * @param strict Whether to reject if the element is missing or has an invalid type.
+	 * @returns A promise that resolves to the element instance.
+	 * @throws {TypeError} If the element is missing or has an invalid type and strict mode is enabled.
+	 */
+	tryGetClosest<T extends typeof Element>(type: T, selectors: string, strict?: boolean): Promise<InstanceType<T>>;
 	/**
 	 * Retrieves elements of the specified type and selectors.
 	 * @template T
 	 * @param type The type of elements to retrieve.
 	 * @param selectors The selectors to search for the elements.
 	 * @returns The NodeList of element instances.
-	 * @throws If any element is missing or has an invalid type.
+	 * @throws {TypeError} If any element is missing or has an invalid type.
 	 */
-	getElements<T extends typeof HTMLElement>(type: T, selectors: string): NodeListOf<InstanceType<T>>;
+	getElements<T extends typeof Element>(type: T, selectors: string): NodeListOf<InstanceType<T>>;
 	/**
 	 * Tries to retrieve elements of the specified type and selectors.
 	 * @template T
@@ -96,9 +235,9 @@ interface HTMLElement {
 	 * @param selectors The selectors to search for the elements.
 	 * @param strict Whether to reject if any element is missing or has an invalid type.
 	 * @returns A promise that resolves to the NodeList of element instances.
-	 * @throws If any element is missing or has an invalid type and strict mode is enabled.
+	 * @throws {TypeError} If any element is missing or has an invalid type and strict mode is enabled.
 	 */
-	tryGetElements<T extends typeof HTMLElement>(type: T, selectors: string, strict?: boolean): Promise<NodeListOf<InstanceType<T>>>;
+	tryGetElements<T extends typeof Element>(type: T, selectors: string, strict?: boolean): Promise<NodeListOf<InstanceType<T>>>;
 }
 
 interface Document {
@@ -108,9 +247,9 @@ interface Document {
 	 * @param type The type of element to retrieve.
 	 * @param selectors The selectors to search for the element.
 	 * @returns The element instance.
-	 * @throws If the element is missing or has an invalid type.
+	 * @throws {TypeError} If the element is missing or has an invalid type.
 	 */
-	getElement<T extends typeof HTMLElement>(type: T, selectors: string): InstanceType<T>;
+	getElement<T extends typeof Element>(type: T, selectors: string): InstanceType<T>;
 	/**
 	 * Tries to retrieve an element of the specified type and selectors.
 	 * @template T
@@ -118,18 +257,18 @@ interface Document {
 	 * @param selectors The selectors to search for the element.
 	 * @param strict Whether to reject if the element is missing or has an invalid type.
 	 * @returns A promise that resolves to the element instance.
-	 * @throws If the element is missing or has an invalid type and strict mode is enabled.
+	 * @throws {TypeError} If the element is missing or has an invalid type and strict mode is enabled.
 	 */
-	tryGetElement<T extends typeof HTMLElement>(type: T, selectors: string, strict?: boolean): Promise<InstanceType<T>>;
+	tryGetElement<T extends typeof Element>(type: T, selectors: string, strict?: boolean): Promise<InstanceType<T>>;
 	/**
 	 * Retrieves elements of the specified type and selectors.
 	 * @template T
 	 * @param type The type of elements to retrieve.
 	 * @param selectors The selectors to search for the elements.
 	 * @returns The NodeList of element instances.
-	 * @throws If any element is missing or has an invalid type.
+	 * @throws {TypeError} If any element is missing or has an invalid type.
 	 */
-	getElements<T extends typeof HTMLElement>(type: T, selectors: string): NodeListOf<InstanceType<T>>;
+	getElements<T extends typeof Element>(type: T, selectors: string): NodeListOf<InstanceType<T>>;
 	/**
 	 * Tries to retrieve elements of the specified type and selectors.
 	 * @template T
@@ -137,12 +276,23 @@ interface Document {
 	 * @param selectors The selectors to search for the elements.
 	 * @param strict Whether to reject if any element is missing or has an invalid type.
 	 * @returns A promise that resolves to the NodeList of element instances.
-	 * @throws If any element is missing or has an invalid type and strict mode is enabled.
+	 * @throws {TypeError} If any element is missing or has an invalid type and strict mode is enabled.
 	 */
-	tryGetElements<T extends typeof HTMLElement>(type: T, selectors: string, strict?: boolean): Promise<NodeListOf<InstanceType<T>>>;
+	tryGetElements<T extends typeof Element>(type: T, selectors: string, strict?: boolean): Promise<NodeListOf<InstanceType<T>>>;
 }
 
 interface Window {
+	/**
+	 * Gets the type name of a value.
+	 * @param value The value to get the type name of.
+	 * @returns The type name of the value.
+	 */
+	typename(value: unknown): string;
+	/**
+	 * Retrieves the data path based on developer and application name metadata.
+	 * @returns The data path.
+	 */
+	getDataPath(): string;
 	/**
 	 * Asynchronously displays an alert message.
 	 * @param message The message to display.
@@ -174,19 +324,25 @@ interface Window {
 	 */
 	load<T>(promise: Promise<T>, duration?: number, delay?: number): Promise<T>;
 	/**
-	 * Asynchronously handles an error, displaying it in an alert or console.
+	 * Asynchronously handles an error, displaying it in an alert.
 	 * @param error The error to handle.
-	 * @param locked Indicates whether the application should be locked after displaying the error.
+	 * @param reload Indicates whether the application should be reloaded after displaying the error.
 	 * @returns A promise that resolves once the error handling is complete.
 	 */
-	stabilize(error: Error, locked?: boolean): Promise<void>;
-	/**
-	 * Logs data to the console dialog.
-	 * @param data The data to log.
-	 */
-	log(...data: any[]): void;
+	stabilize(error: Error, reload?: boolean): Promise<void>;
 }
 
+/**
+ * Gets the type name of a value.
+ * @param value The value to get the type name of.
+ * @returns The type name of the value.
+ */
+declare function typename(value: unknown): string;
+/**
+ * Retrieves the data path based on developer and application name metadata.
+ * @returns The data path.
+ */
+declare function getDataPath(): string;
 /**
  * Asynchronously displays an alert message.
  * @param message The message to display.
@@ -224,11 +380,6 @@ declare function load<T>(promise: Promise<T>, duration?: number, delay?: number)
  * @returns A promise that resolves once the error handling is complete.
  */
 declare function stabilize(error: Error, locked?: boolean): Promise<void>;
-/**
- * Logs data to the console dialog.
- * @param data The data to log.
- */
-declare function log(...data: any[]): void;
 
 interface Navigator {
 	/**

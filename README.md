@@ -1,10 +1,22 @@
-# Adaptive Webpage Template
+# Adaptive Core
 
 ## Information
-Template for creating adaptive web pages.\
+Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### Update 2.6.0 (27.02.2024)
+- Added `import` and `export` functions for each fundamental class, with the ability to add them to more complex classes.
+- Improved error string conversion.
+- Fixed element search constructs.
+- Added `Element.getClosest` and `Element.tryGetClosest` functions for element searching.
+- Added `typename` and `getDataPath` functions to the global namespace.
+- Deprecated functions removed.
+- Fixed additional functions error in constructors.
+- Deprecated type `NotationProgenitor` removed, replaced `NotationContainer` with `ArchiveManager`.
+- Improved breakpoint CSS classes.
+- Added `avatar` CSS class.
+
 ### Update 2.5.2 (12.02.2024)
 - Added function `Error.analyze` which analyzes the error and returns a description.
 - Added functions `HTMLElement.getElements` and `HTMLElement.tryGetElements` which are counterparts of functions `HTMLElement.getElement` and `HTMLElement.tryGetElement` for multiple elements.
