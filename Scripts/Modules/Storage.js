@@ -15,11 +15,16 @@ class Archive {
 	 */
 	constructor(key, initial) {
 		this.#key = key;
+		this.#initial = initial;
+
 		if (localStorage.getItem(this.#key) === null) {
-			this.data = initial;
+			this.data = this.#initial;
 		}
 	}
-	/** @type {string} */ #key;
+	/** @type {string} */
+	#key;
+	/** @type {T} */
+	#initial;
 	/**
 	 * Gets the stored data from local storage.
 	 * @returns {T}
@@ -38,6 +43,13 @@ class Archive {
 		localStorage.setItem(this.#key, JSON.stringify(value, undefined, `\t`));
 	}
 	/**
+	 * Resets the stored data to its initial value.
+	 * @returns {void}
+	 */
+	reset() {
+		this.data = this.#initial;
+	}
+	/**
 	 * Applies an action to modify the stored data.
 	 * @param {(value: T) => T} action The function that modifies the current data.
 	 */
@@ -49,46 +61,70 @@ class Archive {
 //#region Archive manager
 /**
  * Manages the lifecycle of an archive.
- * @template {Function & { new(...args: any): any }} T
+ * @template N The type of data to be stored in the archive.
+ * @template {{ export(): N }} O The type of object that can be exported from the archive.
  */
 class ArchiveManager {
+	static #locked = true;
 	/**
-	 * Creates an instance of the ArchiveManager class.
-	 * @param {string} path The path to the archive in local storage.
-	 * @param {T} prototype The prototype of the archive.
-	 * @param {any[]} args The arguments to initialize the archive.
+	 * Constructs an ArchiveManager instance asynchronously.
+	 * @template N The type of data to be stored in the archive.
+	 * @template {{ export(): N }} O The type of object that can be exported from the archive.
+	 * @template {readonly any[]} A The types of constructor arguments.
+	 * @param {string} path The path identifier for the archive.
+	 * @param {{ import(source: unknown, name?: string): O, new(...args: A): O }} prototype The prototype for creating objects from archive data.
+	 * @param {A} args The constructor arguments.
+	 * @returns {Promise<ArchiveManager<O>>} A promise resolving to the constructed ArchiveManager instance.
 	 */
-	constructor(path, prototype, ...args) {
-		this.#assembler = Reflect.construct.bind(Reflect.construct, prototype, args);
-		const archive = new Archive(path, this.#assembler().export());
+	static async construct(path, prototype, ...args) {
+		ArchiveManager.#locked = false;
+		const self = new ArchiveManager();
+		ArchiveManager.#locked = true;
 
-		const data = prototype.import(archive.data, `archive data`);
-		if (!(data instanceof prototype)) {
-			throw new TypeError(`Imported data ${(data)} type does not match ${(prototype)}`);
+		self.#assemble = () => Reflect.construct(prototype, args);
+		/** @type {Archive<N>} */
+		const archive = new Archive(path, self.#assemble().export());
+		while (true) {
+			try {
+				const data = prototype.import(archive.data, `archive data`);
+				if (!(data instanceof prototype)) {
+					throw new TypeError(`Imported data ${(data)} type does not match ${(prototype)}`);
+				}
+				self.#data = data;
+				break;
+			} catch (error) {
+				if (await window.confirmAsync(`An error occurred during initialization. This type error cannot be fixed by reloading. Would you like to reset the data from archive '${path}' to restore the program's functionality?`)) {
+					archive.reset();
+					continue;
+				} else throw error;
+			}
 		}
-		this.#data = (/** @type {InstanceType<T>} */ (data));
 		window.addEventListener(`beforeunload`, (event) => {
-			archive.data = this.#data.export();
+			archive.data = self.#data.export();
 		});
+
+		return self;
 	}
-	/** @type {() => InstanceType<T>} */
-	#assembler;
-	/** @type {InstanceType<T>} */
+	constructor() {
+		if (ArchiveManager.#locked) throw new TypeError(`Illegal constructor`);
+	}
+	/** @type {() => O} */
+	#assemble;
+	/** @type {O} */
 	#data;
 	/**
 	 * Gets the current data from the archive.
-	 * @returns {InstanceType<T>} The current data.
+	 * @returns {O} The current data.
 	 */
 	get data() {
 		return this.#data;
 	}
 	/**
 	 * Reassembles the archive.
-	 * @returns {InstanceType<T>} The reassembled data.
+	 * @returns {void}
 	 */
 	reassemble() {
-		this.#data = this.#assembler();
-		return this.data;
+		this.#data = this.#assemble();
 	}
 }
 //#endregion

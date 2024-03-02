@@ -259,6 +259,7 @@ Error.prototype.toString = function () {
 	return text;
 };
 //#endregion
+
 //#region Element
 /**
  * Retrieves an element of the specified type and selectors.
@@ -436,22 +437,12 @@ dialogAlert.addEventListener(`click`, (event) => {
 });
 
 /**
- * Retrieves the data path based on developer and application name metadata.
- * @returns {string} The data path.
- */
-Window.prototype.getDataPath = function () {
-	const developer = document.getElement(HTMLMetaElement, `meta[name="author"]`).content;
-	const title = document.getElement(HTMLMetaElement, `meta[name="application-name"]`).content;
-	return `${developer}.${title}`;
-};
-
-/**
  * Asynchronously displays an alert message.
- * @param {string} message The message to display.
+ * @param {any} message The message to display.
  * @param {string} title The title of the alert.
  * @returns {Promise<void>} A promise that resolves when the alert is closed.
  */
-Window.prototype.alertAsync = function (message, title = `Message`) {
+Window.prototype.alertAsync = function (message = ``, title = `Message`) {
 	dialogAlert.showModal();
 	//#region Header
 	const htmlHeader = dialogAlert.getElement(HTMLElement, `*.header`);
@@ -473,7 +464,7 @@ Window.prototype.alertAsync = function (message, title = `Message`) {
 	//#endregion
 	//#region Container
 	const htmlContainer = dialogAlert.getElement(HTMLElement, `*.container`);
-	htmlContainer.innerText = message;
+	htmlContainer.innerText = `${message}`;
 	//#endregion
 	const controller = new AbortController();
 	const promise = ( /** @type {Promise<void>} */(new Promise((resolve) => {
@@ -501,7 +492,8 @@ dialogConfirm.addEventListener(`click`, (event) => {
  * @param {string} title The title of the confirmation dialog.
  * @returns {Promise<boolean>} A promise that resolves to true if the user confirms, and false otherwise.
  */
-Window.prototype.confirmAsync = function (message, title = `Message`) {
+// @ts-ignore
+Window.prototype.confirmAsync = function (message = ``, title = `Message`) {
 	dialogConfirm.showModal();
 	//#region Header
 	const htmlHeader = dialogConfirm.getElement(HTMLElement, `*.header`);
@@ -564,9 +556,10 @@ dialogPrompt.addEventListener(`click`, (event) => {
  * Asynchronously displays a prompt dialog.
  * @param {string} message The message to display.
  * @param {string} title The title of the prompt dialog.
- * @returns {Promise<string|null>} A promise that resolves to the user's input value if accepted, or null if canceled.
+ * @returns {Promise<string?>} A promise that resolves to the user's input value if accepted, or null if canceled.
  */
-Window.prototype.promptAsync = function (message, title = `Message`) {
+// @ts-ignore
+Window.prototype.promptAsync = function (message = ``, _default = ``, title = `Message`) {
 	dialogPrompt.showModal();
 	//#region Header
 	const htmlHeader = dialogPrompt.getElement(HTMLElement, `*.header`);
@@ -597,6 +590,7 @@ Window.prototype.promptAsync = function (message, title = `Message`) {
 	//#endregion
 	//#region Input Prompt
 	const inputPrompt = htmlFooter.getElement(HTMLInputElement, `input[type="text"]`);
+	inputPrompt.value = _default;
 	//#endregion
 	//#endregion
 	const controller = new AbortController();
@@ -613,6 +607,24 @@ Window.prototype.promptAsync = function (message, title = `Message`) {
 		dialogPrompt.close();
 	});
 	return promise;
+};
+
+/**
+ * Issues a warning message.
+ * @param {any} message The warning message to be issued.
+ * @returns {Promise<void>} A Promise that resolves when the warning is displayed.
+ */
+Window.prototype.warn = async function (message = ``) {
+	await this.alertAsync(message, `Warning`);
+};
+
+/**
+ * Throws an error message.
+ * @param {any} message The error message to be thrown.
+ * @returns {Promise<void>} A Promise that resolves when the error is displayed.
+ */
+Window.prototype.throw = async function (message = ``) {
+	await this.alertAsync(message, `Error`);
 };
 
 /**
@@ -648,13 +660,91 @@ Window.prototype.load = async function (promise, duration = 200, delay = 0) {
  * @returns {Promise<void>} A promise that resolves once the error handling is complete.
  */
 Window.prototype.stabilize = async function (error, reload = true) {
-	await window.alertAsync(error.toString(), `Error`);
+	await window.throw(error);
 	if (reload) {
 		location.reload();
 	}
 };
 //#endregion
+//#region Version manager
+/**
+ * Represents a version manager for parsing and comparing version numbers.
+ */
+class VersionManager {
+	/**
+	 * Parses a version number from the given text.
+	 * @param {string} text The text representing the version number.
+	 * @returns {VersionManager} A VersionManager instance representing the parsed version.
+	 * @throws {SyntaxError} If the version syntax is invalid.
+	 */
+	static parse(text) {
+		const match = /^(\d+)\.(\d+)\.(\d+)$/.exec(text);
+		if (match === null) throw new SyntaxError(`Invalid version '${text}' syntax. Version must have <number>.<number>.<number> syntax`);
+		const [, major, minor, patch] = match.map(part => Number.parseInt(part));
+		const version = new VersionManager();
+		version.#major = major;
+		version.#minor = minor;
+		version.#patch = patch;
+		return version;
+	}
+	/** @type {number} */
+	#major = 1;
+	/** @type {number} */
+	#minor = 0;
+	/** @type {number} */
+	#patch = 0;
+	/**
+	 * Checks if this version is higher than the specified version.
+	 * @param {VersionManager} other The other version to compare against.
+	 * @returns {boolean} True if this version is higher; otherwise, false.
+	 */
+	isHigherThen(other) {
+		if (this.#major > other.#major) return true;
+		else if (this.#minor > other.#minor) return true;
+		else if (this.#patch > other.#patch) return true;
+		else return false;
+	}
+	/**
+	 * Converts the version to a string representation.
+	 * @returns {string} The string representation of the version.
+	 */
+	toString() {
+		return `${this.#major}.${this.#minor}.${this.#patch}`;
+	}
+}
+//#endregion
 //#region Navigator
+/**
+ * Retrieves the data path based on developer and application name metadata.
+ * @returns {string} The data path.
+ */
+Navigator.prototype.getDataPath = function () {
+	const developer = document.getElement(HTMLMetaElement, `meta[name="author"]`).content;
+	const title = document.getElement(HTMLMetaElement, `meta[name="title"]`).content;
+	return `${developer}.${title}`;
+};
+
+/**
+ * Retrieves the version information from the metadata.
+ * @returns {VersionManager} An instance representing the version.
+ */
+Navigator.prototype.getVersion = function () {
+	const metaVersion = document.getElement(HTMLMetaElement, `meta[name="generator"]`).content;
+	return VersionManager.parse(metaVersion);
+};
+
+/**
+ * Defines a custom property on the Navigator prototype to interact with the color scheme meta tag.
+ */
+Object.defineProperty(Navigator.prototype, `colorScheme`, {
+	get() {
+		return document.getElement(HTMLMetaElement, `meta[name="color-scheme"]`).content;
+	},
+	set(value) {
+		document.getElement(HTMLMetaElement, `meta[name="color-scheme"]`).content = String(value);
+	}
+});
+
 /**
  * Downloads the specified file.
  * @param {File} file The file to download.
@@ -680,6 +770,50 @@ Location.prototype.getSearchMap = function () {
 		return [key, value];
 	}));
 };
+//#endregion
+
+//#region Application
+/**
+ * @typedef ApplicationNotation
+ * @property {string} [version]
+ */
+
+class Application {
+	/**
+	 * @param {unknown} source 
+	 * @returns {Application}
+	 */
+	static import(source) {
+		const result = new Application();
+		const shell = Object.import(source);
+		result.version = VersionManager.parse(String.import(shell[`version`], `property version`));
+		return result;
+	}
+	/**
+	 * @returns {ApplicationNotation}
+	 */
+	export() {
+		return {
+			version: this.version.toString(),
+		};
+	}
+	/** @type {VersionManager} */ #version = new VersionManager();
+	get version() {
+		return this.#version;
+	}
+	set version(value) {
+		this.#version = value;
+	}
+}
+
+// const application = new ArchiveManager(`${navigator.getDataPath()}.Application`, Application).data;
+//#endregion
+//#region Version
+// const version = navigator.getVersion();
+// if (version.isHigherThen(application.version)) {
+// 	window.dispatchEvent(new Event(`update`, { bubbles: false, cancelable: false }));
+// 	application.version = version;
+// }
 //#endregion
 
 export { };

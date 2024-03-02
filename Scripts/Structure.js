@@ -8,9 +8,6 @@ import { } from "./Modules/Palette.js";
 import { } from "./Modules/Storage.js";
 import { } from "./Modules/Time.js";
 
-//#region Metadata
-const developer = document.getElement(HTMLMetaElement, `meta[name="author"]`).content;
-const title = document.getElement(HTMLMetaElement, `meta[name="application-name"]`).content;
-//#endregion
+// Your code goes here
 
 export { };

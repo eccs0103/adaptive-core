@@ -289,31 +289,38 @@ interface Window {
 	 */
 	typename(value: unknown): string;
 	/**
-	 * Retrieves the data path based on developer and application name metadata.
-	 * @returns The data path.
-	 */
-	getDataPath(): string;
-	/**
 	 * Asynchronously displays an alert message.
 	 * @param message The message to display.
 	 * @param title The title of the alert.
 	 * @returns A promise that resolves when the alert is closed.
 	 */
-	alertAsync(message: string, title?: string): Promise<void>;
+	alertAsync(message?: any, title?: string): Promise<void>;
 	/**
 	 * Asynchronously displays a confirmation dialog.
 	 * @param message The message to display.
 	 * @param title The title of the confirmation dialog.
 	 * @returns A promise that resolves to true if the user confirms, and false otherwise.
 	 */
-	confirmAsync(message: string, title?: string): Promise<boolean>;
+	confirmAsync(message?: string, title?: string): Promise<boolean>;
 	/**
 	 * Asynchronously displays a prompt dialog.
 	 * @param message The message to display.
 	 * @param title The title of the prompt dialog.
 	 * @returns A promise that resolves to the user's input value if accepted, or null if canceled.
 	 */
-	promptAsync(message: string, title?: string): Promise<string?>;
+	promptAsync(message?: string, _default?: string, title?: string): Promise<string?>;
+	/**
+	 * Issues a warning message.
+	 * @param message The warning message to be issued.
+	 * @returns A Promise that resolves when the warning is displayed.
+	 */
+	warn(message?: any): Promise<void>;
+	/**
+	 * Throws an error message.
+	 * @param message The error message to be thrown.
+	 * @returns A Promise that resolves when the error is displayed.
+	 */
+	throw(message?: any): Promise<void>;
 	/**
 	 * Asynchronously loads a promise with a loading animation.
 	 * @template T
@@ -339,31 +346,26 @@ interface Window {
  */
 declare function typename(value: unknown): string;
 /**
- * Retrieves the data path based on developer and application name metadata.
- * @returns The data path.
- */
-declare function getDataPath(): string;
-/**
  * Asynchronously displays an alert message.
  * @param message The message to display.
  * @param title The title of the alert.
  * @returns A promise that resolves when the alert is closed.
  */
-declare function alertAsync(message: string, title?: string): Promise<void>;
+declare function alertAsync(message?: any, title?: string): Promise<void>;
 /**
  * Asynchronously displays a confirmation dialog.
  * @param message The message to display.
  * @param title The title of the confirmation dialog.
  * @returns A promise that resolves to true if the user confirms, and false otherwise.
  */
-declare function confirmAsync(message: string, title?: string): Promise<boolean>;
+declare function confirmAsync(message?: string, title?: string): Promise<boolean>;
 /**
  * Asynchronously displays a prompt dialog.
  * @param message The message to display.
  * @param title The title of the prompt dialog.
  * @returns A promise that resolves to the user's input value if accepted, or null if canceled.
  */
-declare function promptAsync(message: string, title?: string): Promise<string?>;
+declare function promptAsync(message?: string, _default?: string, title?: string): Promise<string?>;
 /**
  * Asynchronously loads a promise with a loading animation.
  * @template T
@@ -382,6 +384,20 @@ declare function load<T>(promise: Promise<T>, duration?: number, delay?: number)
 declare function stabilize(error: Error, locked?: boolean): Promise<void>;
 
 interface Navigator {
+	/**
+	 * Retrieves the data path based on developer and application name metadata.
+	 * @returns The data path.
+	 */
+	getDataPath(): string;
+	/**
+	 * Retrieves the version information from the metadata.
+	 * @returns An instance representing the version.
+	 */
+	getVersion(): VersionManager;
+	/**
+	 * А property to interact with the color scheme in webpage.
+	 */
+	colorScheme: string;
 	/**
 	 * Downloads the specified file.
 	 * @param file The file to download.
