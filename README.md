@@ -5,7 +5,7 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
-### 2.10.7 (02.03.2024)
+### 2.6.7 (02.03.2024)
 
 ### Update 2.6.0 (27.02.2024)
 - Added `import` and `export` functions for each fundamental class, with the ability to add them to more complex classes.
