@@ -74,10 +74,11 @@ class ArchiveManager {
 	 * @param {string} path The path identifier for the archive.
 	 * @param {{ import(source: unknown, name?: string): O, new(...args: A): O }} prototype The prototype for creating objects from archive data.
 	 * @param {A} args The constructor arguments.
-	 * @returns {Promise<ArchiveManager<O>>} A promise resolving to the constructed ArchiveManager instance.
+	 * @returns {Promise<ArchiveManager<N, O>>} A promise resolving to the constructed ArchiveManager instance.
 	 */
 	static async construct(path, prototype, ...args) {
 		ArchiveManager.#locked = false;
+		/** @type {ArchiveManager<N, O>} */
 		const self = new ArchiveManager();
 		ArchiveManager.#locked = true;
 
