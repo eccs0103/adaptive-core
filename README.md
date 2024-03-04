@@ -5,7 +5,15 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
-### 2.6.7 (02.03.2024)
+### 2.6.7 (04.03.2024)
+- Improved metadata handling.
+- Removed deprecated template.
+- Enhanced functions `Window.alertAsync`, `Window.confirmAsync`, and `Window.promptAsync`.
+- Added functions `Window.warn` and `Window.throw`.
+- Function `Window.getDataPath` moved to `Navigator`.
+- Added function `Navigator.getVersion` and property `Navigator.colorScheme`.
+- Added function `Archive.reset`.
+- Improved structure of class `ArchiveManager`.
 
 ### Update 2.6.0 (27.02.2024)
 - Added `import` and `export` functions for each fundamental class, with the ability to add them to more complex classes.
