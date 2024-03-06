@@ -81,7 +81,8 @@ class FastEngine extends Engine {
 		requestAnimationFrame(callback);
 		this.launched = launch;
 	}
-	/** @type {DOMHighResTimeStamp} */ #time = 0;
+	/** @type {DOMHighResTimeStamp} */
+	#time = 0;
 	/**
 	 * Gets the elapsed time since the engine started.
 	 * @readonly
@@ -90,7 +91,8 @@ class FastEngine extends Engine {
 	get time() {
 		return this.#time;
 	}
-	/** @type {boolean} */ #launched = false;
+	/** @type {boolean} */
+	#launched = false;
 	/**
 	 * Gets the launch status of the engine.
 	 * @returns {boolean} True if the engine is launched, false otherwise.
@@ -111,7 +113,8 @@ class FastEngine extends Engine {
 			this.dispatchEvent(new Event(`launch`));
 		}
 	}
-	/** @type {number} */ #FPSLimit = Infinity;
+	/** @type {number} */
+	#FPSLimit = Infinity;
 	/**
 	 * Gets the FPS limit of the engine.
 	 * @returns {number} The FPS limit.
@@ -130,7 +133,8 @@ class FastEngine extends Engine {
 		}
 		this.#FPSLimit = value;
 	}
-	/** @type {number} */ #FPS = 0;
+	/** @type {number} */
+	#FPS = 0;
 	/**
 	 * Gets the current FPS of the engine.
 	 * @readonly
@@ -174,7 +178,8 @@ class PreciseEngine extends Engine {
 		setTimeout(callback, this.#delta);
 		this.launched = launch;
 	}
-	/** @type {boolean} */ #launched = false;
+	/** @type {boolean} */
+	#launched = false;
 	/**
 	 * Gets the launch status of the engine.
 	 * @returns {boolean} True if the engine is launched, false otherwise.
@@ -195,7 +200,8 @@ class PreciseEngine extends Engine {
 			this.dispatchEvent(new Event(`launch`));
 		}
 	}
-	/** @type {number} */ #delta = (1000 / 60);
+	/** @type {number} */
+	#delta = (1000 / 60);
 	/**
 	 * Gets the FPS of the engine.
 	 * @returns {number} The current FPS.
@@ -225,7 +231,6 @@ class PreciseEngine extends Engine {
 }
 //#endregion
 
-
 //#region Fast display
 /**
  * Represents a fast display using a rendering context.
@@ -246,7 +251,8 @@ class FastDisplay extends FastEngine {
 			this.#resize();
 		});
 	}
-	/** @type {RenderingContext} */ #context;
+	/** @type {RenderingContext} */
+	#context;
 	/**
 	 * Resizes the canvas based on the current dimensions.
 	 * Dispatches resize and update events after resizing.
@@ -283,7 +289,8 @@ class PreciseDisplay extends PreciseEngine {
 			this.#resize();
 		});
 	}
-	/** @type {RenderingContext} */ #context;
+	/** @type {RenderingContext} */
+	#context;
 	/**
 	 * Resizes the canvas based on the current dimensions.
 	 * Dispatches resize and update events after resizing.

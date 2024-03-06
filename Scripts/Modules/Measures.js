@@ -130,7 +130,8 @@ class Point1D extends Point {
 		super();
 		this.x = x;
 	}
-	/** @type {number} */ #x = 0;
+	/** @type {number} */
+	#x = 0;
 	/**
 	 * Gets the x-coordinate of the point.
 	 */
@@ -267,7 +268,8 @@ class Point2D extends Point1D {
 		super(x);
 		this.y = y;
 	}
-	/** @type {number} */ #y = 0;
+	/** @type {number} */
+	#y = 0;
 	/**
 	 * Gets the y-coordinate of the point.
 	 */
@@ -406,7 +408,8 @@ class Point3D extends Point2D {
 		super(x, y);
 		this.z = z;
 	}
-	/** @type {number} */ #z = 0;
+	/** @type {number} */
+	#z = 0;
 	/**
 	 * Gets the z-coordinate of the point.
 	 */
@@ -484,17 +487,21 @@ class Matrix {
 	 */
 	constructor(size, initial) {
 		this.#size = size.clone();
-		/** @type {Item[][]} */ const data = (this.#data = new Array(this.#size.y));
+		/** @type {Item[][]} */
+		const data = (this.#data = new Array(this.#size.y));
 		for (let y = 0; y < data.length; y++) {
-			/** @type {Item[]} */ const row = (data[y] = new Array(this.#size.x));
+			/** @type {Item[]} */
+			const row = (data[y] = new Array(this.#size.x));
 			for (let x = 0; x < row.length; x++) {
 				if (initial !== undefined) {
-					/** @type {Item} */ (row[x] == initial);
+					/** @type {Item} */
+					(row[x] == initial);
 				}
 			}
 		}
 	}
-	/** @type {Point2D} */ #size;
+	/** @type {Point2D} */
+	#size;
 	/** 
 	 * Gets the size of the matrix.
 	 * @readonly 
@@ -502,7 +509,8 @@ class Matrix {
 	get size() {
 		return Object.freeze(this.#size);
 	}
-	/** @type {Item[][]} */ #data;
+	/** @type {Item[][]} */
+	#data;
 	/**
 	 * Gets the value at the specified position in the matrix.
 	 * @param {Readonly<Point2D>} position The position in the matrix.

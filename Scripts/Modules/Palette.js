@@ -407,7 +407,8 @@ class Color {
 	}
 	//#endregion
 	//#region Properties
-	/** @type {number} */ #red = 0;
+	/** @type {number} */
+	#red = 0;
 	/** 
 	 * Gets the red component of the color.
 	 */
@@ -422,7 +423,8 @@ class Color {
 		this.#red = trunc(value);
 		[this.#hue, this.#saturation, this.#lightness] = Color.#RGBtoHSL(this.#red, this.#green, this.#blue);
 	}
-	/** @type {number} */ #green = 0;
+	/** @type {number} */
+	#green = 0;
 	/** 
 	 * Gets the green component of the color.
 	 */
@@ -437,7 +439,8 @@ class Color {
 		this.#green = trunc(value);
 		[this.#hue, this.#saturation, this.#lightness] = Color.#RGBtoHSL(this.#red, this.#green, this.#blue);
 	}
-	/** @type {number} */ #blue = 0;
+	/** @type {number} */
+	#blue = 0;
 	/** 
 	 * Gets the blue component of the color.
 	 */
@@ -452,7 +455,8 @@ class Color {
 		this.#blue = trunc(value);
 		[this.#hue, this.#saturation, this.#lightness] = Color.#RGBtoHSL(this.#red, this.#green, this.#blue);
 	}
-	/** @type {number} */ #hue = 0;
+	/** @type {number} */
+	#hue = 0;
 	/** 
 	 * Gets the hue component of the color.
 	 */
@@ -467,7 +471,8 @@ class Color {
 		this.#hue = trunc(value);
 		[this.#red, this.#green, this.#blue] = Color.#HSLtoRGB(this.#hue, this.#saturation, this.#lightness);
 	}
-	/** @type {number} */ #saturation = 0;
+	/** @type {number} */
+	#saturation = 0;
 	/** 
 	 * Gets the saturation component of the color.
 	 */
@@ -482,7 +487,8 @@ class Color {
 		this.#saturation = trunc(value);
 		[this.#red, this.#green, this.#blue] = Color.#HSLtoRGB(this.#hue, this.#saturation, this.#lightness);
 	}
-	/** @type {number} */ #lightness = 0;
+	/** @type {number} */
+	#lightness = 0;
 	/** 
 	 * Gets the lightness component of the color.
 	 */
@@ -497,7 +503,8 @@ class Color {
 		this.#lightness = trunc(value);
 		[this.#red, this.#green, this.#blue] = Color.#HSLtoRGB(this.#hue, this.#saturation, this.#lightness);
 	}
-	/** @type {number} */ #alpha = 1;
+	/** @type {number} */
+	#alpha = 1;
 	/** 
 	 * Gets the alpha (transparency) component of the color.
 	 */

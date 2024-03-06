@@ -217,7 +217,8 @@ class Timespan {
 	}
 	//#endregion
 	//#region Properties
-	/** @type {number} */ #duration = 0;
+	/** @type {number} */
+	#duration = 0;
 	/** 
 	 * Gets the duration of the Timespan.
 	 */
@@ -233,7 +234,8 @@ class Timespan {
 		this.#duration = trunc(value);
 		[this.#negativity, this.#hours, this.#minutes, this.#seconds, this.#milliseconds] = Timespan.#toTime(this.#duration);
 	}
-	/** @type {boolean} */ #negativity = false;
+	/** @type {boolean} */
+	#negativity = false;
 	/** 
 	 * Gets the negativity flag of the Timespan.
 	 */
@@ -247,7 +249,8 @@ class Timespan {
 		this.#negativity = value;
 		this.#duration = Timespan.#toDuration(this.#negativity, this.#hours, this.#minutes, this.#seconds, this.#milliseconds);
 	}
-	/** @type {number} */ #hours = 0;
+	/** @type {number} */
+	#hours = 0;
 	/** 
 	 * Gets the hours component of the Timespan.
 	 */
@@ -262,7 +265,8 @@ class Timespan {
 		this.#hours = trunc(value);
 		this.#duration = Timespan.#toDuration(this.#negativity, this.#hours, this.#minutes, this.#seconds, this.#milliseconds);
 	}
-	/** @type {number} */ #minutes = 0;
+	/** @type {number} */
+	#minutes = 0;
 	/** 
 	 * Gets the minutes component of the Timespan.
 	 */
@@ -277,7 +281,8 @@ class Timespan {
 		this.#minutes = trunc(value);
 		this.#duration = Timespan.#toDuration(this.#negativity, this.#hours, this.#minutes, this.#seconds, this.#milliseconds);
 	}
-	/** @type {number} */ #seconds = 0;
+	/** @type {number} */
+	#seconds = 0;
 	/** 
 	 * Gets the seconds component of the Timespan.
 	 */
@@ -292,7 +297,8 @@ class Timespan {
 		this.#seconds = trunc(value);
 		this.#duration = Timespan.#toDuration(this.#negativity, this.#hours, this.#minutes, this.#seconds, this.#milliseconds);
 	}
-	/** @type {number} */ #milliseconds = 0;
+	/** @type {number} */
+	#milliseconds = 0;
 	/** 
 	 * Gets the milliseconds component of the Timespan.
 	 */

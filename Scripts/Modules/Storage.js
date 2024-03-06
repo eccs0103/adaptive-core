@@ -155,7 +155,8 @@ class Store {
 		// 	}
 		// });
 	}
-	/** @type {string} */ #store;
+	/** @type {string} */
+	#store;
 	/**
 	 * @param {string} name 
 	 * @returns {Promise<IDBDatabase>}
@@ -176,7 +177,8 @@ class Store {
 		});
 		return promise;
 	}
-	/** @type {Promise<IDBObjectStore>} */ #promiseGetStore;
+	/** @type {Promise<IDBObjectStore>} */
+	#promiseGetStore;
 	/**
 	 * Retrieves the value associated with the specified key from the store.
 	 * @param {string} key The key to retrieve the value for.
