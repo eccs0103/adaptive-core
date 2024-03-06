@@ -29,7 +29,8 @@ class Color {
 		hue /= 30;
 		saturation /= 100;
 		lightness /= 100;
-		function transform(/** @type {number} */ level) {
+		/** @param {number} level */
+		function transform(level) {
 			const sector = (level + hue) % 12;
 			return lightness - (saturation * min(lightness, 1 - lightness)) * max(-1, min(sector - 3, 9 - sector, 1));
 		}

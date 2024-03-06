@@ -164,7 +164,8 @@ class Store {
 	#createOpenDatabasePromise(name) {
 		const request = indexedDB.open(name);
 		const controller = new AbortController();
-		/** @type {Promise<IDBDatabase>} */ const promise = new Promise((resolve, reject) => {
+		/** @type {Promise<IDBDatabase>} */
+		const promise = new Promise((resolve, reject) => {
 			request.addEventListener(`success`, (event) => {
 				resolve(request.result);
 			}, { signal: controller.signal });
@@ -240,7 +241,8 @@ class Locker extends Store {
 		super(database, store);
 		this.#key = key;
 	}
-	/** @type {string} */ #key;
+	/** @type {string} */
+	#key;
 	/**
 	 * Retrieves the value stored under the specified key in the locker.
 	 * @returns {Promise<T>} A promise resolving to the stored value.
