@@ -51,6 +51,12 @@ interface StringConstructor {
 	 * @throws {TypeError} If the source is not a string.
 	 */
 	import(source: unknown, name?: string): string;
+	/**
+	 * Checks if the given string is empty.
+	 * @param text The string to check.
+	 * @returns Returns true if the string is empty, otherwise returns false.
+	 */
+	isEmpty(text: string): boolean;
 }
 
 interface String {
@@ -59,6 +65,12 @@ interface String {
 	 * @returns The exported string.
 	 */
 	export(): string;
+	/**
+	 * Replaces the string with the provided text if it's empty.
+	 * @param text The text to replace the string with if it's empty.
+	 * @returns Returns the original string if it's not empty, otherwise returns the provided text.
+	 */
+	replaceVoid(text: string): string;
 }
 
 interface Function {

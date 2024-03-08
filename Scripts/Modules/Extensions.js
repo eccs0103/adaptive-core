@@ -81,12 +81,30 @@ String.import = function (source, name = `source`) {
 };
 
 /**
+ * Checks if the given string is empty.
+ * @param {string} text The string to check.
+ * @returns {boolean} Returns true if the string is empty, otherwise returns false.
+ */
+String.isEmpty = function (text) {
+	return text.length === 0;
+}
+
+/**
  * Exports the string value.
  * @returns {string} The exported string.
  */
 String.prototype.export = function () {
 	const result = this.valueOf();
 	return result;
+};
+
+/**
+ * Replaces the string with the provided text if it's empty.
+ * @param {string} text The text to replace the string with if it's empty.
+ * @returns {string} Returns the original string if it's not empty, otherwise returns the provided text.
+ */
+String.prototype.replaceVoid = function (text) {
+	return (this.length > 0 ? this.valueOf() : text);
 };
 //#endregion
 //#region Function
@@ -167,7 +185,7 @@ Array.import = function (source, name = `source`) {
 
 /**
  * Exports the array value.
- * @todo Check
+* @todo Check
  * @returns {this[]} The exported array.
  */
 Array.prototype.export = function () {
