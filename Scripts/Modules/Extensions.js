@@ -31,35 +31,6 @@ Number.prototype.export = function () {
 	return result;
 };
 //#endregion
-//#region BigInt
-/**
- * Imports a value as a BigInt.
- * @param {unknown} source The value to import as a BigInt.
- * @param {string} name The name of the source (optional).
- * @returns {bigint} The imported BigInt value.
- * @throws {ReferenceError} If the source is undefined.
- * @throws {TypeError} If the source is not of type bigint.
- */
-BigInt.import = function (source, name = `source`) {
-	if (source === undefined) {
-		throw new ReferenceError(`${name.replace(/^\w/, part => part.toUpperCase())} is not defined`);
-	}
-	if (typeof (source) !== `bigint`) {
-		throw new TypeError(`Unable to import ${(name)} due it's ${typename(source)} type`);
-	}
-	const result = source.valueOf();
-	return result;
-};
-
-/**
- * Exports the BigInt value.
- * @returns {bigint} The exported BigInt value.
- */
-BigInt.prototype.export = function () {
-	const result = this.valueOf();
-	return result;
-};
-//#endregion
 //#region Boolean
 /**
  * Imports a boolean from the source.

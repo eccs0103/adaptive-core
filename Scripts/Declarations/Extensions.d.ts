@@ -21,26 +21,6 @@ interface Number {
 	export(): number;
 }
 
-interface BigIntConstructor {
-	/**
-	 * Imports a value as a BigInt.
-	 * @param source The value to import as a BigInt.
-	 * @param name The name of the source (optional).
-	 * @returns The imported BigInt value.
-	 * @throws {ReferenceError} If the source is undefined.
-	 * @throws {TypeError} If the source is not of type bigint.
-	 */
-	import(source: unknown, name?: string): bigint;
-}
-
-interface BigInt {
-	/**
-	 * Exports the BigInt value.
-	 * @returns The exported BigInt value.
-	 */
-	export(): bigint;
-}
-
 interface BooleanConstructor {
 	/**
 	 * Imports a boolean from the source.

@@ -5,6 +5,10 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 2.6.8 (18.03.2024)
+- Добавлены функции `isEmpty` и `replaceVoid` для строк.
+- Убраны устаревшые классы `FastDisplay` и `PreciseDisplay`.
+
 ### 2.6.7 (04.03.2024)
 - Improved metadata handling.
 - Removed deprecated template.
