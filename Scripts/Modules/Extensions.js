@@ -13,7 +13,7 @@
  */
 Number.import = function (source, name = `source`) {
 	if (source === undefined) {
-		throw new ReferenceError(`${name.replace(/^\w/, (part) => part.toUpperCase())} is not defined`);
+		throw new ReferenceError(`${name.replace(/^\w/, part => part.toUpperCase())} is not defined`);
 	}
 	if (typeof (source) !== `number`) {
 		throw new TypeError(`Unable to import ${(name)} due it's ${typename(source)} type`);
@@ -31,6 +31,35 @@ Number.prototype.export = function () {
 	return result;
 };
 //#endregion
+//#region BigInt
+/**
+ * Imports a value as a BigInt.
+ * @param {unknown} source The value to import as a BigInt.
+ * @param {string} name The name of the source (optional).
+ * @returns {bigint} The imported BigInt value.
+ * @throws {ReferenceError} If the source is undefined.
+ * @throws {TypeError} If the source is not of type bigint.
+ */
+BigInt.import = function (source, name = `source`) {
+	if (source === undefined) {
+		throw new ReferenceError(`${name.replace(/^\w/, part => part.toUpperCase())} is not defined`);
+	}
+	if (typeof (source) !== `bigint`) {
+		throw new TypeError(`Unable to import ${(name)} due it's ${typename(source)} type`);
+	}
+	const result = source.valueOf();
+	return result;
+};
+
+/**
+ * Exports the BigInt value.
+ * @returns {bigint} The exported BigInt value.
+ */
+BigInt.prototype.export = function () {
+	const result = this.valueOf();
+	return result;
+};
+//#endregion
 //#region Boolean
 /**
  * Imports a boolean from the source.
@@ -42,7 +71,7 @@ Number.prototype.export = function () {
  */
 Boolean.import = function (source, name = `source`) {
 	if (source === undefined) {
-		throw new ReferenceError(`${name.replace(/^\w/, (part) => part.toUpperCase())} is not defined`);
+		throw new ReferenceError(`${name.replace(/^\w/, part => part.toUpperCase())} is not defined`);
 	}
 	if (typeof (source) !== `boolean`) {
 		throw new TypeError(`Unable to import ${(name)} due it's ${typename(source)} type`);
@@ -71,7 +100,7 @@ Boolean.prototype.export = function () {
  */
 String.import = function (source, name = `source`) {
 	if (source === undefined) {
-		throw new ReferenceError(`${name.replace(/^\w/, (part) => part.toUpperCase())} is not defined`);
+		throw new ReferenceError(`${name.replace(/^\w/, part => part.toUpperCase())} is not defined`);
 	}
 	if (typeof (source) !== `string`) {
 		throw new TypeError(`Unable to import ${(name)} due it's ${typename(source)} type`);
@@ -87,7 +116,7 @@ String.import = function (source, name = `source`) {
  */
 String.isEmpty = function (text) {
 	return text.length === 0;
-}
+};
 
 /**
  * Exports the string value.
@@ -139,7 +168,7 @@ Function.prototype.export = function () {
  */
 Object.import = function (source, name = `source`) {
 	if (source === undefined) {
-		throw new ReferenceError(`${name.replace(/^\w/, (part) => part.toUpperCase())} is not defined`);
+		throw new ReferenceError(`${name.replace(/^\w/, part => part.toUpperCase())} is not defined`);
 	}
 	if (typeof (source) !== `object`) {
 		throw new TypeError(`Unable to import ${(name)} due it's ${typename(source)} type`);
@@ -174,7 +203,7 @@ Object.prototype.export = function () {
  */
 Array.import = function (source, name = `source`) {
 	if (source === undefined) {
-		throw new ReferenceError(`${name.replace(/^\w/, (part) => part.toUpperCase())} is not defined`);
+		throw new ReferenceError(`${name.replace(/^\w/, part => part.toUpperCase())} is not defined`);
 	}
 	if (!(source instanceof Array)) {
 		throw new TypeError(`Unable to import ${name} due it's ${typename(source)} type`);
