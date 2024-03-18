@@ -6,8 +6,8 @@ Core for creating adaptive web pages.\
 
 ## Feed
 ### 2.6.8 (18.03.2024)
-- Добавлены функции `isEmpty` и `replaceVoid` для строк.
-- Убраны устаревшые классы `FastDisplay` и `PreciseDisplay`.
+- Added functions `isEmpty` and `replaceVoid` for strings.
+- Removed deprecated classes `FastDisplay` and `PreciseDisplay`.
 
 ### 2.6.7 (04.03.2024)
 - Improved metadata handling.
