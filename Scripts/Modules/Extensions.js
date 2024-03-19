@@ -195,6 +195,15 @@ Array.prototype.export = function () {
 //#endregion
 //#region Math
 /**
+ * Returns the square power of a number.
+ * @param {number} x A numeric expression.
+ * @returns {number}
+ */
+Math.sqpw = function (x) {
+	return x * x;
+}
+
+/**
  * Clamps a value between a minimum and maximum value.
  * @param {number} value The value to be clamped.
  * @param {number} min The minimum allowed value.

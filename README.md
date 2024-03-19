@@ -5,8 +5,9 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
-### 2.6.8 (18.03.2024)
-- Added functions `isEmpty` and `replaceVoid` for strings.
+### 2.6.8 (19.03.2024)
+- Added function `Math.sqpw` for fast calculating square power.
+- Added functions `String.isEmpty` and `String.replaceVoid`.
 - Removed deprecated classes `FastDisplay` and `PreciseDisplay`.
 
 ### 2.6.7 (04.03.2024)

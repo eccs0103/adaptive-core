@@ -132,6 +132,11 @@ interface Array<T extends Function> {
 
 interface Math {
 	/**
+	 * Returns the square power of a number.
+	 * @param x A numeric expression.
+	 */
+	sqpw(x: number): number;
+	/**
 	 * Clamps a value between a minimum and maximum value.
 	 * @param value The value to be clamped.
 	 * @param min The minimum allowed value.
