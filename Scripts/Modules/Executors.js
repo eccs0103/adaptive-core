@@ -1,5 +1,3 @@
-/// <reference path="../Declarations/Executors.d.ts" />
-
 "use strict";
 
 //#region Engine
@@ -45,6 +43,16 @@ class Engine extends EventTarget {
 }
 //#endregion
 //#region Fast engine
+/**
+ * @typedef VirtualFastEngineEventMap
+ * @property {Event} start
+ * @property {Event} update
+ * @property {Event} launch
+ * @property {Event} change
+ * 
+ * @typedef {EventListener & VirtualFastEngineEventMap} FastEngineEventMap
+ */
+
 class FastEngine extends Engine {
 	/**
 	 * Constructs a FastEngine instance.
@@ -176,6 +184,16 @@ class FastEngine extends Engine {
 }
 //#endregion
 //#region Precise engine
+/**
+ * @typedef VirtualPreciseEngineEventMap
+ * @property {Event} start
+ * @property {Event} update
+ * @property {Event} launch
+ * @property {Event} change
+ * 
+ * @typedef {EventListener & VirtualPreciseEngineEventMap} PreciseEngineEventMap
+ */
+
 class PreciseEngine extends Engine {
 	/**
 	 * Constructs a PreciseEngine instance.
