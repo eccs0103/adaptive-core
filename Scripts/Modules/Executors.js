@@ -1,3 +1,5 @@
+/// <reference path="../Declarations/Executors.d.ts" />
+
 "use strict";
 
 //#region Engine
@@ -80,6 +82,26 @@ class FastEngine extends Engine {
 		};
 		requestAnimationFrame(callback);
 		this.launched = launch;
+	}
+	/**
+	 * @template {keyof FastEngineEventMap} K
+	 * @param {K} type 
+	 * @param {(this: FastEngine, ev: FastEngineEventMap[K]) => any} listener 
+	 * @param {boolean | AddEventListenerOptions} options
+	 * @returns {void}
+	 */
+	addEventListener(type, listener, options = false) {
+		return super.addEventListener(type, listener, options);
+	}
+	/**
+	 * @template {keyof FastEngineEventMap} K
+	 * @param {K} type 
+	 * @param {(this: FastEngine, ev: FastEngineEventMap[K]) => any} listener 
+	 * @param {boolean | EventListenerOptions} options
+	 * @returns {void}
+	 */
+	removeEventListener(type, listener, options = false) {
+		return super.addEventListener(type, listener, options);
 	}
 	/** @type {DOMHighResTimeStamp} */
 	#time = 0;
@@ -177,6 +199,26 @@ class PreciseEngine extends Engine {
 		};
 		setTimeout(callback, this.#delta);
 		this.launched = launch;
+	}
+	/**
+	 * @template {keyof PreciseEngineEventMap} K
+	 * @param {K} type 
+	 * @param {(this: PreciseEngine, ev: PreciseEngineEventMap[K]) => any} listener 
+	 * @param {boolean | AddEventListenerOptions} options
+	 * @returns {void}
+	 */
+	addEventListener(type, listener, options = false) {
+		return super.addEventListener(type, listener, options);
+	}
+	/**
+	 * @template {keyof PreciseEngineEventMap} K
+	 * @param {K} type 
+	 * @param {(this: PreciseEngine, ev: PreciseEngineEventMap[K]) => any} listener 
+	 * @param {boolean | EventListenerOptions} options
+	 * @returns {void}
+	 */
+	removeEventListener(type, listener, options = false) {
+		return super.addEventListener(type, listener, options);
 	}
 	/** @type {boolean} */
 	#launched = false;
