@@ -1,4 +1,4 @@
-/// <reference path="./Extensions.d.ts" />
+/// <reference path="./Declarations.d.ts" />
 
 "use strict";
 

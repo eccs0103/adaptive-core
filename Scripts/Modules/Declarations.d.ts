@@ -1,5 +1,6 @@
-/// <reference path="../Modules/Extensions.js" />
+/// <reference path="./Extensions.js" />
 /// (?<!throws )\{[\w<>\[\]]+\} 
+/// (?<=@.+)- 
 
 interface NumberConstructor {
 	/**
