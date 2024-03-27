@@ -16,7 +16,7 @@ Number.import = function (source, name = `source`) {
 		throw new ReferenceError(`${name.replace(/^\w/, part => part.toUpperCase())} is not defined`);
 	}
 	if (typeof (source) !== `number`) {
-		throw new TypeError(`Unable to import ${(name)} due it's ${typename(source)} type`);
+		throw new TypeError(`Unable to import ${(name)} due its ${typename(source)} type`);
 	}
 	const result = source.valueOf();
 	return result;
@@ -45,7 +45,7 @@ Boolean.import = function (source, name = `source`) {
 		throw new ReferenceError(`${name.replace(/^\w/, part => part.toUpperCase())} is not defined`);
 	}
 	if (typeof (source) !== `boolean`) {
-		throw new TypeError(`Unable to import ${(name)} due it's ${typename(source)} type`);
+		throw new TypeError(`Unable to import ${(name)} due its ${typename(source)} type`);
 	}
 	const result = source.valueOf();
 	return result;
@@ -74,7 +74,7 @@ String.import = function (source, name = `source`) {
 		throw new ReferenceError(`${name.replace(/^\w/, part => part.toUpperCase())} is not defined`);
 	}
 	if (typeof (source) !== `string`) {
-		throw new TypeError(`Unable to import ${(name)} due it's ${typename(source)} type`);
+		throw new TypeError(`Unable to import ${(name)} due its ${typename(source)} type`);
 	}
 	const result = source.valueOf();
 	return result;
@@ -142,10 +142,10 @@ Object.import = function (source, name = `source`) {
 		throw new ReferenceError(`${name.replace(/^\w/, part => part.toUpperCase())} is not defined`);
 	}
 	if (typeof (source) !== `object`) {
-		throw new TypeError(`Unable to import ${(name)} due it's ${typename(source)} type`);
+		throw new TypeError(`Unable to import ${(name)} due its ${typename(source)} type`);
 	}
 	if (source === null) {
-		throw new TypeError(`Unable to import ${(name)} due it's ${typename(null)} type`);
+		throw new TypeError(`Unable to import ${(name)} due its ${typename(null)} type`);
 	}
 	/**
 	 * @todo Check
@@ -177,7 +177,7 @@ Array.import = function (source, name = `source`) {
 		throw new ReferenceError(`${name.replace(/^\w/, part => part.toUpperCase())} is not defined`);
 	}
 	if (!(source instanceof Array)) {
-		throw new TypeError(`Unable to import ${name} due it's ${typename(source)} type`);
+		throw new TypeError(`Unable to import ${name} due its ${typename(source)} type`);
 	}
 	const result = Array.from(source);
 	return result;
