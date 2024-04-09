@@ -2,36 +2,36 @@
 
 //#region Point
 /**
- * Base class representing a point in a any-dimensional space.
+ * Abstract base class representing a point.
  * @abstract
  */
 class Point {
 	/**
-	 * Converts the point to a string with a fixed number of decimal places for each metric.
-	 * @param {number} [digits] The number of digits to appear after the decimal point for each metric.
-	 * @returns {string} A string representation of the point with fixed decimal places.
+	 * Returns a string representation of the point with a fixed number of digits after the decimal point.
+	 * @param {number} [digits] The number of digits to appear after the decimal point.
+	 * @returns {string} A string representation of the point.
 	 */
 	toFixed(digits) {
 		return `(${[...this].map(metric => metric.toFixed(digits)).join(`, `)})`;
 	}
 	/**
-	 * Converts the point to a string using exponential notation for each metric.
-	 * @param {number} [digits] The number of digits to appear after the decimal point for each metric.
-	 * @returns {string} A string representation of the point using exponential notation.
+	 * Returns a string representation of the point in exponential notation.
+	 * @param {number} [digits] The number of digits to appear after the decimal point.
+	 * @returns {string} A string representation of the point in exponential notation.
 	 */
 	toExponential(digits) {
 		return `(${[...this].map(metric => metric.toExponential(digits)).join(`, `)})`;
 	}
 	/**
-	 * Converts the point to a string with a specified precision for each metric.
-	 * @param {number} [precision] The number of significant digits for each metric.
-	 * @returns {string} A string representation of the point with specified precision.
+	 * Returns a string representation of the point with a specified precision.
+	 * @param {number} [precision] The number of significant digits.
+	 * @returns {string} A string representation of the point with the specified precision.
 	 */
 	toPrecision(precision) {
 		return `(${[...this].map(metric => metric.toPrecision(precision)).join(`, `)})`;
 	}
 	/**
-	 * Converts the point to a string, using a specified radix for each metric.
+	 * Returns a string representation of the point in the specified radix (base).
 	 * @param {number} [radix] An integer between 2 and 36 specifying the base to use for representing numeric values.
 	 * @returns {string} A string representation of the point in the specified radix.
 	 */
@@ -39,17 +39,18 @@ class Point {
 		return `(${[...this].map(metric => metric.toString(radix)).join(`, `)})`;
 	}
 	/**
-	 * Converts the point to a localized string using the specified locales and formatting options for each metric.
+	 * Returns a string representation of the point formatted according to the specified locale and formatting options.
 	 * @param {Intl.LocalesArgument} [locales] A string with a BCP 47 language tag, or an array of such strings.
-	 * @param {Intl.NumberFormatOptions} [options] An object with some or all of the properties of the Intl.NumberFormat object.
-	 * @returns {string} A localized string representation of the point.
+	 * @param {Intl.NumberFormatOptions} [options] An object with some or all of the following properties.
+	 * @returns {string} A string representation of the point formatted according to the specified locale and formatting options.
 	 */
 	toLocaleString(locales, options) {
 		return `(${[...this].map(metric => metric.toLocaleString(locales, options)).join(`, `)})`;
 	}
 	/**
-	 * Returns a generator for iterating over the metrics of the point.
-	 * @returns {Generator<number>} A generator for iterating over the metrics.
+	 * Returns an iterator object that yields each component of the point.
+	 * @abstract
+	 * @returns {Generator<number>} An iterator object.
 	 */
 	*[Symbol.iterator]() {
 		throw new ReferenceError(`Not implemented function`);
@@ -59,72 +60,70 @@ class Point {
 //#region Point 1D
 /**
  * Represents a point in one-dimensional space.
- * @extends {Point}
  */
 class Point1D extends Point {
 	/**
-	 * Adds two one-dimensional points.
+	 * Static method to add two points.
 	 * @param {Readonly<Point1D>} first The first point.
 	 * @param {Readonly<Point1D>} second The second point.
-	 * @returns {Point1D} A new point representing the sum of the input points.
+	 * @returns {Point1D} The result of adding the two points.
 	 */
 	static [`+`](first, second) {
 		return new Point1D(first.x + second.x);
 	}
 	/**
-	 * Subtracts the second one-dimensional point from the first.
+	 * Static method to subtract one point from another.
 	 * @param {Readonly<Point1D>} first The first point.
 	 * @param {Readonly<Point1D>} second The second point.
-	 * @returns {Point1D} A new point representing the difference between the input points.
+	 * @returns {Point1D} The result of subtracting the second point from the first.
 	 */
 	static [`-`](first, second) {
 		return new Point1D(first.x - second.x);
 	}
 	/**
-	 * Multiplies two one-dimensional points.
+	 * Static method to multiply two points.
 	 * @param {Readonly<Point1D>} first The first point.
 	 * @param {Readonly<Point1D>} second The second point.
-	 * @returns {Point1D} A new point representing the product of the input points.
+	 * @returns {Point1D} The result of multiplying the two points.
 	 */
 	static [`*`](first, second) {
 		return new Point1D(first.x * second.x);
 	}
 	/**
-	 * Divides the first one-dimensional point by the second.
+	 * Static method to divide one point by another.
 	 * @param {Readonly<Point1D>} first The first point.
 	 * @param {Readonly<Point1D>} second The second point.
-	 * @returns {Point1D} A new point representing the quotient of the input points.
+	 * @returns {Point1D} The result of dividing the first point by the second.
 	 */
 	static [`/`](first, second) {
 		return new Point1D(first.x / second.x);
 	}
 	/**
-	 * Creates a clone of a one-dimensional point.
+	 * Static method to clone a point.
 	 * @param {Readonly<Point1D>} source The point to clone.
-	 * @returns {Point1D} A new point with the same value as the input point.
+	 * @returns {Point1D} A new point with the same coordinates as the source point.
 	 */
 	static clone(source) {
 		return new Point1D(source.x);
 	}
 	/**
-	 * Creates a one-dimensional point with the specified value.
-	 * @param {number} value The value of the one-dimensional point.
-	 * @returns {Point1D} A new one-dimensional point with the specified value.
+	 * Static method to create a point with a repeated value.
+	 * @param {number} value The value to repeat.
+	 * @returns {Point1D} A new point with the specified value.
 	 */
 	static repeat(value) {
 		return new Point1D(value);
 	}
 	/**
-	 * Gets a one-dimensional point with zero value.
+	 * Returns the zero point (0).
 	 * @readonly
-	 * @returns {Point1D}
+	 * @returns {Point1D} The zero point.
 	 */
 	static get ZERO() {
 		return Point1D.repeat(0);
 	}
 	/**
-	 * Creates a new one-dimensional point.
-	 * @param {number} x The value of the point along the x-axis.
+	 * @param {number} x The x-coordinate of the point.
 	 */
 	constructor(x) {
 		super();
@@ -134,12 +133,14 @@ class Point1D extends Point {
 	#x = 0;
 	/**
 	 * Gets the x-coordinate of the point.
+	 * @returns {number} The x-coordinate.
 	 */
 	get x() {
 		return this.#x;
 	}
 	/**
 	 * Sets the x-coordinate of the point.
+	 * @param {number} value The new value for the x-coordinate.
 	 */
 	set x(value) {
 		this.#x = value;
@@ -147,7 +148,7 @@ class Point1D extends Point {
 	/**
 	 * Adds another point to this point.
 	 * @param {Readonly<Point1D>} other The point to add.
-	 * @returns {Point1D} A new point representing the sum of this point and the input point.
+	 * @returns {Point1D} The result of adding the other point to this point.
 	 */
 	[`+`](other) {
 		return Point1D[`+`](this, other);
@@ -155,7 +156,7 @@ class Point1D extends Point {
 	/**
 	 * Subtracts another point from this point.
 	 * @param {Readonly<Point1D>} other The point to subtract.
-	 * @returns {Point1D} A new point representing the difference between this point and the input point.
+	 * @returns {Point1D} The result of subtracting the other point from this point.
 	 */
 	[`-`](other) {
 		return Point1D[`-`](this, other);
@@ -163,7 +164,7 @@ class Point1D extends Point {
 	/**
 	 * Multiplies this point by another point.
 	 * @param {Readonly<Point1D>} other The point to multiply by.
-	 * @returns {Point1D} A new point representing the product of this point and the input point.
+	 * @returns {Point1D} The result of multiplying this point by the other point.
 	 */
 	[`*`](other) {
 		return Point1D[`*`](this, other);
@@ -171,21 +172,21 @@ class Point1D extends Point {
 	/**
 	 * Divides this point by another point.
 	 * @param {Readonly<Point1D>} other The point to divide by.
-	 * @returns {Point1D} A new point representing the quotient of this point and the input point.
+	 * @returns {Point1D} The result of dividing this point by the other point.
 	 */
 	[`/`](other) {
 		return Point1D[`/`](this, other);
 	}
 	/**
 	 * Creates a clone of this point.
-	 * @returns {Point1D} A new point with the same value as this point.
+	 * @returns {Point1D} A new point with the same coordinates as this point.
 	 */
 	clone() {
 		return Point1D.clone(this);
 	}
 	/**
-	 * Returns a generator for iterating over the metrics of this point.
-	 * @returns {Generator<number>} A generator for iterating over the metrics.
+	 * Returns an iterator that yields the x-coordinate of the point.
+	 * @returns {Generator<number>} An iterator object that yields the x-coordinate.
 	 */
 	*[Symbol.iterator]() {
 		yield this.x;
@@ -196,73 +197,71 @@ class Point1D extends Point {
 //#region Point 2D
 /**
  * Represents a point in two-dimensional space.
- * @extends {Point1D}
  */
 class Point2D extends Point1D {
 	/**
-	 * Adds two two-dimensional points.
+	 * Static method to add two points.
 	 * @param {Readonly<Point2D>} first The first point.
 	 * @param {Readonly<Point2D>} second The second point.
-	 * @returns {Point2D} A new point representing the sum of the input points.
+	 * @returns {Point2D} The result of adding the two points.
 	 */
 	static [`+`](first, second) {
 		return new Point2D(first.x + second.x, first.y + second.y);
 	}
 	/**
-	 * Subtracts the second two-dimensional point from the first.
+	 * Static method to subtract one point from another.
 	 * @param {Readonly<Point2D>} first The first point.
 	 * @param {Readonly<Point2D>} second The second point.
-	 * @returns {Point2D} A new point representing the difference between the input points.
+	 * @returns {Point2D} The result of subtracting the second point from the first.
 	 */
 	static [`-`](first, second) {
 		return new Point2D(first.x - second.x, first.y - second.y);
 	}
 	/**
-	 * Multiplies two two-dimensional points.
+	 * Static method to multiply two points.
 	 * @param {Readonly<Point2D>} first The first point.
 	 * @param {Readonly<Point2D>} second The second point.
-	 * @returns {Point2D} A new point representing the product of the input points.
+	 * @returns {Point2D} The result of multiplying the two points.
 	 */
 	static [`*`](first, second) {
 		return new Point2D(first.x * second.x, first.y * second.y);
 	}
 	/**
-	 * Divides the first two-dimensional point by the second.
+	 * Static method to divide one point by another.
 	 * @param {Readonly<Point2D>} first The first point.
 	 * @param {Readonly<Point2D>} second The second point.
-	 * @returns {Point2D} A new point representing the quotient of the input points.
+	 * @returns {Point2D} The result of dividing the first point by the second.
 	 */
 	static [`/`](first, second) {
 		return new Point2D(first.x / second.x, first.y / second.y);
 	}
 	/**
-	 * Creates a clone of a two-dimensional point.
+	 * Static method to clone a point.
 	 * @param {Readonly<Point2D>} source The point to clone.
-	 * @returns {Point2D} A new point with the same value as the input point.
+	 * @returns {Point2D} A new point with the same coordinates as the source point.
 	 */
 	static clone(source) {
 		return new Point2D(source.x, source.y);
 	}
 	/**
-	 * Creates a two-dimensional point with the specified value.
-	 * @param {number} value The value of the two-dimensional point.
-	 * @returns {Point2D} A new two-dimensional point with the specified value.
+	 * Static method to create a point with a repeated value.
+	 * @param {number} value The value to repeat.
+	 * @returns {Point2D} A new point with the specified value.
 	 */
 	static repeat(value) {
 		return new Point2D(value, value);
 	}
 	/**
-	 * Gets a two-dimensional point with zero value.
+	 * Returns the zero point (0, 0).
 	 * @readonly
-	 * @returns {Point2D}
+	 * @returns {Point2D} The zero point.
 	 */
 	static get ZERO() {
 		return Point2D.repeat(0);
 	}
 	/**
-	 * Creates a new two-dimensional point.
-	 * @param {number} x The value of the point along the x-axis.
-	 * @param {number} y The value of the point along the y-axis.
+	 * @param {number} x The x-coordinate of the point.
+	 * @param {number} y The y-coordinate of the point.
 	 */
 	constructor(x, y) {
 		super(x);
@@ -272,12 +271,14 @@ class Point2D extends Point1D {
 	#y = 0;
 	/**
 	 * Gets the y-coordinate of the point.
+	 * @returns {number} The y-coordinate.
 	 */
 	get y() {
 		return this.#y;
 	}
 	/**
 	 * Sets the y-coordinate of the point.
+	 * @param {number} value The new value for the y-coordinate.
 	 */
 	set y(value) {
 		this.#y = value;
@@ -285,7 +286,7 @@ class Point2D extends Point1D {
 	/**
 	 * Adds another point to this point.
 	 * @param {Readonly<Point2D>} other The point to add.
-	 * @returns {Point2D} A new point representing the sum of this point and the input point.
+	 * @returns {Point2D} The result of adding the other point to this point.
 	 */
 	[`+`](other) {
 		return Point2D[`+`](this, other);
@@ -293,7 +294,7 @@ class Point2D extends Point1D {
 	/**
 	 * Subtracts another point from this point.
 	 * @param {Readonly<Point2D>} other The point to subtract.
-	 * @returns {Point2D} A new point representing the difference between this point and the input point.
+	 * @returns {Point2D} The result of subtracting the other point from this point.
 	 */
 	[`-`](other) {
 		return Point2D[`-`](this, other);
@@ -301,7 +302,7 @@ class Point2D extends Point1D {
 	/**
 	 * Multiplies this point by another point.
 	 * @param {Readonly<Point2D>} other The point to multiply by.
-	 * @returns {Point2D} A new point representing the product of this point and the input point.
+	 * @returns {Point2D} The result of multiplying this point by the other point.
 	 */
 	[`*`](other) {
 		return Point2D[`*`](this, other);
@@ -309,21 +310,21 @@ class Point2D extends Point1D {
 	/**
 	 * Divides this point by another point.
 	 * @param {Readonly<Point2D>} other The point to divide by.
-	 * @returns {Point2D} A new point representing the quotient of this point and the input point.
+	 * @returns {Point2D} The result of dividing this point by the other point.
 	 */
 	[`/`](other) {
 		return Point2D[`/`](this, other);
 	}
 	/**
 	 * Creates a clone of this point.
-	 * @returns {Point2D} A new point with the same value as this point.
+	 * @returns {Point2D} A new point with the same coordinates as this point.
 	 */
 	clone() {
 		return Point2D.clone(this);
 	}
 	/**
-	 * Returns a generator for iterating over the metrics of this point.
-	 * @returns {Generator<number>} A generator for iterating over the metrics.
+	 * Returns an iterator that yields the coordinates of the point.
+	 * @returns {Generator<number>} An iterator object that yields the coordinates.
 	 */
 	*[Symbol.iterator]() {
 		yield this.x;
@@ -334,75 +335,73 @@ class Point2D extends Point1D {
 //#endregion
 //#region Point 3D
 /**
- * Represents a point in two-dimensional space.
- * @extends {Point2D}
+ * Represents a point in three-dimensional space.
  */
 class Point3D extends Point2D {
 	/**
-	 * Adds two two-dimensional points.
+	 * Static method to add two points.
 	 * @param {Readonly<Point3D>} first The first point.
 	 * @param {Readonly<Point3D>} second The second point.
-	 * @returns {Point3D} A new point representing the sum of the input points.
+	 * @returns {Point3D} The result of adding the two points.
 	 */
 	static [`+`](first, second) {
 		return new Point3D(first.x + second.x, first.y + second.y, first.z + second.z);
 	}
 	/**
-	 * Subtracts the second two-dimensional point from the first.
+	 * Static method to subtract one point from another.
 	 * @param {Readonly<Point3D>} first The first point.
 	 * @param {Readonly<Point3D>} second The second point.
-	 * @returns {Point3D} A new point representing the difference between the input points.
+	 * @returns {Point3D} The result of subtracting the second point from the first.
 	 */
 	static [`-`](first, second) {
 		return new Point3D(first.x - second.x, first.y - second.y, first.z - second.z);
 	}
 	/**
-	 * Multiplies two two-dimensional points.
+	 * Static method to multiply two points.
 	 * @param {Readonly<Point3D>} first The first point.
 	 * @param {Readonly<Point3D>} second The second point.
-	 * @returns {Point3D} A new point representing the product of the input points.
+	 * @returns {Point3D} The result of multiplying the two points.
 	 */
 	static [`*`](first, second) {
 		return new Point3D(first.x * second.x, first.y * second.y, first.z * second.z);
 	}
 	/**
-	 * Divides the first two-dimensional point by the second.
+	 * Static method to divide one point by another.
 	 * @param {Readonly<Point3D>} first The first point.
 	 * @param {Readonly<Point3D>} second The second point.
-	 * @returns {Point3D} A new point representing the quotient of the input points.
+	 * @returns {Point3D} The result of dividing the first point by the second.
 	 */
 	static [`/`](first, second) {
 		return new Point3D(first.x / second.x, first.y / second.y, first.z / second.z);
 	}
 	/**
-	 * Creates a clone of a two-dimensional point.
+	 * Static method to clone a point.
 	 * @param {Readonly<Point3D>} source The point to clone.
-	 * @returns {Point3D} A new point with the same value as the input point.
+	 * @returns {Point3D} A new point with the same coordinates as the source point.
 	 */
 	static clone(source) {
 		return new Point3D(source.x, source.y, source.z);
 	}
 	/**
-	 * Creates a two-dimensional point with the specified value.
-	 * @param {number} value The value of the two-dimensional point.
-	 * @returns {Point3D} A new two-dimensional point with the specified value.
+	 * Static method to create a point with a repeated value.
+	 * @param {number} value The value to repeat.
+	 * @returns {Point3D} A new point with the specified value.
 	 */
 	static repeat(value) {
 		return new Point3D(value, value, value);
 	}
 	/**
-	 * Gets a two-dimensional point with zero value.
+	 * Returns the zero point (0, 0, 0).
 	 * @readonly
-	 * @returns {Point3D}
+	 * @returns {Point3D} The zero point.
 	 */
 	static get ZERO() {
 		return Point3D.repeat(0);
 	}
 	/**
-	 * Creates a new two-dimensional point.
-	 * @param {number} x The value of the point along the x-axis.
-	 * @param {number} y The value of the point along the y-axis.
-	 * @param {number} z The value of the point along the z-axis.
+	 * @param {number} x The x-coordinate of the point.
+	 * @param {number} y The y-coordinate of the point.
+	 * @param {number} z The z-coordinate of the point.
 	 */
 	constructor(x, y, z) {
 		super(x, y);
@@ -412,12 +411,14 @@ class Point3D extends Point2D {
 	#z = 0;
 	/**
 	 * Gets the z-coordinate of the point.
+	 * @returns {number} The z-coordinate.
 	 */
 	get z() {
 		return this.#z;
 	}
 	/**
 	 * Sets the z-coordinate of the point.
+	 * @param {number} value The new value for the z-coordinate.
 	 */
 	set z(value) {
 		this.#z = value;
@@ -425,7 +426,7 @@ class Point3D extends Point2D {
 	/**
 	 * Adds another point to this point.
 	 * @param {Readonly<Point3D>} other The point to add.
-	 * @returns {Point3D} A new point representing the sum of this point and the input point.
+	 * @returns {Point3D} The result of adding the other point to this point.
 	 */
 	[`+`](other) {
 		return Point3D[`+`](this, other);
@@ -433,7 +434,7 @@ class Point3D extends Point2D {
 	/**
 	 * Subtracts another point from this point.
 	 * @param {Readonly<Point3D>} other The point to subtract.
-	 * @returns {Point3D} A new point representing the difference between this point and the input point.
+	 * @returns {Point3D} The result of subtracting the other point from this point.
 	 */
 	[`-`](other) {
 		return Point3D[`-`](this, other);
@@ -441,7 +442,7 @@ class Point3D extends Point2D {
 	/**
 	 * Multiplies this point by another point.
 	 * @param {Readonly<Point3D>} other The point to multiply by.
-	 * @returns {Point3D} A new point representing the product of this point and the input point.
+	 * @returns {Point3D} The result of multiplying this point by the other point.
 	 */
 	[`*`](other) {
 		return Point3D[`*`](this, other);
@@ -449,21 +450,21 @@ class Point3D extends Point2D {
 	/**
 	 * Divides this point by another point.
 	 * @param {Readonly<Point3D>} other The point to divide by.
-	 * @returns {Point3D} A new point representing the quotient of this point and the input point.
+	 * @returns {Point3D} The result of dividing this point by the other point.
 	 */
 	[`/`](other) {
 		return Point3D[`/`](this, other);
 	}
 	/**
 	 * Creates a clone of this point.
-	 * @returns {Point3D} A new point with the same value as this point.
+	 * @returns {Point3D} A new point with the same coordinates as this point.
 	 */
 	clone() {
 		return Point3D.clone(this);
 	}
 	/**
-	 * Returns a generator for iterating over the metrics of this point.
-	 * @returns {Generator<number>} A generator for iterating over the metrics.
+	 * Returns an iterator that yields the coordinates of the point.
+	 * @returns {Generator<number>} An iterator object that yields the coordinates.
 	 */
 	*[Symbol.iterator]() {
 		yield this.x;
@@ -476,27 +477,23 @@ class Point3D extends Point2D {
 
 //#region Matrix
 /**
- * Represents a generic matrix.
- * @template Item 
+ * Represents a matrix with generic data type.
+ * @template T
  */
 class Matrix {
 	/**
-	 * Initializes a new instance of the Matrix class.
 	 * @param {Readonly<Point2D>} size The size of the matrix.
-	 * @param {Item} [initial] The initial value for all matrix elements.
+	 * @param {T} initial The initial value for all elements in the matrix.
 	 */
 	constructor(size, initial) {
 		this.#size = size.clone();
-		/** @type {Item[][]} */
+		/** @type {T[][]} */
 		const data = (this.#data = new Array(this.#size.y));
 		for (let y = 0; y < data.length; y++) {
-			/** @type {Item[]} */
+			/** @type {T[]} */
 			const row = (data[y] = new Array(this.#size.x));
 			for (let x = 0; x < row.length; x++) {
-				if (initial !== undefined) {
-					/** @type {Item} */
-					(row[x] == initial);
-				}
+				(row[x] = initial);
 			}
 		}
 	}
@@ -505,35 +502,34 @@ class Matrix {
 	/** 
 	 * Gets the size of the matrix.
 	 * @readonly 
+	 * @returns {Readonly<Point2D>} The size of the matrix.
 	 */
 	get size() {
 		return Object.freeze(this.#size);
 	}
-	/** @type {Item[][]} */
+	/** @type {T[][]} */
 	#data;
 	/**
 	 * Gets the value at the specified position in the matrix.
-	 * @param {Readonly<Point2D>} position The position in the matrix.
-	 * @returns {Item} The value at the specified position.
+	 * @param {Readonly<Point2D>} position The position to get the value from.
+	 * @returns {T} The value at the specified position.
+	 * @throws {RangeError} If the position is out of range.
 	 */
 	get(position) {
-		const matrix = this.#data;
-		if (matrix === undefined) return matrix;
-		const row = matrix[position.y];
-		if (row === undefined) return row;
-		return row[position.x];
+		if (0 > position.x || position.x >= this.#size.x) throw new RangeError(`The x-coordinate of ${position} is out of range [0 - ${this.#size.x})`);
+		if (0 > position.y || position.y >= this.#size.y) throw new RangeError(`The y-coordinate of ${position} is out of range [0 - ${this.#size.y})`);
+		return this.#data[position.y][position.x];
 	}
 	/**
 	 * Sets the value at the specified position in the matrix.
-	 * @param {Readonly<Point2D>} position The position in the matrix.
-	 * @param {Item} value The value to set.
+	 * @param {Readonly<Point2D>} position The position to set the value at.
+	 * @param {T} value The value to set.
+	 * @throws {RangeError} If the position is out of range.
 	 */
 	set(position, value) {
-		if (this.#data === undefined) this.#data = new Array(this.#size.y);
-		const matrix = this.#data;
-		if (matrix[position.y] === undefined) matrix[position.y] = new Array(this.#size.x);
-		const row = matrix[position.y];
-		row[position.x] = value;
+		if (0 > position.x || position.x >= this.#size.x) throw new RangeError(`The x-coordinate of ${position} is out of range [0 - ${this.#size.x})`);
+		if (0 > position.y || position.y >= this.#size.y) throw new RangeError(`The y-coordinate of ${position} is out of range [0 - ${this.#size.y})`);
+		this.#data[position.y][position.x] = value;
 	}
 };
 //#endregion

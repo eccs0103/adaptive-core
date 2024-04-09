@@ -4,10 +4,10 @@
 
 interface NumberConstructor {
 	/**
-	 * Imports a number from the source.
-	 * @param source The source to import.
-	 * @param name The name of the source.
-	 * @returns The imported number.
+	 * Imports a number from a source.
+	 * @param source The source value to import.
+	 * @param name The name of the source value.
+	 * @returns The imported number value.
 	 * @throws {ReferenceError} If the source is undefined.
 	 * @throws {TypeError} If the source is not a number.
 	 */
@@ -17,17 +17,17 @@ interface NumberConstructor {
 interface Number {
 	/**
 	 * Exports the number value.
-	 * @returns The exported number.
+	 * @returns The exported number value.
 	 */
 	export(): number;
 }
 
 interface BooleanConstructor {
 	/**
-	 * Imports a boolean from the source.
-	 * @param source The source to import.
-	 * @param name The name of the source.
-	 * @returns The imported boolean.
+	 * Imports a boolean value from a source.
+	 * @param source The source value to import.
+	 * @param name The name of the source value.
+	 * @returns The imported boolean value.
 	 * @throws {ReferenceError} If the source is undefined.
 	 * @throws {TypeError} If the source is not a boolean.
 	 */
@@ -37,25 +37,25 @@ interface BooleanConstructor {
 interface Boolean {
 	/**
 	 * Exports the boolean value.
-	 * @returns The exported boolean.
+	 * @returns The exported boolean value.
 	 */
 	export(): boolean;
 }
 
 interface StringConstructor {
 	/**
-	 * Imports a string from the source.
-	 * @param source The source to import.
-	 * @param name The name of the source.
-	 * @returns The imported string.
+	 * Imports a string from a source.
+	 * @param source The source value to import.
+	 * @param name The name of the source value.
+	 * @returns The imported string value.
 	 * @throws {ReferenceError} If the source is undefined.
 	 * @throws {TypeError} If the source is not a string.
 	 */
 	import(source: unknown, name?: string): string;
 	/**
-	 * Checks if the given string is empty.
+	 * Checks if a string is empty.
 	 * @param text The string to check.
-	 * @returns Returns true if the string is empty, otherwise returns false.
+	 * @returns True if the string is empty, otherwise false.
 	 */
 	isEmpty(text: string): boolean;
 }
@@ -63,49 +63,49 @@ interface StringConstructor {
 interface String {
 	/**
 	 * Exports the string value.
-	 * @returns The exported string.
+	 * @returns The exported string value.
 	 */
 	export(): string;
 	/**
-	 * Replaces the string with the provided text if it's empty.
-	 * @param text The text to replace the string with if it's empty.
-	 * @returns Returns the original string if it's not empty, otherwise returns the provided text.
+	 * Replaces the string with another if it's empty.
+	 * @param text The replacement text.
+	 * @returns The original string if not empty, otherwise the replacement text.
 	 */
 	replaceVoid(text: string): string;
 }
 
 interface Function {
 	/**
-	 * Not implemented function to import source.
+	 * Abstract method for importing.
 	 * @param source The source to import.
 	 * @param name The name of the source.
 	 * @returns The imported value.
-	 * @throws {ReferenceError} If the function is called.
+	 * @throws {ReferenceError} If not implemented.
 	 */
-	import(source: unknown, name?: string): any;
+	abstract import(source: unknown, name?: string): any;
 	/**
-	 * Not implemented function to export source.
+	 * Abstract method for exporting.
 	 * @returns The exported value.
-	 * @throws {ReferenceError} If the function is called.
+	 * @throws {ReferenceError} If not implemented.
 	 */
-	export(): any;
+	abstract export(): any;
 }
 
 interface ObjectConstructor {
 	/**
-	 * Imports an object from the source.
-	 * @param source The source to import.
+	 * Imports an object from a source.
+	 * @param source The source to import from.
 	 * @param name The name of the source.
 	 * @returns The imported object.
-	 * @throws {ReferenceError} If the source is undefined.
-	 * @throws {TypeError} If the source is not an object or is null.
+	 * @throws {ReferenceError} Throws a ReferenceError if the source is undefined.
+	 * @throws {TypeError} Throws a TypeError if the source is not an object or null.
 	 */
 	import(source: unknown, name?: string): Object;
 }
 
 interface Object {
 	/**
-	 * Exports the object value.
+	 * Exports the object.
 	 * @returns The exported object.
 	 */
 	export(): Object;
@@ -113,19 +113,19 @@ interface Object {
 
 interface ArrayConstructor {
 	/**
-	 * Imports an array from the source.
-	 * @param source The source to import.
+	 * Imports an array from a source.
+	 * @param source The source to import from.
 	 * @param name The name of the source.
 	 * @returns The imported array.
-	 * @throws {ReferenceError} If the source is undefined.
-	 * @throws {TypeError} If the source is not an array or if any element cannot be imported.
+	 * @throws {ReferenceError} Throws a ReferenceError if the source is undefined.
+	 * @throws {TypeError} Throws a TypeError if the source is not an array.
 	 */
 	import(source: unknown, name?: string): any[];
 }
 
 interface Array<T extends Function> {
 	/**
-	 * Exports the array value.
+	 * Exports the array.
 	 * @returns The exported array.
 	 */
 	export(): T[];
@@ -133,67 +133,70 @@ interface Array<T extends Function> {
 
 interface Math {
 	/**
-	 * Returns the square power of a number.
-	 * @param x A numeric expression.
+	 * Calculates the square of a number.
+	 * @param x The number to square.
+	 * @returns The square of the input number.
 	 */
 	sqpw(x: number): number;
 	/**
-	 * Clamps a value between a minimum and maximum value.
-	 * @param value The value to be clamped.
-	 * @param min The minimum allowed value.
-	 * @param max The maximum allowed value.
+	 * Clamps a value between a minimum and maximum.
+	 * @param value The value to clamp.
+	 * @param min The minimum value.
+	 * @param max The maximum value.
 	 * @returns The clamped value.
 	 */
 	between(value: number, min: number, max: number): number;
 	/**
 	 * Converts radians to degrees.
 	 * @param radians The angle in radians.
-	 * @returns The equivalent angle in degrees.
+	 * @returns The angle in degrees.
 	 */
 	toDegrees(radians: number): number;
 	/**
 	 * Converts degrees to radians.
 	 * @param degrees The angle in degrees.
-	 * @returns The equivalent angle in radians.
+	 * @returns The angle in radians.
 	 */
 	toRadians(degrees: number): number;
 	/**
-	 * Converts a value to a factor within the range [0, 1] based on a specified period.
-	 * @param value The value to convert.
-	 * @param period The period to use for conversion.
-	 * @returns The converted factor within the range [0, 1].
+	 * Maps a value to the range [0, 1].
+	 * @param value The value to map.
+	 * @param period The period of the mapping.
+	 * @returns The mapped value.
 	 */
 	toFactor(value: number, period: number): number;
 	/**
-	 * Converts a value to a factor within the range [0, 1] based on a specified period.
-	 * @param value The value to convert.
-	 * @param period The period to use for conversion.
-	 * @returns The converted factor within the range [0, 1].
+	 * Maps a value to the range [-1, 1].
+	 * @param value The value to map.
+	 * @param period The period of the mapping.
+	 * @returns The mapped value.
 	 */
 	toSignedFactor(value: number, period: number): number;
 }
 
 interface PromiseConstructor {
 	/**
+	 * Creates a promise that fulfills with the result of calling the provided action.
 	 * @template T
 	 * @param action The action to execute.
-	 * @returns A promise that resolves with the result of the action.
+	 * @returns A promise that fulfills with the result of the action.
 	 */
 	fulfill<T>(action: () => T | PromiseLike<T>): Promise<T>;
 }
 
 interface ErrorConstructor {
 	/**
-	 * @param error The error object to generate.
-	 * @returns The generated error object.
+	 * Generates an Error object from the provided input.
+	 * @param error The error input.
+	 * @returns An Error object representing the input.
 	 */
 	generate(error: any): Error;
 }
 
 interface Error {
 	/**
-	 * Returns a descriptive string.
-	 * @returns A descriptive string representing the error.
+	 * Returns a string representation of the Error object.
+	 * @returns A string representation of the Error object.
 	 */
 	toString(): string;
 }

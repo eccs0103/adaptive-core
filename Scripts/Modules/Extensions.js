@@ -4,10 +4,10 @@
 
 //#region Number
 /**
- * Imports a number from the source.
- * @param {unknown} source The source to import.
- * @param {string} name The name of the source.
- * @returns {number} The imported number.
+ * Imports a number from a source.
+ * @param {unknown} source The source value to import.
+ * @param {string} name The name of the source value.
+ * @returns {number} The imported number value.
  * @throws {ReferenceError} If the source is undefined.
  * @throws {TypeError} If the source is not a number.
  */
@@ -24,7 +24,7 @@ Number.import = function (source, name = `source`) {
 
 /**
  * Exports the number value.
- * @returns {number} The exported number.
+ * @returns {number} The exported number value.
  */
 Number.prototype.export = function () {
 	const result = this.valueOf();
@@ -33,10 +33,10 @@ Number.prototype.export = function () {
 //#endregion
 //#region Boolean
 /**
- * Imports a boolean from the source.
- * @param {unknown} source The source to import.
- * @param {string} name The name of the source.
- * @returns {boolean} The imported boolean.
+ * Imports a boolean value from a source.
+ * @param {unknown} source The source value to import.
+ * @param {string} name The name of the source value.
+ * @returns {boolean} The imported boolean value.
  * @throws {ReferenceError} If the source is undefined.
  * @throws {TypeError} If the source is not a boolean.
  */
@@ -53,7 +53,7 @@ Boolean.import = function (source, name = `source`) {
 
 /**
  * Exports the boolean value.
- * @returns {boolean} The exported boolean.
+ * @returns {boolean} The exported boolean value.
  */
 Boolean.prototype.export = function () {
 	const result = this.valueOf();
@@ -62,10 +62,10 @@ Boolean.prototype.export = function () {
 //#endregion
 //#region String
 /**
- * Imports a string from the source.
- * @param {unknown} source The source to import.
- * @param {string} name The name of the source.
- * @returns {string} The imported string.
+ * Imports a string from a source.
+ * @param {unknown} source The source value to import.
+ * @param {string} name The name of the source value.
+ * @returns {string} The imported string value.
  * @throws {ReferenceError} If the source is undefined.
  * @throws {TypeError} If the source is not a string.
  */
@@ -81,9 +81,9 @@ String.import = function (source, name = `source`) {
 };
 
 /**
- * Checks if the given string is empty.
+ * Checks if a string is empty.
  * @param {string} text The string to check.
- * @returns {boolean} Returns true if the string is empty, otherwise returns false.
+ * @returns {boolean} True if the string is empty, otherwise false.
  */
 String.isEmpty = function (text) {
 	return text.length === 0;
@@ -91,7 +91,7 @@ String.isEmpty = function (text) {
 
 /**
  * Exports the string value.
- * @returns {string} The exported string.
+ * @returns {string} The exported string value.
  */
 String.prototype.export = function () {
 	const result = this.valueOf();
@@ -99,9 +99,9 @@ String.prototype.export = function () {
 };
 
 /**
- * Replaces the string with the provided text if it's empty.
- * @param {string} text The text to replace the string with if it's empty.
- * @returns {string} Returns the original string if it's not empty, otherwise returns the provided text.
+ * Replaces the string with another if it's empty.
+ * @param {string} text The replacement text.
+ * @returns {string} The original string if not empty, otherwise the replacement text.
  */
 String.prototype.replaceVoid = function (text) {
 	return (this.length > 0 ? this.valueOf() : text);
@@ -109,20 +109,22 @@ String.prototype.replaceVoid = function (text) {
 //#endregion
 //#region Function
 /**
- * Not implemented function to import source.
+ * Abstract method for importing.
+ * @abstract
  * @param {unknown} source The source to import.
  * @param {string} name The name of the source.
  * @returns {any} The imported value.
- * @throws {ReferenceError} If the function is called.
+ * @throws {ReferenceError} If not implemented.
  */
 Function.prototype.import = function (source, name = `source`) {
 	throw new ReferenceError(`Not implemented function`);
 };
 
 /**
- * Not implemented function to export source.
+ * Abstract method for exporting.
+ * @abstract
  * @returns {any} The exported value.
- * @throws {ReferenceError} If the function is called.
+ * @throws {ReferenceError} If not implemented.
  */
 Function.prototype.export = function () {
 	throw new ReferenceError(`Not implemented function`);
@@ -130,12 +132,12 @@ Function.prototype.export = function () {
 //#endregion
 //#region Object
 /**
- * Imports an object from the source.
- * @param {unknown} source The source to import.
+ * Imports an object from a source.
+ * @param {unknown} source The source to import from.
  * @param {string} name The name of the source.
  * @returns {Object} The imported object.
- * @throws {ReferenceError} If the source is undefined.
- * @throws {TypeError} If the source is not an object or is null.
+ * @throws {ReferenceError} Throws a ReferenceError if the source is undefined.
+ * @throws {TypeError} Throws a TypeError if the source is not an object or null.
  */
 Object.import = function (source, name = `source`) {
 	if (source === undefined) {
@@ -155,7 +157,7 @@ Object.import = function (source, name = `source`) {
 };
 
 /**
- * Exports the object value.
+ * Exports the object.
  * @returns {Object} The exported object.
  */
 Object.prototype.export = function () {
@@ -165,12 +167,12 @@ Object.prototype.export = function () {
 //#endregion
 //#region Array
 /**
- * Imports an array from the source.
- * @param {unknown} source The source to import.
+ * Imports an array from a source.
+ * @param {unknown} source The source to import from.
  * @param {string} name The name of the source.
  * @returns {any[]} The imported array.
- * @throws {ReferenceError} If the source is undefined.
- * @throws {TypeError} If the source is not an array or if any element cannot be imported.
+ * @throws {ReferenceError} Throws a ReferenceError if the source is undefined.
+ * @throws {TypeError} Throws a TypeError if the source is not an array.
  */
 Array.import = function (source, name = `source`) {
 	if (source === undefined) {
@@ -184,8 +186,7 @@ Array.import = function (source, name = `source`) {
 };
 
 /**
- * Exports the array value.
-* @todo Check
+ * Exports the array.
  * @returns {this[]} The exported array.
  */
 Array.prototype.export = function () {
@@ -195,19 +196,19 @@ Array.prototype.export = function () {
 //#endregion
 //#region Math
 /**
- * Returns the square power of a number.
- * @param {number} x A numeric expression.
- * @returns {number}
+ * Calculates the square of a number.
+ * @param {number} x The number to square.
+ * @returns {number} The square of the input number.
  */
 Math.sqpw = function (x) {
 	return x * x;
-}
+};
 
 /**
- * Clamps a value between a minimum and maximum value.
- * @param {number} value The value to be clamped.
- * @param {number} min The minimum allowed value.
- * @param {number} max The maximum allowed value.
+ * Clamps a value between a minimum and maximum.
+ * @param {number} value The value to clamp.
+ * @param {number} min The minimum value.
+ * @param {number} max The maximum value.
  * @returns {number} The clamped value.
  */
 Math.between = function (value, min, max) {
@@ -218,7 +219,7 @@ const toDegreeFactor = 180 / Math.PI;
 /**
  * Converts radians to degrees.
  * @param {number} radians The angle in radians.
- * @returns {number} The equivalent angle in degrees.
+ * @returns {number} The angle in degrees.
  */
 Math.toDegrees = function (radians) {
 	return radians * toDegreeFactor;
@@ -228,27 +229,27 @@ const toRadianFactor = Math.PI / 180;
 /**
  * Converts degrees to radians.
  * @param {number} degrees The angle in degrees.
- * @returns {number} The equivalent angle in radians.
+ * @returns {number} The angle in radians.
  */
 Math.toRadians = function (degrees) {
 	return degrees * toRadianFactor;
 };
 
 /**
- * Converts a value to a factor within the range [0, 1] based on a specified period.
- * @param {number} value The value to convert.
- * @param {number} period The period to use for conversion.
- * @returns {number} The converted factor within the range [0, 1].
+ * Maps a value to the range [0, 1].
+ * @param {number} value The value to map.
+ * @param {number} period The period of the mapping.
+ * @returns {number} The mapped value.
  */
 Math.toFactor = function (value, period) {
 	return value % (period + 1) / period;
 };
 
 /**
- * Converts a value to a factor within the range [0, 1] based on a specified period.
- * @param {number} value The value to convert.
- * @param {number} period The period to use for conversion.
- * @returns {number} The converted factor within the range [0, 1].
+ * Maps a value to the range [-1, 1].
+ * @param {number} value The value to map.
+ * @param {number} period The period of the mapping.
+ * @returns {number} The mapped value.
  */
 Math.toSignedFactor = function (value, period) {
 	return value % (period + 1) / period * 2 - 1;
@@ -256,9 +257,10 @@ Math.toSignedFactor = function (value, period) {
 //#endregion
 //#region Promise
 /**
+ * Creates a promise that fulfills with the result of calling the provided action.
  * @template T
  * @param {() => T | PromiseLike<T>} action The action to execute.
- * @returns {Promise<T>} A promise that resolves with the result of the action.
+ * @returns {Promise<T>} A promise that fulfills with the result of the action.
  */
 Promise.fulfill = function (action) {
 	return new Promise((resolve, reject) => {
@@ -272,15 +274,17 @@ Promise.fulfill = function (action) {
 //#endregion
 //#region Error
 /**
- * @param {any} error The error object to generate.
- * @returns {Error} The generated error object.
+ * Generates an Error object from the provided input.
+ * @param {any} error The error input.
+ * @returns {Error} An Error object representing the input.
  */
 Error.generate = function (error) {
 	return error instanceof Error ? error : new Error(`Undefined error type`);
 };
 
 /**
- * @returns {string}
+ * Returns a string representation of the Error object.
+ * @returns {string} A string representation of the Error object.
  */
 Error.prototype.toString = function () {
 	let text = this.stack ?? `${this.name}: ${this.message}`;

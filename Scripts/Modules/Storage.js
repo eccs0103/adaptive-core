@@ -4,14 +4,13 @@ import { } from "./Extensions.js";
 
 //#region Archive
 /**
- * Generic class for managing data stored in the browser's local storage.
- * @template T The type of data to be stored.
+ * Represents an archive that stores data in localStorage.
+ * @template T
  */
 class Archive {
 	/**
-	 * Creates an instance of the Archive class.
-	 * @param {string} key The key to identify the data in local storage.
-	 * @param {T} initial The initial value of the data if not already stored.
+	 * @param {string} key The key to use for storing the data in localStorage.
+	 * @param {T} initial The initial data to be stored if no data exists with the provided key.
 	 */
 	constructor(key, initial) {
 		this.#key = key;
@@ -26,8 +25,8 @@ class Archive {
 	/** @type {T} */
 	#initial;
 	/**
-	 * Gets the stored data from local storage.
-	 * @returns {T}
+	 * Gets the data stored in the archive.
+	 * @returns {T} The data stored in the archive.
 	 */
 	get data() {
 		const item = localStorage.getItem(this.#key) ?? (() => {
@@ -36,22 +35,22 @@ class Archive {
 		return (/** @type {T} */ (JSON.parse(item)));
 	}
 	/**
-	 * Sets the data to be stored in local storage.
-	 * @param {T} value The data to be stored.
+	 * Sets the data in the archive.
+	 * @param {T} value The data to be stored in the archive.
 	 */
 	set data(value) {
 		localStorage.setItem(this.#key, JSON.stringify(value, undefined, `\t`));
 	}
 	/**
-	 * Resets the stored data to its initial value.
+	 * Resets the data in the archive to its initial value.
 	 * @returns {void}
 	 */
 	reset() {
 		this.data = this.#initial;
 	}
 	/**
-	 * Applies an action to modify the stored data.
-	 * @param {(value: T) => T} action The function that modifies the current data.
+	 * Modifies the data in the archive using the provided action.
+	 * @param {(value: T) => T} action The action to be applied to the data.
 	 */
 	change(action) {
 		this.data = action(this.data);
@@ -60,21 +59,20 @@ class Archive {
 //#endregion
 //#region Archive manager
 /**
- * Manages the lifecycle of an archive.
- * @template N The type of data to be stored in the archive.
- * @template {{ export(): N }} O The type of object that can be exported from the archive.
+ * Manages the archive data and provides methods for construction, reconstruction, and accessing data.
+ * @template N The type of data exported by the archive.
+ * @template {{ export(): N }} O The type of object that can export the data.
  */
 class ArchiveManager {
 	static #locked = true;
 	/**
-	 * Constructs an ArchiveManager instance asynchronously.
-	 * @template N The type of data to be stored in the archive.
-	 * @template {{ export(): N }} O The type of object that can be exported from the archive.
-	 * @template {readonly any[]} A The types of constructor arguments.
-	 * @param {string} path The path identifier for the archive.
-	 * @param {{ import(source: unknown, name?: string): O, new(...args: A): O }} prototype The prototype for creating objects from archive data.
-	 * @param {A} args The constructor arguments.
-	 * @returns {Promise<ArchiveManager<N, O>>} A promise resolving to the constructed ArchiveManager instance.
+	 * @template N The type of data exported by the archive.
+	 * @template {{ export(): N }} O The type of object that can export the data.
+	 * @template {readonly any[]} A The type of arguments for the constructor of the prototype object.
+	 * @param {string} path The path of the archive.
+	 * @param {{ import(source: unknown, name?: string): O, new(...args: A): O }} prototype The prototype object.
+	 * @param {A} args The arguments for the constructor of the prototype object.
+	 * @returns {Promise<ArchiveManager<N, O>>} A promise that resolves to the constructed ArchiveManager instance.
 	 */
 	static async construct(path, prototype, ...args) {
 		ArchiveManager.#locked = false;
@@ -82,9 +80,9 @@ class ArchiveManager {
 		const self = new ArchiveManager();
 		ArchiveManager.#locked = true;
 
-		self.#assemble = () => Reflect.construct(prototype, args);
+		self.#construct = () => Reflect.construct(prototype, args);
 		/** @type {Archive<N>} */
-		const archive = new Archive(path, self.#assemble().export());
+		const archive = new Archive(path, self.#construct().export());
 		while (true) {
 			try {
 				const data = prototype.import(archive.data, `archive data`);
@@ -110,35 +108,31 @@ class ArchiveManager {
 		if (ArchiveManager.#locked) throw new TypeError(`Illegal constructor`);
 	}
 	/** @type {() => O} */
-	#assemble;
+	#construct;
 	/** @type {O} */
 	#data;
 	/**
-	 * Gets the current data from the archive.
-	 * @returns {O} The current data.
+	 * Gets the archive data.
+	 * @returns {O} The archive data.
 	 */
 	get data() {
 		return this.#data;
 	}
 	/**
-	 * Reassembles the archive.
+	 * Reconstructs the archive data.
 	 * @returns {void}
 	 */
-	reassemble() {
-		this.#data = this.#assemble();
+	reconstruct() {
+		this.#data = this.#construct();
 	}
 }
 //#endregion
 
 //#region Store
-/**
- * Represents a client-side storage using IndexedDB.
- */
 class Store {
 	/**
-	 * Creates a new instance of the Store class.
-	 * @param {string} database The name of the IndexedDB database.
-	 * @param {string} store The name of the object store within the database.
+	 * @param {string} database
+	 * @param {string} store
 	 */
 	constructor(database, store) {
 		this.#store = store;
@@ -181,9 +175,8 @@ class Store {
 	/** @type {Promise<IDBObjectStore>} */
 	#promiseGetStore;
 	/**
-	 * Retrieves the value associated with the specified key from the store.
-	 * @param {string} key The key to retrieve the value for.
-	 * @returns {Promise<any>} A promise resolving to the value associated with the key.
+	 * @param {string} key
+	 * @returns {Promise<any>}
 	 */
 	async get(key) {
 		// const database = await this.#promiseOpenDatabase;
@@ -202,10 +195,9 @@ class Store {
 		}
 	}
 	/**
-	 * Sets the value associated with the specified key in the store.
-	 * @param {string} key The key to set the value for.
-	 * @param {any} value The value to set.
-	 * @returns {Promise<void>} A promise indicating the completion of the set operation.
+	 * @param {string} key
+	 * @param {any} value
+	 * @returns {Promise<void>}
 	 */
 	async set(key, value) {
 		// const database = await this.#promiseOpenDatabase;
@@ -227,15 +219,13 @@ class Store {
 //#endregion
 //#region Locker
 /**
- * Represents a locker that extends the Store class for storing a single value under a specific key.
- * @template T The type of value to be stored.
+ * @template T
  */
 class Locker extends Store {
 	/**
-	 * Creates a new instance of the Locker class.
-	 * @param {string} database The name of the IndexedDB database.
-	 * @param {string} store The name of the object store within the database.
-	 * @param {string} key The key under which the value will be stored.
+	 * @param {string} database
+	 * @param {string} store
+	 * @param {string} key
 	 */
 	constructor(database, store, key) {
 		super(database, store);
@@ -244,16 +234,14 @@ class Locker extends Store {
 	/** @type {string} */
 	#key;
 	/**
-	 * Retrieves the value stored under the specified key in the locker.
-	 * @returns {Promise<T>} A promise resolving to the stored value.
+	 * @returns {Promise<T>}
 	 */
 	async get() {
 		return await super.get(this.#key);
 	}
 	/**
-	 * Sets the value to be stored under the specified key in the locker.
-	 * @param {T} value The value to be stored.
-	 * @returns {Promise<void>} A promise indicating the completion of the set operation.
+	 * @param {T} value
+	 * @returns {Promise<void>}
 	 */
 	// @ts-ignore
 	async set(value) {
@@ -262,4 +250,4 @@ class Locker extends Store {
 }
 //#endregion
 
-export { Archive, ArchiveManager, Store, Locker };
+export { Archive, ArchiveManager };

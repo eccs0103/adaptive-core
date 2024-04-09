@@ -5,6 +5,10 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 2.6.10 (09.04.2024)
+- Engines optimized.
+- Unstable classes for databases frozen.
+
 ### 2.6.9 (22.03.2024)
 - Listener names added.
 

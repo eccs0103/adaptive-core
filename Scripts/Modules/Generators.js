@@ -4,42 +4,42 @@ const { random, trunc } = Math;
 
 //#region Random
 /**
- * Utility class for generating random numbers and values.
+ * Random number and element generator.
  */
 class Random {
 	/**
-	 * Generates a random number within the specified range.
-	 * @param {number} min The minimum value of the range.
-	 * @param {number} max The maximum value of the range.
-	 * @returns {number} A random number within the range [min, max).
+	 * Returns a random number between the specified values.
+	 * @param {number} min The minimum value.
+	 * @param {number} max The maximum value.
+	 * @returns {number} A random number.
 	 */
 	number(min, max) {
 		return random() * (max - min) + min;
 	}
 	/**
-	 * Generates a random integer within the specified range.
-	 * @param {number} min The minimum value of the range.
-	 * @param {number} max The maximum value of the range.
-	 * @returns {number} A random integer within the range [min, max).
+	 * Returns a random integer between the specified values.
+	 * @param {number} min The minimum value.
+	 * @param {number} max The maximum value.
+	 * @returns {number} A random integer.
 	 */
 	integer(min, max) {
 		return trunc(this.number(min, max));
 	}
 	/**
-	 * Retrieves a random item from the provided array.
+	 * Returns a random element from an array.
 	 * @template T
-	 * @param {T[]} array The array from which to select a random item.
-	 * @returns {T} A randomly selected item from the array.
+	 * @param {T[]} array The array of elements.
+	 * @returns {T} A random element.
 	 */
 	item(array) {
 		return array[this.integer(0, array.length)];
 	}
 	/**
-	 * Selects a case from the provided map based on their relative percentages.
+	 * Selects a random element from a list according to their weights.
 	 * @template T
-	 * @param {Map<T, number>} cases A map where each key represents a case, and the value is the percentage weight of that case.
-	 * @returns {T} The selected case based on their percentages.
-	 * @throws {RangeError} If the selected value is out of range [0, summary).
+	 * @param {Map<T, number>} cases The map with elements and their weights.
+	 * @returns {T} A random element.
+	 * @throws {RangeError} If the map is empty.
 	 */
 	case(cases) {
 		const summary = [...cases].reduce((previous, [, percentage]) => previous + percentage, 0);
@@ -52,11 +52,11 @@ class Random {
 			}
 			begin = end;
 		}
-		throw new RangeError(`Selector ${random} is out of range [0 - ${summary})`);
+		throw new RangeError(`Unable to select value. Most likely the map is empty.`);
 	}
 	/**
-	 * Generates a globally unique identifier (GUID).
-	 * @returns {string} A string representing a GUID.
+	 * Generates a random GUID identifier.
+	 * @returns {string} A random GUID identifier.
 	 */
 	GUID() {
 		return `${crypto.randomUUID()}`;

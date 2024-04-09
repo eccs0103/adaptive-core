@@ -6,7 +6,6 @@ const { min, max, trunc, abs } = Math;
 
 //#region Color formats
 /**
- * Enumeration of color formats.
  * @enum {string}
  */
 const ColorFormats = {
@@ -20,17 +19,16 @@ Object.freeze(ColorFormats);
 class Color {
 	//#region Converters
 	/**
-	 * @param {number} hue [0 360]
-	 * @param {number} saturation [0 100]
-	 * @param {number} lightness [0 100]
-	 * @returns {[number, number, number]} red [0 255], green [0 255], blue [0 255]
+	 * @param {number} hue [0 - 360]
+	 * @param {number} saturation [0 - 100]
+	 * @param {number} lightness [0 - 100]
+	 * @returns {[number, number, number]} red [0 - 255], green [0 - 255], blue [0 - 255]
 	 */
 	static #HSLtoRGB(hue, saturation, lightness) {
 		hue /= 30;
 		saturation /= 100;
 		lightness /= 100;
-		/** @param {number} level */
-		function transform(level) {
+		function transform(/** @type {number} */ level) {
 			const sector = (level + hue) % 12;
 			return lightness - (saturation * min(lightness, 1 - lightness)) * max(-1, min(sector - 3, 9 - sector, 1));
 		}
@@ -41,10 +39,10 @@ class Color {
 		];
 	}
 	/**
-	 * @param {number} red [0 255]
-	 * @param {number} green [0 255]
-	 * @param {number} blue [0 255]
-	 * @returns {[number, number, number]} hue [0 360], saturation [0 100], lightness [0 100]
+	 * @param {number} red [0 - 255]
+	 * @param {number} green [0 - 255]
+	 * @param {number} blue [0 - 255]
+	 * @returns {[number, number, number]} hue [0 - 360], saturation [0 - 100], lightness [0 - 100]
 	 */
 	static #RGBtoHSL(red, green, blue) {
 		red /= 255;
@@ -62,11 +60,12 @@ class Color {
 		];
 	}
 	/**
-	 * Converts a Color object to a string representation.
-	 * @param {Color} source The source Color object.
-	 * @param {boolean} deep Whether to include alpha channel.
-	 * @param {ColorFormats} format The desired output format.
-	 * @returns {string} The string representation of the Color object.
+	 * Converts a Color object to a string representation in the specified format.
+	 * @param {Color} source The Color object to stringify.
+	 * @param {boolean} deep Indicates whether to include alpha channel for RGBA/HSLA formats.
+	 * @param {ColorFormats} format The format to stringify the color in.
+	 * @returns {string} The string representation of the color.
+	 * @throws {TypeError} If the provided format is invalid.
 	 */
 	static stringify(source, deep = false, format = ColorFormats.RGB) {
 		switch (format) {
@@ -77,11 +76,14 @@ class Color {
 		}
 	}
 	/**
-	 * Parses a string representation into a Color object.
-	 * @param {string} source The string representation of the Color object.
-	 * @param {boolean} deep Whether to include alpha channel.
-	 * @param {ColorFormats} format The format of the input string.
+	/**
+	 * Parses a string representation of a color into a Color object.
+	 * @param {string} source The string representation of the color.
+	 * @param {boolean} deep Indicates whether the color representation includes alpha channel for RGBA/HSLA formats.
+	 * @param {ColorFormats} format The format of the string representation.
 	 * @returns {Color} The parsed Color object.
+	 * @throws {SyntaxError} If the provided string has invalid syntax for the specified format.
+	 * @throws {TypeError} If the provided format is invalid.
 	 */
 	static parse(source, deep = false, format = ColorFormats.RGB) {
 		switch (format) {
@@ -116,9 +118,9 @@ class Color {
 		}
 	}
 	/**
-	 * Tries to parse a string representation into a Color object.
-	 * @param {string} source The string representation of the Color object.
-	 * @returns {Color?} The parsed Color object or null if parsing fails.
+	 * Attempts to parse a string representation of a color into a Color object, trying different formats.
+	 * @param {string} source The string representation of the color.
+	 * @returns {Color?} The parsed Color object, or null if parsing fails.
 	 */
 	static tryParse(source) {
 		for (const [format, deep] of Object.values(ColorFormats).flatMap((format) => (/** @type {[string, boolean][]} */ ([[format, false], [format, true]])))) {
@@ -133,12 +135,13 @@ class Color {
 	//#endregion
 	//#region Constructors
 	/**
-	 * Creates a Color object based on RGB values.
-	 * @param {number} red Range: [0 255].
-	 * @param {number} green Range: [0 255].
-	 * @param {number} blue Range: [0 255].
-	 * @param {number} alpha Range: [0 1].
-	 * @returns {Color} The Color object created.
+	 * Creates a Color object from RGB values.
+	 * @param {number} red The red component, ranging from 0 to 255.
+	 * @param {number} green The green component, ranging from 0 to 255.
+	 * @param {number} blue The blue component, ranging from 0 to 255.
+	 * @param {number} alpha The alpha (opacity) value, ranging from 0 to 1. Default is 1 (fully opaque).
+	 * @returns {Color} The Color object representing the specified RGB color.
+	 * @throws {RangeError} If any of the provided RGB values or alpha is out of range.
 	 */
 	static viaRGB(red, green, blue, alpha = 1) {
 		if (red < 0 || red > 255) throw new RangeError(`Property 'red' out of range: ${red}`);
@@ -154,12 +157,13 @@ class Color {
 		return result;
 	}
 	/**
-	 * Creates a Color object based on HSL values.
-	 * @param {number} hue Range: [0 360].
-	 * @param {number} saturation Range: [0 100].
-	 * @param {number} lightness Range: [0 100].
-	 * @param {number} alpha Range: [0 1].
-	 * @returns {Color} The Color object created.
+	 * Creates a Color object from HSL values.
+	 * @param {number} hue The hue component, ranging from 0 to 360.
+	 * @param {number} saturation The saturation component, ranging from 0 to 100.
+	 * @param {number} lightness The lightness component, ranging from 0 to 100.
+	 * @param {number} alpha= The alpha (opacity) value, ranging from 0 to 1. Default is 1 (fully opaque).
+	 * @returns {Color} The Color object representing the specified HSL color.
+	 * @throws {RangeError} If any of the provided HSL values or alpha is out of range.
 	 */
 	static viaHSL(hue, saturation, lightness, alpha = 1) {
 		if (hue < 0 || hue > 360) throw new RangeError(`Property 'hue' out of range: ${hue}`);
@@ -175,9 +179,9 @@ class Color {
 		return result;
 	}
 	/**
-	 * Creates a copy of a Color object.
-	 * @param {Color} source The source Color object.
-	 * @returns {Color} The cloned Color object.
+	 * Creates a copy of the specified Color object.
+	 * @param {Color} source The Color object to clone.
+	 * @returns {Color} A new Color object with the same properties as the source color.
 	 */
 	static clone(source) {
 		const result = new Color();
@@ -193,109 +197,109 @@ class Color {
 	//#endregion
 	//#region Presets
 	/**
-	 * Represents a transparent color.
+	 * Transparent color preset.
 	 * @readonly
 	 * @returns {Color}
 	 */
 	static get TRANSPARENT() { return Color.viaRGB(0, 0, 0, 0); };
 	/**
-	 * Represents the color maroon.
+	 * Maroon color preset.
 	 * @readonly
 	 * @returns {Color}
 	 */
 	static get MAROON() { return Color.viaRGB(128, 0, 0); };
 	/**
-	 * Represents the color red.
+	 * Red color preset.
 	 * @readonly
 	 * @returns {Color}
 	 */
 	static get RED() { return Color.viaRGB(255, 0, 0); };
 	/**
-	 * Represents the color orange.
+	 * Orange color preset.
 	 * @readonly
 	 * @returns {Color}
 	 */
 	static get ORANGE() { return Color.viaRGB(255, 165, 0); };
 	/**
-	 * Represents the color yellow.
+	 * Yellow color preset.
 	 * @readonly
 	 * @returns {Color}
 	 */
 	static get YELLOW() { return Color.viaRGB(255, 255, 0); };
 	/**
-	 * Represents the color olive.
+	 * Olive color preset.
 	 * @readonly
 	 * @returns {Color}
 	 */
 	static get OLIVE() { return Color.viaRGB(128, 128, 0); };
 	/**
-	 * Represents the color green.
+	 * Green color preset.
 	 * @readonly
 	 * @returns {Color}
 	 */
 	static get GREEN() { return Color.viaRGB(0, 128, 0); };
 	/**
-	 * Represents the color purple.
+	 * Purple color preset.
 	 * @readonly
 	 * @returns {Color}
 	 */
 	static get PURPLE() { return Color.viaRGB(128, 0, 128); };
 	/**
-	 * Represents the color fuchsia.
+	 * Fuchsia color preset.
 	 * @readonly
 	 * @returns {Color}
 	 */
 	static get FUCHSIA() { return Color.viaRGB(255, 0, 255); };
 	/**
-	 * Represents the color lime.
+	 * Lime color preset.
 	 * @readonly
 	 * @returns {Color}
 	 */
 	static get LIME() { return Color.viaRGB(0, 255, 0); };
 	/**
-	 * Represents the color teal.
+	 * Teal color preset.
 	 * @readonly
 	 * @returns {Color}
 	 */
 	static get TEAL() { return Color.viaRGB(0, 128, 128); };
 	/**
-	 * Represents the color aqua.
+	 * Aqua color preset.
 	 * @readonly
 	 * @returns {Color}
 	 */
 	static get AQUA() { return Color.viaRGB(0, 255, 255); };
 	/**
-	 * Represents the color blue.
+	 * Blue color preset.
 	 * @readonly
 	 * @returns {Color}
 	 */
 	static get BLUE() { return Color.viaRGB(0, 0, 255); };
 	/**
-	 * Represents the color navy.
+	 * Navy color preset.
 	 * @readonly
 	 * @returns {Color}
 	 */
 	static get NAVY() { return Color.viaRGB(0, 0, 128); };
 	/**
-	 * Represents the color black.
+	 * Black color preset.
 	 * @readonly
 	 * @returns {Color}
 	 */
 	static get BLACK() { return Color.viaRGB(0, 0, 0); };
 	/**
-	 * Represents the color gray.
+	 * Gray color preset.
 	 * @readonly
 	 * @returns {Color}
 	 */
 	static get GRAY() { return Color.viaRGB(128, 128, 128); };
 	/**
-	 * Represents the color silver.
+	 * Silver color preset.
 	 * @readonly
 	 * @returns {Color}
 	 */
 	static get SILVER() { return Color.viaRGB(192, 192, 192); };
 	/**
-	 * Represents the color white.
+	 * White color preset.
 	 * @readonly
 	 * @returns {Color}
 	 */
@@ -303,11 +307,12 @@ class Color {
 	//#endregion
 	//#region Modifiers
 	/**
-	 * Mixes two colors.
-	 * @param {Color} first The first color.
-	 * @param {Color} second The second color.
-	 * @param {number} ratio Range: [0 1].
+	 * Mixes two colors based on a given ratio.
+	 * @param {Color} first The first color to mix.
+	 * @param {Color} second The second color to mix.
+	 * @param {number} ratio The ratio of the mix (0 to 1).
 	 * @returns {Color} The mixed color.
+	 * @throws {RangeError} If the ratio is out of range.
 	 */
 	static mix(first, second, ratio = 0.5) {
 		if (ratio < 0 || ratio > 1) throw new RangeError(`Property 'ratio' out of range: ${ratio}`);
@@ -318,10 +323,11 @@ class Color {
 		);
 	}
 	/**
-	 * Creates a grayscale version of a color.
-	 * @param {Color} source The source color.
-	 * @param {number} scale Range: [0 1].
+	 * Converts a color to grayscale.
+	 * @param {Color} source The color to convert to grayscale.
+	 * @param {number} scale The scale of the conversion (0 to 1).
 	 * @returns {Color} The grayscale color.
+	 * @throws {RangeError} If the scale is out of range.
 	 */
 	static grayscale(source, scale = 1) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Property 'scale' out of range: ${scale}`);
@@ -333,10 +339,11 @@ class Color {
 		);
 	}
 	/**
-	 * Inverts the colors of a color.
-	 * @param {Color} source The source color.
-	 * @param {number} scale Range: [0 1].
+	 * Inverts a color.
+	 * @param {Color} source The color to invert.
+	 * @param {number} scale The scale of the inversion (0 to 1).
 	 * @returns {Color} The inverted color.
+	 * @throws {RangeError} If the scale is out of range.
 	 */
 	static invert(source, scale = 1) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Property 'scale' out of range: ${scale}`);
@@ -348,10 +355,11 @@ class Color {
 		);
 	}
 	/**
-	 * Applies sepia tone to a color.
-	 * @param {Color} source The source color.
-	 * @param {number} scale Range: [0 1].
-	 * @returns {Color} The sepia-toned color.
+	 * Applies a sepia tone effect to a color.
+	 * @param {Color} source The color to apply the sepia effect to.
+	 * @param {number} scale The scale of the effect (0 to 1).
+	 * @returns {Color} The color with the sepia effect applied.
+	 * @throws {RangeError} If the scale is out of range.
 	 */
 	static sepia(source, scale = 1) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Property 'scale' out of range: ${scale}`);
@@ -367,8 +375,8 @@ class Color {
 	}
 	/**
 	 * Rotates the hue of a color.
-	 * @param {Color} source The source color.
-	 * @param {number} angle Range: (-∞ ∞).
+	 * @param {Color} source The color to rotate.
+	 * @param {number} angle The angle of rotation.
 	 * @returns {Color} The rotated color.
 	 */
 	static rotate(source, angle) {
@@ -378,9 +386,10 @@ class Color {
 	}
 	/**
 	 * Saturates a color.
-	 * @param {Color} source The source color.
-	 * @param {number} scale Range: [0 1].
+	 * @param {Color} source The color to saturate.
+	 * @param {number} scale The scale of saturation (0 to 1).
 	 * @returns {Color} The saturated color.
+	 * @throws {RangeError} If the scale is out of range.
 	 */
 	static saturate(source, scale) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Property 'scale' out of range: ${scale}`);
@@ -388,19 +397,21 @@ class Color {
 	}
 	/**
 	 * Illuminates a color.
-	 * @param {Color} source The source color.
-	 * @param {number} scale Range: [0 1].
+	 * @param {Color} source The color to illuminate.
+	 * @param {number} scale The scale of illumination (0 to 1).
 	 * @returns {Color} The illuminated color.
+	 * @throws {RangeError} If the scale is out of range.
 	 */
 	static illuminate(source, scale) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Property 'scale' out of range: ${scale}`);
 		return Color.viaHSL(source.#hue, source.#saturation, 100 * scale);
 	}
 	/**
-	 * Adjusts the alpha of a color.
-	 * @param {Color} source The source color.
-	 * @param {number} scale Range: [0 1].
-	 * @returns {Color} The color with adjusted alpha.
+	 * Changes the alpha transparency of a color.
+	 * @param {Color} source The color to change the transparency of.
+	 * @param {number} scale The scale of transparency (0 to 1).
+	 * @returns {Color} The color with adjusted transparency.
+	 * @throws {RangeError} If the scale is out of range.
 	 */
 	static pass(source, scale) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Property 'scale' out of range: ${scale}`);
@@ -412,12 +423,15 @@ class Color {
 	#red = 0;
 	/** 
 	 * Gets the red component of the color.
+	 * @returns {number} The red component.
 	 */
 	get red() {
 		return this.#red;
 	}
 	/** 
 	 * Sets the red component of the color.
+	 * @param {number} value The red value to set.
+	 * @throws {RangeError} If the value is out of range.
 	 */
 	set red(value) {
 		if (value < 0 || value > 255) throw new RangeError(`Property 'red' out of range: ${value}`);
@@ -428,12 +442,15 @@ class Color {
 	#green = 0;
 	/** 
 	 * Gets the green component of the color.
+	 * @returns {number} The green component.
 	 */
 	get green() {
 		return this.#green;
 	}
 	/** 
 	 * Sets the green component of the color.
+	 * @param {number} value The green value to set.
+	 * @throws {RangeError} If the value is out of range.
 	 */
 	set green(value) {
 		if (value < 0 || value > 255) throw new RangeError(`Property 'green' out of range: ${value}`);
@@ -444,12 +461,15 @@ class Color {
 	#blue = 0;
 	/** 
 	 * Gets the blue component of the color.
+	 * @returns {number} The blue component.
 	 */
 	get blue() {
 		return this.#blue;
 	}
 	/** 
 	 * Sets the blue component of the color.
+	 * @param {number} value The blue value to set.
+	 * @throws {RangeError} If the value is out of range.
 	 */
 	set blue(value) {
 		if (value < 0 || value > 255) throw new RangeError(`Property 'blue' out of range: ${value}`);
@@ -460,12 +480,15 @@ class Color {
 	#hue = 0;
 	/** 
 	 * Gets the hue component of the color.
+	 * @returns {number} The hue component.
 	 */
 	get hue() {
 		return this.#hue;
 	}
 	/** 
 	 * Sets the hue component of the color.
+	 * @param {number} value The hue value to set.
+	 * @throws {RangeError} If the value is out of range.
 	 */
 	set hue(value) {
 		if (value < 0 || value > 360) throw new RangeError(`Property 'hue' out of range: ${value}`);
@@ -476,12 +499,15 @@ class Color {
 	#saturation = 0;
 	/** 
 	 * Gets the saturation component of the color.
+	 * @returns {number} The saturation component.
 	 */
 	get saturation() {
 		return this.#saturation;
 	}
 	/** 
 	 * Sets the saturation component of the color.
+	 * @param {number} value The saturation value to set.
+	 * @throws {RangeError} If the value is out of range.
 	 */
 	set saturation(value) {
 		if (value < 0 || value > 100) throw new RangeError(`Property 'saturation' out of range: ${value}`);
@@ -492,12 +518,15 @@ class Color {
 	#lightness = 0;
 	/** 
 	 * Gets the lightness component of the color.
+	 * @returns {number} The lightness component.
 	 */
 	get lightness() {
 		return this.#lightness;
 	}
 	/** 
 	 * Sets the lightness component of the color.
+	 * @param {number} value The lightness value to set.
+	 * @throws {RangeError} If the value is out of range.
 	 */
 	set lightness(value) {
 		if (value < 0 || value > 100) throw new RangeError(`Property 'lightness' out of range: ${value}`);
@@ -507,13 +536,16 @@ class Color {
 	/** @type {number} */
 	#alpha = 1;
 	/** 
-	 * Gets the alpha (transparency) component of the color.
+	 * Gets the alpha component of the color.
+	 * @returns {number} The alpha component.
 	 */
 	get alpha() {
 		return this.#alpha;
 	}
 	/** 
-	 * Sets the alpha (transparency) component of the color.
+	 * Sets the alpha component of the color.
+	 * @param {number} value The alpha value to set.
+	 * @throws {RangeError} If the value is out of range.
 	 */
 	set alpha(value) {
 		if (value < 0 || value > 1) throw new RangeError(`Property 'alpha' out of range: ${value}`);
@@ -522,82 +554,82 @@ class Color {
 	//#endregion
 	//#region Methods
 	/**
-	 * Converts the color object to a string representation.
-	 * @param {boolean} deep If true, includes detailed information. Default is false.
-	 * @param {ColorFormats} format The format in which to represent the color. Default is ColorFormats.RGB.
-	 * @returns {string} String representation of the color.
+	 * Converts the color to a string representation.
+	 * @param {boolean} deep Indicates whether to include alpha channel in the output.
+	 * @param {ColorFormats} format The color format to use for the string representation.
+	 * @returns {string} The string representation of the color.
 	 */
 	toString(deep = false, format = ColorFormats.RGB) {
 		return Color.stringify(this, deep, format);
 	}
 	/**
-	 * Creates and returns a deep copy of the current color object.
-	 * @returns {Color} A new color object that is a clone of the current color.
+	 * Creates a clone of the color.
+	 * @returns {Color} A clone of the color.
 	 */
 	clone() {
 		return Color.clone(this);
 	}
 	/**
-	 * Mixes the current color with another color.
-	 * @param {Color} other The color to mix with.
-	 * @param {number} ratio The ratio of the other color in the mix. Should be in the range [0, 1]. Default is 0.5.
-	 * @returns {Color} A new color resulting from the mixture.
+	 * Mixes the color with another color.
+	 * @param {Color} other The other color to mix with.
+	 * @param {number} ratio The ratio of the mixture. Default is 0.5.
+	 * @returns {Color} The mixed color.
 	 */
 	mix(other, ratio = 0.5) {
 		return Color.mix(this, other, ratio);
 	}
 	/**
-	 * Converts the current color to grayscale.
-	 * @param {number} scale The scale of the grayscale effect. Should be in the range [0, 1]. Default is 1.
-	 * @returns {Color} A new color in grayscale.
+	 * Converts the color to grayscale.
+	 * @param {number} scale The scale factor for the grayscale conversion. Default is 1.
+	 * @returns {Color} The grayscale color.
 	 */
 	grayscale(scale = 1) {
 		return Color.grayscale(this, scale);
 	}
 	/**
-	 * Inverts the current color.
-	 * @param {number} scale The scale of the inversion effect. Should be in the range [0, 1]. Default is 1.
-	 * @returns {Color} A new color resulting from the inversion.
+	 * Inverts the color.
+	 * @param {number} scale The scale factor for the inversion. Default is 1.
+	 * @returns {Color} The inverted color.
 	 */
 	invert(scale = 1) {
 		return Color.invert(this, scale);
 	}
 	/**
-	 * Applies sepia effect to the current color.
-	 * @param {number} scale The scale of the sepia effect. Should be in the range [0, 1]. Default is 1.
-	 * @returns {Color} A new color with sepia effect applied.
+	 * Applies sepia effect to the color.
+	 * @param {number} scale The scale factor for the sepia effect. Default is 1.
+	 * @returns {Color} The color with sepia effect applied.
 	 */
 	sepia(scale = 1) {
 		return Color.sepia(this, scale);
 	}
 	/**
-	 * Rotates the hue of the current color.
-	 * @param {number} angle The angle of rotation. Can be any real number.
-	 * @returns {Color} A new color resulting from the hue rotation.
+	 * Rotates the hue of the color.
+	 * @param {number} angle The angle of rotation in degrees.
+	 * @returns {Color} The color with rotated hue.
 	 */
 	rotate(angle) {
 		return Color.rotate(this, angle);
 	}
 	/**
-	 * Increases or decreases the saturation of the current color.
-	 * @param {number} scale The scale of the saturation effect. Should be in the range [0, 1].
-	 * @returns {Color} A new color with adjusted saturation.
+	 * Saturates the color.
+	 * @param {number} scale The scale factor for saturation.
+	 * @returns {Color} The saturated color.
 	 */
 	saturate(scale) {
 		return Color.saturate(this, scale);
 	}
 	/**
-	 * Increases or decreases the lightness of the current color.
-	 * @param {number} scale The scale of the illumination effect. Should be in the range [0, 1].
-	 * @returns {Color} A new color with adjusted lightness.
+	 * Illuminates the color.
+	 * @param {number} scale The scale factor for illumination.
+	 * @returns {Color} The illuminated color.
 	 */
 	illuminate(scale) {
 		return Color.illuminate(this, scale);
 	}
 	/**
-	 * Adjusts the alpha (transparency) of the current color.
-	 * @param {number} scale The scale of the adjustment. Should be in the range [0, 1].
-	 * @returns {Color} A new color with adjusted alpha.
+	 * Passes the color.
+	 * @param {number} scale The scale factor.
+	 * @returns {Color} The passed color.
 	 */
 	pass(scale) {
 		return Color.pass(this, scale);
@@ -608,7 +640,7 @@ class Color {
 
 //#region Texture
 /**
- * A matrix representing a texture with colors.
+ * Represents a texture.
  * @extends {Matrix<Color>}
  */
 class Texture extends Matrix {
@@ -616,7 +648,7 @@ class Texture extends Matrix {
 	/**
 	 * Converts the texture to ImageData.
 	 * @param {Texture} texture The texture to convert.
-	 * @returns {ImageData} ImageData representing the texture.
+	 * @returns {ImageData} The converted ImageData.
 	 */
 	static toImageData(texture) {
 		const imageData = new ImageData(texture.size.x, texture.size.y);
@@ -635,9 +667,9 @@ class Texture extends Matrix {
 		return imageData;
 	}
 	/**
-	 * Converts ImageData to a Texture.
-	 * @param {ImageData} imageData The ImageData to convert.
-	 * @returns {Texture} Texture representing the ImageData.
+	 * Creates a texture from ImageData.
+	 * @param {ImageData} imageData The ImageData to create the texture from.
+	 * @returns {Texture} The created texture.
 	 */
 	static fromImageData(imageData) {
 		const texture = new Texture(new Point2D(imageData.width, imageData.height));
@@ -660,7 +692,7 @@ class Texture extends Matrix {
 	//#endregion
 	//#region Contructors
 	/**
-	 * Creates a clone of the given texture.
+	 * Clones the texture.
 	 * @param {Texture} texture The texture to clone.
 	 * @returns {Texture} The cloned texture.
 	 */
@@ -675,7 +707,6 @@ class Texture extends Matrix {
 		return texture;
 	}
 	/**
-	 * Constructs a new texture with the specified size.
 	 * @param {Readonly<Point2D>} size The size of the texture.
 	 */
 	constructor(size) {
@@ -684,11 +715,11 @@ class Texture extends Matrix {
 	//#endregion
 	//#region Modifiers
 	/**
-	 * Mixes two textures together based on the specified ratio.
+	 * Mixes two textures.
 	 * @param {Texture} first The first texture.
 	 * @param {Texture} second The second texture.
-	 * @param {number} ratio The ratio of the mix, ranging from 0 to 1.
-	 * @returns {Texture} The resulting mixed texture.
+	 * @param {number} ratio The ratio of mixing.
+	 * @returns {Texture} The mixed texture.
 	 */
 	static mix(first, second, ratio = 0.5) {
 		if (ratio < 0 || ratio > 1) throw new RangeError(`Ratio ${ratio} out of range [0 - 1]`);
@@ -702,10 +733,10 @@ class Texture extends Matrix {
 		return result;
 	}
 	/**
-	 * Converts the source texture to grayscale.
+	 * Converts the texture to grayscale.
 	 * @param {Texture} source The source texture.
-	 * @param {number} scale The scale of grayscale, ranging from 0 to 1.
-	 * @returns {Texture} The resulting grayscale texture.
+	 * @param {number} scale The scale of the grayscale effect.
+	 * @returns {Texture} The grayscale texture.
 	 */
 	static grayscale(source, scale = 1) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Scale ${scale} out of range [0 - 1]`);
@@ -719,10 +750,10 @@ class Texture extends Matrix {
 		return result;
 	}
 	/**
-	 * Inverts the colors of the source texture.
+	 * Inverts the colors of the texture.
 	 * @param {Texture} source The source texture.
-	 * @param {number} scale The scale of inversion, ranging from 0 to 1.
-	 * @returns {Texture} The resulting inverted texture.
+	 * @param {number} scale The scale of the inversion effect.
+	 * @returns {Texture} The inverted texture.
 	 */
 	static invert(source, scale = 1) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Scale ${scale} out of range [0 - 1]`);
@@ -736,10 +767,10 @@ class Texture extends Matrix {
 		return result;
 	}
 	/**
-	 * Applies a sepia tone to the source texture.
+	 * Applies sepia effect to the texture.
 	 * @param {Texture} source The source texture.
-	 * @param {number} scale The scale of sepia, ranging from 0 to 1.
-	 * @returns {Texture} The resulting sepia-toned texture.
+	 * @param {number} scale The scale of the sepia effect.
+	 * @returns {Texture} The texture with sepia effect.
 	 */
 	static sepia(source, scale = 1) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Scale ${scale} out of range [0 - 1]`);
@@ -753,10 +784,10 @@ class Texture extends Matrix {
 		return result;
 	}
 	/**
-	 * Rotates the colors of the source texture.
+	 * Rotates the hue of the texture.
 	 * @param {Texture} source The source texture.
 	 * @param {number} angle The angle of rotation.
-	 * @returns {Texture} The resulting rotated texture.
+	 * @returns {Texture} The rotated texture.
 	 */
 	static rotate(source, angle) {
 		const result = source.clone();
@@ -769,10 +800,10 @@ class Texture extends Matrix {
 		return result;
 	}
 	/**
-	 * Saturates the colors of the source texture.
+	 * Saturates the colors of the texture.
 	 * @param {Texture} source The source texture.
-	 * @param {number} scale The scale of saturation, ranging from 0 to 1.
-	 * @returns {Texture} The resulting saturated texture.
+	 * @param {number} scale The scale of saturation effect.
+	 * @returns {Texture} The saturated texture.
 	 */
 	static saturate(source, scale) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Scale ${scale} out of range [0 - 1]`);
@@ -786,10 +817,10 @@ class Texture extends Matrix {
 		return result;
 	}
 	/**
-	 * Illuminates the colors of the source texture.
+	 * Illuminates the texture.
 	 * @param {Texture} source The source texture.
-	 * @param {number} scale The scale of illumination, ranging from 0 to 1.
-	 * @returns {Texture} The resulting illuminated texture.
+	 * @param {number} scale The scale of illumination.
+	 * @returns {Texture} The illuminated texture.
 	 */
 	static illuminate(source, scale) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Scale ${scale} out of range [0 - 1]`);
@@ -803,10 +834,10 @@ class Texture extends Matrix {
 		return result;
 	}
 	/**
-	 * Passes the colors of the source texture.
+	 * Sets the transparency of the texture.
 	 * @param {Texture} source The source texture.
-	 * @param {number} scale The scale of passing, ranging from 0 to 1.
-	 * @returns {Texture} The resulting passed texture.
+	 * @param {number} scale The scale of transparency.
+	 * @returns {Texture} The texture with transparency.
 	 */
 	static pass(source, scale) {
 		if (scale < 0 || scale > 1) throw new RangeError(`Scale ${scale} out of range [0 - 1]`);
@@ -822,73 +853,73 @@ class Texture extends Matrix {
 	//#endregion
 	//#region Methods
 	/**
-	 * Creates a deep clone of the current texture.
+	 * Clones the texture.
 	 * @returns {Texture} The cloned texture.
 	 */
 	clone() {
 		return Texture.clone(this);
 	}
 	/**
-	 * Mixes the current texture with another texture based on the specified ratio.
-	 * @param {Texture} other The other texture to mix with.
-	 * @param {number} ratio The ratio of the mix, ranging from 0 to 1.
-	 * @returns {Texture} The resulting mixed texture.
+	 * Mixes this texture with another texture.
+	 * @param {Texture} other The other texture to mix.
+	 * @param {number} ratio The ratio of mixing.
+	 * @returns {Texture} The mixed texture.
 	 */
 	mix(other, ratio = 0.5) {
 		return Texture.mix(this, other, ratio);
 	}
 	/**
-	 * Converts the current texture to grayscale.
-	 * @param {number} scale The scale of grayscale, ranging from 0 to 1.
-	 * @returns {Texture} The resulting grayscale texture.
+	 * Converts the texture to grayscale.
+	 * @param {number} scale The scale of the grayscale effect.
+	 * @returns {Texture} The grayscale texture.
 	 */
 	grayscale(scale = 1) {
 		return Texture.grayscale(this, scale);
 	}
 	/**
-	 * Inverts the colors of the current texture.
-	 * @param {number} scale The scale of inversion, ranging from 0 to 1.
-	 * @returns {Texture} The resulting inverted texture.
+	 * Inverts the colors of the texture.
+	 * @param {number} scale The scale of the inversion effect.
+	 * @returns {Texture} The inverted texture.
 	 */
 	invert(scale = 1) {
 		return Texture.invert(this, scale);
 	}
 	/**
-	 * Applies a sepia tone to the current texture.
-	 * @param {number} scale The scale of sepia, ranging from 0 to 1.
-	 * @returns {Texture} The resulting sepia-toned texture.
+	 * Applies sepia effect to the texture.
+	 * @param {number} scale The scale of the sepia effect.
+	 * @returns {Texture} The texture with sepia effect.
 	 */
 	sepia(scale = 1) {
 		return Texture.sepia(this, scale);
 	}
 	/**
-	 * Rotates the colors of the current texture.
+	 * Rotates the hue of the texture.
 	 * @param {number} angle The angle of rotation.
-	 * @returns {Texture} The resulting rotated texture.
+	 * @returns {Texture} The rotated texture.
 	 */
 	rotate(angle) {
 		return Texture.rotate(this, angle);
 	}
 	/**
-	 * Saturates the colors of the current texture.
-	 * @param {number} scale The scale of saturation, ranging from 0 to 1.
-	 * @returns {Texture} The resulting saturated texture.
+	 * Saturates the colors of the texture.
+	 * @param {number} scale The scale of saturation effect.
+	 * @returns {Texture} The saturated texture.
 	 */
 	saturate(scale) {
 		return Texture.saturate(this, scale);
 	}
 	/**
-	 * Illuminates the colors of the current texture.
-	 * @param {number} scale The scale of illumination, ranging from 0 to 1.
-	 * @returns {Texture} The resulting illuminated texture.
+	 * Illuminates the texture.
+	 * @param {number} scale The scale of illumination.
+	 * @returns {Texture} The illuminated texture.
 	 */
 	illuminate(scale) {
 		return Texture.illuminate(this, scale);
 	}
 	/**
-	 * Passes the colors of the current texture.
-	 * @param {number} scale The scale of passing, ranging from 0 to 1.
-	 * @returns {Texture} The resulting passed texture.
+	 * Sets the transparency of the texture.
+	 * @param {number} scale The scale of transparency.
+	 * @returns {Texture} The texture with transparency.
 	 */
 	pass(scale) {
 		return Texture.pass(this, scale);
