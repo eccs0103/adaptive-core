@@ -122,6 +122,52 @@ class Point1D extends Point {
 	static get ZERO() {
 		return Point1D.repeat(0);
 	}
+	/** @type {Readonly<Point1D>} */
+	static #CONSTANT_ZERO = Object.freeze(Point1D.ZERO);
+	/**
+	 * Returns the constant zero point (0).
+	 * @readonly
+	 * @returns {Readonly<Point1D>} The constant zero point.
+	 */
+	static get CONSTANT_ZERO() {
+		return this.#CONSTANT_ZERO;
+	}
+	/**
+	 * Returns the single point (1).
+	 * @readonly
+	 * @returns {Point1D} The single point.
+	 */
+	static get SINGLE() {
+		return Point1D.repeat(1);
+	}
+	/** @type {Readonly<Point1D>} */
+	static #CONSTANT_SINGLE = Object.freeze(Point1D.SINGLE);
+	/**
+	 * Returns the constant single point (1).
+	 * @readonly
+	 * @returns {Readonly<Point1D>} The constant single point.
+	 */
+	static get CONSTANT_SINGLE() {
+		return this.#CONSTANT_SINGLE;
+	}
+	/**
+	 * Returns the double point (2).
+	 * @readonly
+	 * @returns {Point1D} The double point.
+	 */
+	static get DOUBLE() {
+		return Point1D.repeat(2);
+	}
+	/** @type {Readonly<Point1D>} */
+	static #CONSTANT_DOUBLE = Object.freeze(Point1D.DOUBLE);
+	/**
+	 * Returns the constant double point (2).
+	 * @readonly
+	 * @returns {Readonly<Point1D>} The constant double point.
+	 */
+	static get CONSTANT_DOUBLE() {
+		return this.#CONSTANT_DOUBLE;
+	}
 	/**
 	 * @param {number} x The x-coordinate of the point.
 	 */
@@ -258,6 +304,52 @@ class Point2D extends Point1D {
 	 */
 	static get ZERO() {
 		return Point2D.repeat(0);
+	}
+	/** @type {Readonly<Point2D>} */
+	static #CONSTANT_ZERO = Object.freeze(Point2D.ZERO);
+	/**
+	 * Returns the constant zero point (0, 0).
+	 * @readonly
+	 * @returns {Readonly<Point2D>} The constant zero point.
+	 */
+	static get CONSTANT_ZERO() {
+		return this.#CONSTANT_ZERO;
+	}
+	/**
+	 * Returns the single point (1, 1).
+	 * @readonly
+	 * @returns {Point2D} The single point.
+	 */
+	static get SINGLE() {
+		return Point2D.repeat(1);
+	}
+	/** @type {Readonly<Point2D>} */
+	static #CONSTANT_SINGLE = Object.freeze(Point2D.SINGLE);
+	/**
+	 * Returns the constant single point (1, 1).
+	 * @readonly
+	 * @returns {Readonly<Point2D>} The constant single point.
+	 */
+	static get CONSTANT_SINGLE() {
+		return this.#CONSTANT_SINGLE;
+	}
+	/**
+	 * Returns the double point (2, 2).
+	 * @readonly
+	 * @returns {Point2D} The double point.
+	 */
+	static get DOUBLE() {
+		return Point2D.repeat(2);
+	}
+	/** @type {Readonly<Point2D>} */
+	static #CONSTANT_DOUBLE = Object.freeze(Point2D.DOUBLE);
+	/**
+	 * Returns the constant double point (2, 2).
+	 * @readonly
+	 * @returns {Readonly<Point2D>} The constant double point.
+	 */
+	static get CONSTANT_DOUBLE() {
+		return this.#CONSTANT_DOUBLE;
 	}
 	/**
 	 * @param {number} x The x-coordinate of the point.
@@ -397,6 +489,52 @@ class Point3D extends Point2D {
 	 */
 	static get ZERO() {
 		return Point3D.repeat(0);
+	}
+	/** @type {Readonly<Point3D>} */
+	static #CONSTANT_ZERO = Object.freeze(Point3D.ZERO);
+	/**
+	 * Returns the constant zero point (0, 0, 0).
+	 * @readonly
+	 * @returns {Readonly<Point3D>} The constant zero point.
+	 */
+	static get CONSTANT_ZERO() {
+		return this.#CONSTANT_ZERO;
+	}
+	/**
+	 * Returns the single point (1, 1, 1).
+	 * @readonly
+	 * @returns {Point3D} The single point.
+	 */
+	static get SINGLE() {
+		return Point3D.repeat(1);
+	}
+	/** @type {Readonly<Point3D>} */
+	static #CONSTANT_SINGLE = Object.freeze(Point3D.SINGLE);
+	/**
+	 * Returns the constant single point (1, 1, 1).
+	 * @readonly
+	 * @returns {Readonly<Point3D>} The constant single point.
+	 */
+	static get CONSTANT_SINGLE() {
+		return this.#CONSTANT_SINGLE;
+	}
+	/**
+	 * Returns the double point (2, 2, 2).
+	 * @readonly
+	 * @returns {Point3D} The double point.
+	 */
+	static get DOUBLE() {
+		return Point3D.repeat(2);
+	}
+	/** @type {Readonly<Point3D>} */
+	static #CONSTANT_DOUBLE = Object.freeze(Point3D.DOUBLE);
+	/**
+	 * Returns the constant double point (2, 2, 2).
+	 * @readonly
+	 * @returns {Readonly<Point3D>} The constant double point.
+	 */
+	static get CONSTANT_DOUBLE() {
+		return this.#CONSTANT_DOUBLE;
 	}
 	/**
 	 * @param {number} x The x-coordinate of the point.

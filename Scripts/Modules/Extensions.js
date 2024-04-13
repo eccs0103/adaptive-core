@@ -149,9 +149,6 @@ Object.import = function (source, name = `source`) {
 	if (source === null) {
 		throw new TypeError(`Unable to import ${(name)} due its ${typename(null)} type`);
 	}
-	/**
-	 * @todo Check
-	 */
 	const result = source.valueOf();
 	return result;
 };
