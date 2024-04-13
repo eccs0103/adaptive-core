@@ -34,6 +34,23 @@ class Engine extends EventTarget {
 		throw new ReferenceError(`Not implemented function`);
 	}
 	/**
+	 * Gets the FPS limit of the engine.
+	 * @abstract
+	 * @returns {number}
+	 */
+	get limit() {
+		throw new ReferenceError(`Not implemented function`);
+	}
+	/**
+	 * Sets the FPS limit of the engine.
+	 * @abstract
+	 * @param {number} value
+	 * @returns {void}
+	 */
+	set limit(value) {
+		throw new ReferenceError(`Not implemented function`);
+	}
+	/**
 	 * Gets the Frames Per Second (FPS) of the engine.
 	 * @abstract
 	 * @returns {number}
@@ -80,9 +97,10 @@ class FastEngine extends Engine {
 			const difference = current - previous;
 			if (difference > this.#gap) {
 				if (this.launched) {
-					this.#time += difference;
 					this.#FPS = (1000 / difference);
 					this.dispatchEvent(new Event(`update`));
+				} else {
+					this.#FPS = 0;
 				}
 				previous = current;
 			}
@@ -112,18 +130,8 @@ class FastEngine extends Engine {
 	removeEventListener(type, listener, options = false) {
 		return super.addEventListener(type, listener, options);
 	}
-	/** @type {DOMHighResTimeStamp} */
-	#time = 0;
-	/**
-	 * Gets the elapsed time since the engine started.
-	 * @readonly
-	 * @returns {DOMHighResTimeStamp}
-	 */
-	get time() {
-		return this.#time;
-	}
 	/** @type {boolean} */
-	#launched = false;
+	#launched;
 	/**
 	 * Gets the launch status of the engine.
 	 * @returns {boolean}
@@ -133,6 +141,8 @@ class FastEngine extends Engine {
 	}
 	/**
 	 * Sets the launch status of the engine.
+	 * @param {boolean} value 
+	 * @returns {void}
 	 */
 	set launched(value) {
 		if (this.#launched !== value) {
@@ -147,15 +157,18 @@ class FastEngine extends Engine {
 	#gap = 0;
 	/**
 	 * Gets the FPS limit of the engine.
+	 * @returns {number}
 	 */
-	get FPSLimit() {
+	get limit() {
 		return 1000 / this.#gap;
 	}
 	/**
 	 * Sets the FPS limit of the engine.
+	 * @param {number} value 
+	 * @returns {void}
 	 * @throws {RangeError} If the FPS limit is not higher than 0.
 	 */
-	set FPSLimit(value) {
+	set limit(value) {
 		if (value <= 0) {
 			throw new RangeError(`FPS limit must be higher than 0`);
 		}
@@ -166,6 +179,7 @@ class FastEngine extends Engine {
 	/**
 	 * Gets the current FPS of the engine.
 	 * @readonly
+	 * @returns {number}
 	 */
 	get FPS() {
 		return this.#FPS;
@@ -173,6 +187,7 @@ class FastEngine extends Engine {
 	/**
 	 * Gets the time delta between frames.
 	 * @readonly
+	 * @returns {number}
 	 */
 	get delta() {
 		return 1 / this.#FPS;
@@ -202,16 +217,22 @@ class PreciseEngine extends Engine {
 			controller.abort();
 		}, { signal: controller.signal });
 
-		const callback = () => {
+		let previous = performance.now();
+		const callback = (/** @type {number} */ current) => {
+			const difference = current - previous;
 			if (this.launched) {
+				this.#FPS = (1000 / difference);
 				this.dispatchEvent(new Event(`update`));
+			} else {
+				this.#FPS = 0;
 			}
-			setTimeout(callback, this.#delta);
+			previous = current;
+			setTimeout(callback, this.#gap, performance.now());
 		};
-		setTimeout(callback, this.#delta);
+		setTimeout(callback, this.#gap, performance.now());
 
 		this.launched = launch;
-	}
+	};
 	/**
 	 * @template {keyof PreciseEngineEventMap} K
 	 * @param {K} type
@@ -233,15 +254,18 @@ class PreciseEngine extends Engine {
 		return super.addEventListener(type, listener, options);
 	}
 	/** @type {boolean} */
-	#launched = false;
+	#launched;
 	/**
 	 * Gets the launch status of the engine.
+	 * @returns {boolean}
 	 */
 	get launched() {
 		return this.#launched;
 	}
 	/**
 	 * Sets the launch status of the engine.
+	 * @param {boolean} value 
+	 * @returns {void}
 	 */
 	set launched(value) {
 		if (this.#launched !== value) {
@@ -253,29 +277,43 @@ class PreciseEngine extends Engine {
 		}
 	}
 	/** @type {number} */
-	#delta = (1000 / 60);
+	#gap = 0;
 	/**
-	 * Gets the FPS of the engine.
+	 * Gets the FPS limit of the engine.
+	 * @returns {number}
 	 */
-	get FPS() {
-		return (1000 / this.#delta);
+	get limit() {
+		return 1000 / this.#gap;
 	}
 	/**
-	 * Sets the FPS of the engine.
-	 * @throws {RangeError} If the FPS is not higher than 0.
+	 * Sets the FPS limit of the engine.
+	 * @param {number} value 
+	 * @returns {void}
+	 * @throws {RangeError} If the FPS limit is not higher than 0.
 	 */
-	set FPS(value) {
+	set limit(value) {
 		if (value <= 0) {
-			throw new RangeError(`FPS must be higher than 0`);
+			throw new RangeError(`FPS limit must be higher than 0`);
 		}
-		this.#delta = (1000 / value);
+		this.#gap = 1000 / value;
+	}
+	/** @type {number} */
+	#FPS = 0;
+	/**
+	 * Gets the current FPS of the engine.
+	 * @readonly
+	 * @returns {number}
+	 */
+	get FPS() {
+		return this.#FPS;
 	}
 	/**
 	 * Gets the time delta between frames.
 	 * @readonly
+	 * @returns {number}
 	 */
 	get delta() {
-		return this.#delta * 1000;
+		return 1 / this.#FPS;
 	}
 }
 //#endregion
