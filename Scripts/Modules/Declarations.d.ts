@@ -91,6 +91,15 @@ interface Function {
 
 interface ObjectConstructor {
 	/**
+	 * Maps a non-null value using a callback function.
+	 * @template T
+	 * @template U
+	 * @param value The value to map.
+	 * @param callback The callback function.
+	 * @returns The result of the callback or null if the value is null.
+	 */
+	map<T, U>(value: NonNullable<T> | null, callback: (object: NonNullable<T>) => U): U | null;
+	/**
 	 * Imports an object from a source.
 	 * @param source The source to import from.
 	 * @param name The name of the source.

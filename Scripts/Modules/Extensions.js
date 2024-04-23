@@ -132,6 +132,19 @@ Function.prototype.export = function () {
 //#endregion
 //#region Object
 /**
+ * Maps a non-null value using a callback function.
+ * @template T
+ * @template U
+ * @param {NonNullable<T>?} value The value to map.
+ * @param {(object: NonNullable<T>) => U} callback The callback function.
+ * @returns {U?} The result of the callback or null if the value is null.
+ */
+Object.map = function (value, callback) {
+	if (value === null) return value;
+	else return callback(value);
+};
+
+/**
  * Imports an object from a source.
  * @param {unknown} source The source to import from.
  * @param {string} name The name of the source.
