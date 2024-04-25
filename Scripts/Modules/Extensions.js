@@ -671,6 +671,35 @@ Window.prototype.throw = async function (message = ``) {
 };
 
 /**
+ * Asynchronously handles an error, displaying it in an alert.
+ * @param {Error} error The error to handle.
+ * @param {boolean} reload Indicates whether the application should be reloaded after displaying the error.
+ * @returns {Promise<void>} A promise that resolves once the error handling is complete.
+ */
+Window.prototype.catch = async function (error, reload = true) {
+	await window.throw(error);
+	if (reload) {
+		location.reload();
+	}
+};
+
+/**
+ * Executes a callback and handles any errors that occur.
+ * @template T
+ * @param {() => T} callback The callback function to execute.
+ * @param {boolean} reload Indicates whether the application should be reloaded after an error.
+ * @returns {Promise<T>} A Promise that resolves with the result of the callback or rejects with the error.
+ */
+Window.prototype.ensure = async function (callback, reload = true) {
+	try {
+		return await callback();
+	} catch (error) {
+		await window.catch(Error.generate(error), reload);
+		throw error;
+	}
+};
+
+/**
  * Asynchronously loads a promise with a loading animation.
  * @template T
  * @param {Promise<T>} promise The promise to load.
@@ -693,19 +722,6 @@ Window.prototype.load = async function (promise, duration = 200, delay = 0) {
 			{ opacity: `0` },
 		], { duration: duration, fill: `both`, delay: delay }).finished;
 		dialogLoader.close();
-	}
-};
-
-/**
- * Asynchronously handles an error, displaying it in an alert.
- * @param {Error} error The error to handle.
- * @param {boolean} reload Indicates whether the application should be reloaded after displaying the error.
- * @returns {Promise<void>} A promise that resolves once the error handling is complete.
- */
-Window.prototype.stabilize = async function (error, reload = true) {
-	await window.throw(error);
-	if (reload) {
-		location.reload();
 	}
 };
 //#endregion

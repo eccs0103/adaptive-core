@@ -350,6 +350,21 @@ interface Window {
 	 */
 	throw(message?: any): Promise<void>;
 	/**
+	 * Asynchronously handles an error, displaying it in an alert.
+	 * @param error The error to handle.
+	 * @param reload Indicates whether the application should be reloaded after displaying the error.
+	 * @returns A promise that resolves once the error handling is complete.
+	 */
+	catch(error: Error, reload?: boolean): Promise<void>;
+	/**
+	 * Executes a callback and handles any errors that occur.
+	 * @template T
+	 * @param callback The callback function to execute.
+	 * @param reload Indicates whether the application should be reloaded after an error.
+	 * @returns A Promise that resolves with the result of the callback or rejects with the error.
+	 */
+	ensure<T>(callback: () => T, reload?: boolean): Promise<T>;
+	/**
 	 * Asynchronously loads a promise with a loading animation.
 	 * @template T
 	 * @param promise The promise to load.
@@ -358,13 +373,6 @@ interface Window {
 	 * @returns A promise that resolves to the result of the input promise.
 	 */
 	load<T>(promise: Promise<T>, duration?: number, delay?: number): Promise<T>;
-	/**
-	 * Asynchronously handles an error, displaying it in an alert.
-	 * @param error The error to handle.
-	 * @param reload Indicates whether the application should be reloaded after displaying the error.
-	 * @returns A promise that resolves once the error handling is complete.
-	 */
-	stabilize(error: Error, reload?: boolean): Promise<void>;
 }
 
 /**
@@ -395,6 +403,20 @@ declare function confirmAsync(message?: string, title?: string): Promise<boolean
  */
 declare function promptAsync(message?: string, _default?: string, title?: string): Promise<string?>;
 /**
+ * Issues a warning message.
+ * @param message The warning message to be issued.
+ * @returns A Promise that resolves when the warning is displayed.
+ */
+declare function warn(message?: any): Promise<void>;
+/**
+ * Executes a callback and handles any errors that occur.
+ * @template T
+ * @param callback The callback function to execute.
+ * @param reload Indicates whether the application should be reloaded after an error.
+ * @returns A Promise that resolves with the result of the callback or rejects with the error.
+ */
+declare function ensure<T>(callback: () => T, reload?: boolean): Promise<T>;
+/**
  * Asynchronously loads a promise with a loading animation.
  * @template T
  * @param promise The promise to load.
@@ -403,13 +425,6 @@ declare function promptAsync(message?: string, _default?: string, title?: string
  * @returns A promise that resolves to the result of the input promise.
  */
 declare function load<T>(promise: Promise<T>, duration?: number, delay?: number): Promise<T>;
-/**
- * Asynchronously handles an error, displaying it in an alert or console.
- * @param error The error to handle.
- * @param locked Indicates whether the application should be locked after displaying the error.
- * @returns A promise that resolves once the error handling is complete.
- */
-declare function stabilize(error: Error, locked?: boolean): Promise<void>;
 
 interface Navigator {
 	/**
