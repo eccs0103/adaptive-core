@@ -2,8 +2,6 @@
 
 import { } from "../Scripts/Structure.js";
 
-try {
+await window.ensure(() => {
 	// Your code goes here
-} catch (error) {
-	await window.stabilize(Error.generate(error));
-}
+});
