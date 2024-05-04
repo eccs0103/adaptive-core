@@ -2,13 +2,13 @@
 
 //#region Engine
 /**
- * @typedef VirtualEngineEventMap
+ * @typedef UncomposedEngineEventMap
  * @property {Event} start
  * @property {Event} update
  * @property {Event} launch
  * @property {Event} change
  * 
- * @typedef {EventListener & VirtualEngineEventMap} EngineEventMap
+ * @typedef {EventListener & UncomposedEngineEventMap} EngineEventMap
  */
 
 /**
@@ -71,9 +71,9 @@ class Engine extends EventTarget {
 //#endregion
 //#region Fast engine
 /**
- * @typedef {{}} VirtualFastEngineEventMap
+ * @typedef {{}} UncomposedFastEngineEventMap
  * 
- * @typedef {EngineEventMap & VirtualFastEngineEventMap} FastEngineEventMap
+ * @typedef {EngineEventMap & UncomposedFastEngineEventMap} FastEngineEventMap
  */
 
 /**
@@ -196,9 +196,9 @@ class FastEngine extends Engine {
 //#endregion
 //#region Precise engine
 /**
- * @typedef {{}} VirtualPreciseEngineEventMap
+ * @typedef {{}} UncomposedPreciseEngineEventMap
  * 
- * @typedef {EngineEventMap & VirtualPreciseEngineEventMap} PreciseEngineEventMap
+ * @typedef {EngineEventMap & UncomposedPreciseEngineEventMap} PreciseEngineEventMap
  */
 
 /**

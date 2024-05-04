@@ -5,9 +5,10 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
-### 2.7.1 (04.05.2024)
+### 2.7.2 (04.05.2024)
 - Added classes `Stack<T>`, `Queue<T>`, `StrictMap<K, V>`.
 - Added function `Random.boolean`.
+- Added functions `Point1D.getDistanceBetween`, `Point2D.getDistanceBetween`, `Point3D.getDistanceBetween`.
 
 ### 2.6.11 (13.04.2024)
 - Added `CONSTANT_ZERO`, `SINGLE`, `CONSTANT_SINGLE`, `DOUBLE`, `CONSTANT_DOUBLE` to `Point1D`, `Point2D`, `Point3D` classes.

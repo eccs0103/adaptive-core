@@ -1,5 +1,7 @@
 "use strict";
 
+const { hypot } = Math;
+
 //#region Point
 /**
  * Abstract base class representing a point.
@@ -50,7 +52,7 @@ class Point {
 	/**
 	 * Returns an iterator object that yields each component of the point.
 	 * @abstract
-	 * @returns {Generator<number>} An iterator object.
+	 * @returns {Iterator<number>} An iterator object.
 	 */
 	*[Symbol.iterator]() {
 		throw new ReferenceError(`Not implemented function`);
@@ -62,6 +64,18 @@ class Point {
  * Represents a point in one-dimensional space.
  */
 class Point1D extends Point {
+	//#region Modifiers
+	/**
+	 * Calculates the distance between two points in one-dimensional space.
+	 * @param {Readonly<Point1D>} first The first point.
+	 * @param {Readonly<Point1D>} second The second point.
+	 * @returns {number} The distance between the two points.
+	 */
+	static getDistanceBetween(first, second) {
+		return hypot(first.x - second.x);
+	}
+	//#endregion
+	//#region Constructors
 	/**
 	 * Static method to add two points.
 	 * @param {Readonly<Point1D>} first The first point.
@@ -175,6 +189,8 @@ class Point1D extends Point {
 		super();
 		this.x = x;
 	}
+	//#endregion
+	//#region Properties
 	/** @type {number} */
 	#x = 0;
 	/**
@@ -190,6 +206,16 @@ class Point1D extends Point {
 	 */
 	set x(value) {
 		this.#x = value;
+	}
+	//#endregion
+	//#region Methods
+	/**
+	 * Calculates the distance from this point to another point in one-dimensional space.
+	 * @param {Readonly<Point1D>} other The other point.
+	 * @returns {number} The distance from this point to the other point.
+	 */
+	getDistanceFrom(other) {
+		return Point1D.getDistanceBetween(this, other);
 	}
 	/**
 	 * Adds another point to this point.
@@ -232,12 +258,13 @@ class Point1D extends Point {
 	}
 	/**
 	 * Returns an iterator that yields the x-coordinate of the point.
-	 * @returns {Generator<number>} An iterator object that yields the x-coordinate.
+	 * @returns {Iterator<number>} An iterator object that yields the x-coordinate.
 	 */
 	*[Symbol.iterator]() {
 		yield this.x;
 		return;
 	}
+	//#endregion
 }
 //#endregion
 //#region Point 2D
@@ -245,6 +272,18 @@ class Point1D extends Point {
  * Represents a point in two-dimensional space.
  */
 class Point2D extends Point1D {
+	//#region Modifiers
+	/**
+	 * Calculates the distance between two points in two-dimensional space.
+	 * @param {Readonly<Point2D>} first The first point.
+	 * @param {Readonly<Point2D>} second The second point.
+	 * @returns {number} The distance between the two points.
+	 */
+	static getDistanceBetween(first, second) {
+		return hypot(first.x - second.x, first.y - second.y);
+	}
+	//#endregion
+	//#region Constructors
 	/**
 	 * Static method to add two points.
 	 * @param {Readonly<Point2D>} first The first point.
@@ -359,6 +398,8 @@ class Point2D extends Point1D {
 		super(x);
 		this.y = y;
 	}
+	//#endregion
+	//#region Properties
 	/** @type {number} */
 	#y = 0;
 	/**
@@ -374,6 +415,16 @@ class Point2D extends Point1D {
 	 */
 	set y(value) {
 		this.#y = value;
+	}
+	//#endregion
+	//#region Methods
+	/**
+	 * Calculates the distance from this point to another point in two-dimensional space.
+	 * @param {Readonly<Point2D>} other The other point.
+	 * @returns {number} The distance from this point to the other point.
+	 */
+	getDistanceFrom(other) {
+		return Point2D.getDistanceBetween(this, other);
 	}
 	/**
 	 * Adds another point to this point.
@@ -416,13 +467,14 @@ class Point2D extends Point1D {
 	}
 	/**
 	 * Returns an iterator that yields the coordinates of the point.
-	 * @returns {Generator<number>} An iterator object that yields the coordinates.
+	 * @returns {Iterator<number>} An iterator object that yields the coordinates.
 	 */
 	*[Symbol.iterator]() {
 		yield this.x;
 		yield this.y;
 		return;
 	}
+	//#endregion
 }
 //#endregion
 //#region Point 3D
@@ -430,6 +482,18 @@ class Point2D extends Point1D {
  * Represents a point in three-dimensional space.
  */
 class Point3D extends Point2D {
+	//#region Modifiers
+	/**
+	 * Calculates the distance between two points in three-dimensional space.
+	 * @param {Readonly<Point3D>} first The first point.
+	 * @param {Readonly<Point3D>} second The second point.
+	 * @returns {number} The distance between the two points.
+	 */
+	static getDistanceBetween(first, second) {
+		return hypot(first.x - second.x, first.y - second.y, first.z - second.z);
+	}
+	//#endregion
+	//#region Constructors
 	/**
 	 * Static method to add two points.
 	 * @param {Readonly<Point3D>} first The first point.
@@ -545,6 +609,8 @@ class Point3D extends Point2D {
 		super(x, y);
 		this.z = z;
 	}
+	//#endregion
+	//#region Properties
 	/** @type {number} */
 	#z = 0;
 	/**
@@ -560,6 +626,16 @@ class Point3D extends Point2D {
 	 */
 	set z(value) {
 		this.#z = value;
+	}
+	//#endregion
+	//#region Methods
+	/**
+	 * Calculates the distance from this point to another point in three-dimensional space.
+	 * @param {Readonly<Point3D>} other The other point.
+	 * @returns {number} The distance from this point to the other point.
+	 */
+	getDistanceFrom(other) {
+		return Point3D.getDistanceBetween(this, other);
 	}
 	/**
 	 * Adds another point to this point.
@@ -602,7 +678,7 @@ class Point3D extends Point2D {
 	}
 	/**
 	 * Returns an iterator that yields the coordinates of the point.
-	 * @returns {Generator<number>} An iterator object that yields the coordinates.
+	 * @returns {Iterator<number>} An iterator object that yields the coordinates.
 	 */
 	*[Symbol.iterator]() {
 		yield this.x;
@@ -610,6 +686,7 @@ class Point3D extends Point2D {
 		yield this.z;
 		return;
 	}
+	//#endregion
 }
 //#endregion
 
