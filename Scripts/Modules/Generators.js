@@ -1,12 +1,19 @@
 "use strict";
 
-const { random, trunc } = Math;
+const { random, round, trunc } = Math;
 
 //#region Random
 /**
- * Random number and element generator.
+ * Random values generator.
  */
 class Random {
+	/**
+	 * Generates a random boolean value.
+	 * @returns {boolean} A random boolean value.
+	 */
+	boolean() {
+		return Boolean(round(random()));
+	}
 	/**
 	 * Returns a random number between the specified values.
 	 * @param {number} min The minimum value.

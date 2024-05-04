@@ -204,6 +204,305 @@ Array.prototype.export = function () {
 	return result;
 };
 //#endregion
+//#region Stack
+/**
+ * Represents a stack data structure.
+ * @template T The type of elements in the stack.
+ */
+class Stack {
+	/**
+	 * @param {...T} items The initial items to add to the stack.
+	 */
+	constructor(...items) {
+		this.#array = items;
+	}
+	/** @type {T[]} */
+	#array;
+	/**
+	 * Pushes an item onto the top of the stack.
+	 * @param {T} item The item to push onto the stack.
+	 * @returns {void}
+	 */
+	push(item) {
+		this.#array.push(item);
+	}
+	/**
+	 * Returns the item at the top of the stack without removing it.
+	 * @readonly
+	 * @returns {T} The item at the top of the stack.
+	 * @throws {ReferenceError} If the stack is empty.
+	 */
+	get peek() {
+		const value = this.#array.at(-1);
+		if (value === undefined) throw new ReferenceError(`Stack is empty`);
+		return value;
+	}
+	/**
+	 * Removes and returns the item at the top of the stack.
+	 * @returns {T} The item that was removed from the top of the stack.
+	 * @throws {ReferenceError} If the stack is empty.
+	 */
+	pop() {
+		const value = this.#array.pop();
+		if (value === undefined) throw new ReferenceError(`Stack is empty`);
+		return value;
+	}
+	/**
+	 * Removes all items from the stack.
+	 * @returns {T[]} An array containing the removed items.
+	 */
+	clear() {
+		return this.#array.splice(0, this.#array.length);
+	}
+	/**
+	 * Gets the number of items in the stack.
+	 * @readonly
+	 * @returns {number} The number of items in the stack.
+	 */
+	get size() {
+		return this.#array.length;
+	}
+	/**
+	 * Returns an iterator that yields the keys of the stack.
+	 * @returns {IterableIterator<number>} An iterator for the keys of the stack.
+	 */
+	keys() {
+		return this.#array.keys();
+	}
+	/**
+	 * Returns an iterator that yields the values of the stack.
+	 * @returns {IterableIterator<T>} An iterator for the values of the stack.
+	 */
+	values() {
+		return this.#array.values();
+	}
+	/**
+	 * Returns an iterator that yields the entries [index, value] of the stack.
+	 * @returns {IterableIterator<[number, T]>} An iterator for the entries of the stack.
+	 */
+	entries() {
+		return this.#array.entries();
+	}
+	/**
+	 * Returns an iterator that yields the values of the stack.
+	 * @returns {IterableIterator<T>} An iterator for the values of the stack.
+	 */
+	*[Symbol.iterator]() {
+		for (const item of this.#array) {
+			yield item;
+		}
+	}
+}
+//#endregion
+//#region Queue
+/**
+ * Represents a queue data structure.
+ * @template T The type of elements in the queue.
+ */
+class Queue {
+	/**
+	 * @param {...T} items The initial items to add to the queue.
+	 */
+	constructor(...items) {
+		this.#array = items;
+	}
+	/** @type {T[]} */
+	#array;
+	/**
+	 * Adds an item to the end of the queue.
+	 * @param {T} item The item to add to the queue.
+	 * @returns {void}
+	 */
+	push(item) {
+		this.#array.push(item);
+	}
+	/**
+	 * Returns the item at the front of the queue without removing it.
+	 * @readonly
+	 * @returns {T} The item at the front of the queue.
+	 * @throws {ReferenceError} If the queue is empty.
+	 */
+	get peek() {
+		const value = this.#array.at(0);
+		if (value === undefined) throw new ReferenceError(`Queue is empty`);
+		return value;
+	}
+	/**
+	 * Removes and returns the item at the front of the queue.
+	 * @returns {T} The item that was removed from the front of the queue.
+	 * @throws {ReferenceError} If the queue is empty.
+	 */
+	shift() {
+		const value = this.#array.shift();
+		if (value === undefined) throw new ReferenceError(`Queue is empty`);
+		return value;
+	}
+	/**
+	 * Removes all items from the queue.
+	 * @returns {T[]} An array containing the removed items.
+	 */
+	clear() {
+		return this.#array.splice(0, this.#array.length);
+	}
+	/**
+	 * Gets the number of items in the queue.
+	 * @readonly
+	 * @returns {number} The number of items in the queue.
+	 */
+	get size() {
+		return this.#array.length;
+	}
+	/**
+	 * Returns an iterator that yields the keys of the queue.
+	 * @returns {IterableIterator<number>} An iterator for the keys of the queue.
+	 */
+	keys() {
+		return this.#array.keys();
+	}
+	/**
+	 * Returns an iterator that yields the values of the queue.
+	 * @returns {IterableIterator<T>} An iterator for the values of the queue.
+	 */
+	values() {
+		return this.#array.values();
+	}
+	/**
+	 * Returns an iterator that yields the entries [index, value] of the queue.
+	 * @returns {IterableIterator<[number, T]>} An iterator for the entries of the queue.
+	 */
+	entries() {
+		return this.#array.entries();
+	}
+	/**
+	 * Returns an iterator that yields the values of the queue.
+	 * @returns {IterableIterator<T>} An iterator for the values of the queue.
+	 */
+	*[Symbol.iterator]() {
+		for (const item of this.#array) {
+			yield item;
+		}
+	}
+}
+//#endregion
+//#region Strict map
+/**
+ * Represents a strict map data structure.
+ * @template K The type of keys in the map.
+ * @template V The type of values in the map.
+ */
+class StrictMap {
+	/**
+	 * @param {...[NonNullable<K>, V]} items The initial key-value pairs to add to the map.
+	 */
+	constructor(...items) {
+		this.#map = new Map(items);
+	}
+	/** @type {Map<NonNullable<K>, V>} */
+	#map;
+	/**
+	 * Gets the value associated with the specified key.
+	 * @param {NonNullable<K>} key The key to look up in the map.
+	 * @returns {V} The value associated with the specified key.
+	 * @throws {ReferenceError} If the key is missing in the map.
+	 */
+	get(key) {
+		const value = this.#map.get(key);
+		if (value === undefined) throw new ReferenceError(`Value for key '${key}' is missing`);
+		return value;
+	}
+	/**
+	 * Gets the value associated with the specified key, or null if the key is missing.
+	 * @param {NonNullable<K>} key The key to look up in the map.
+	 * @returns {V | null} The value associated with the specified key, or null if the key is missing.
+	 */
+	ask(key) {
+		const value = this.#map.get(key);
+		return (value === undefined ? null : value);
+	}
+	/**
+	 * Adds a new key-value pair to the map.
+	 * @param {NonNullable<K>} key The key to add to the map.
+	 * @param {V} value The value associated with the key.
+	 * @returns {void}
+	 * @throws {EvalError} If the key already exists in the map.
+	 */
+	add(key, value) {
+		if (this.#map.has(key)) throw new EvalError(`Value for key '${key}' already exists`);
+		this.#map.set(key, value);
+	}
+	/**
+	 * Sets the value associated with the specified key.
+	 * @param {NonNullable<K>} key The key to set the value for.
+	 * @param {V} value The new value associated with the key.
+	 * @returns {void}
+	 */
+	set(key, value) {
+		this.#map.set(key, value);
+	}
+	/**
+	 * Checks whether the map contains the specified key.
+	 * @param {NonNullable<K>} key The key to check for in the map.
+	 * @returns {boolean} true if the map contains the key, otherwise false.
+	 */
+	has(key) {
+		return this.#map.has(key);
+	}
+	/**
+	 * Deletes the key-value pair associated with the specified key from the map.
+	 * @param {NonNullable<K>} key The key to delete from the map.
+	 * @returns {void}
+	 * @throws {ReferenceError} If the key is missing in the map.
+	 */
+	delete(key) {
+		if (!this.#map.delete(key)) throw new ReferenceError(`Value for key '${key}' is missing`);
+	}
+	/**
+	 * Removes all key-value pairs from the map.
+	 * @returns {void}
+	 */
+	clear() {
+		this.#map.clear();
+	}
+	/**
+	 * Gets the number of key-value pairs in the map.
+	 * @readonly
+	 * @returns {number} The number of key-value pairs in the map.
+	 */
+	get size() {
+		return this.#map.size;
+	}
+	/**
+	 * Returns an iterator that yields the keys of the map.
+	 * @returns {IterableIterator<NonNullable<K>>} An iterator for the keys of the map.
+	 */
+	keys() {
+		return this.#map.keys();
+	}
+	/**
+	 * Returns an iterator that yields the values of the map.
+	 * @returns {IterableIterator<V>} An iterator for the values of the map.
+	 */
+	values() {
+		return this.#map.values();
+	}
+	/**
+	 * Returns an iterator that yields the key-value pairs of the map.
+	 * @returns {IterableIterator<[NonNullable<K>, V]>} An iterator for the entries of the map.
+	 */
+	entries() {
+		return this.#map.entries();
+	}
+	/**
+	 * Returns an iterator that yields the key-value pairs of the map.
+	 * @returns {IterableIterator<[NonNullable<K>, V]>} An iterator for the entries of the map.
+	 */
+	*[Symbol.iterator]() {
+		for (const item of this.#map) {
+			yield item;
+		}
+	}
+}
+//#endregion
 //#region Math
 /**
  * Calculates the square of a number.
@@ -876,4 +1175,4 @@ class Application {
 // }
 //#endregion
 
-export { };
+export { Stack, Queue, StrictMap };
