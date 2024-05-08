@@ -384,6 +384,68 @@ class Queue {
 	}
 }
 //#endregion
+//#region Data pair
+/**
+ * Represents a key-value pair of data.
+ * @template K The type of the key.
+ * @template V The type of the value.
+ */
+class DataPair {
+	/**
+	 * Creates a DataPair instance from an array containing a key-value pair.
+	 * @template K The type of the key.
+	 * @template V The type of the value.
+	 * @param {[NonNullable<K>, V]} source The source array containing the key-value pair.
+	 * @returns {DataPair<K, V>} A new DataPair instance.
+	 */
+	static fromArray(source) {
+		const [key, value] = source;
+		return new DataPair(key, value);
+	}
+	/**
+	 * Converts the DataPair instance to an array containing the key-value pair.
+	 * @returns {[NonNullable<K>, V]} The key-value pair as an array.
+	 */
+	toArray() {
+		return [this.#key, this.#value];
+	}
+	/**
+	 * @param {NonNullable<K>} key The key of the data pair.
+	 * @param {V} value The value of the data pair.
+	 */
+	constructor(key, value) {
+		this.#key = key;
+		this.#value = value;
+	}
+	/** @type {NonNullable<K>} */
+	#key;
+	/**
+	 * Gets the key of the data pair.
+	 * @readonly
+	 * @returns {NonNullable<K>} The key of the data pair.
+	 */
+	get key() {
+		return this.#key;
+	}
+	/** @type {V} */
+	#value;
+	/**
+	 * Gets the value of the data pair.
+	 * @returns {V} The value of the data pair.
+	 */
+	get value() {
+		return this.#value;
+	}
+	/**
+	 * Sets the value of the data pair.
+	 * @param {V} value The new value of the data pair.
+	 * @returns {void}
+	 */
+	set value(value) {
+		this.#value = value;
+	}
+}
+//#endregion
 //#region Strict map
 /**
  * Represents a strict map data structure.
@@ -1175,4 +1237,4 @@ class Application {
 // }
 //#endregion
 
-export { Stack, Queue, StrictMap };
+export { Stack, Queue, DataPair, StrictMap };

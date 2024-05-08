@@ -145,11 +145,12 @@ class FastEngine extends Engine {
 	 * @returns {void}
 	 */
 	set launched(value) {
-		if (this.#launched !== value) {
+		const previous = this.#launched;
+		this.#launched = value;
+		if (previous !== value) {
 			this.dispatchEvent(new Event(`change`));
 		}
-		this.#launched = value;
-		if (this.#launched) {
+		if (value) {
 			this.dispatchEvent(new Event(`launch`));
 		}
 	}
@@ -268,11 +269,12 @@ class PreciseEngine extends Engine {
 	 * @returns {void}
 	 */
 	set launched(value) {
-		if (this.#launched !== value) {
+		const previous = this.#launched;
+		this.#launched = value;
+		if (previous !== value) {
 			this.dispatchEvent(new Event(`change`));
 		}
-		this.#launched = value;
-		if (this.#launched) {
+		if (value) {
 			this.dispatchEvent(new Event(`launch`));
 		}
 	}

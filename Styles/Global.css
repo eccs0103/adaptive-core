@@ -224,21 +224,8 @@ dialog:not([open]) {
 	display: none !important;
 }
 
-dialog.console {
-	position: fixed;
-	inset: 0 0 auto auto;
-	min-width: revert;
-	display: grid;
-	grid-template-columns: repeat(2, auto);
-}
-
-dialog.console *.-key {
-	text-align: left;
-	white-space: pre;
-}
-
-dialog.console *.-value {
-	text-align: right;
+dialog.loader * {
+	text-align: center;
 }
 
 dialog.pop-up > *:empty {

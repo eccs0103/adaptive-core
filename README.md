@@ -5,6 +5,13 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 2.7.5 (08.05.2024)
+- Added preloading for loading animation.
+- Changed loading animation.
+- Fixed `change` events in `FastEngine` and `PreciseEngine`.
+- Added class `DataPair`.
+- Deprecated styles removed.
+
 ### 2.7.2 (04.05.2024)
 - Added classes `Stack<T>`, `Queue<T>`, `StrictMap<K, V>`.
 - Added function `Random.boolean`.
