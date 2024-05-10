@@ -5,6 +5,12 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 2.7.8 (11.05.2024)
+- Added `NAN`, `CONSTANT_NAN` to `Point1D`, `Point2D`, `Point3D` classes.
+- Deprecated functions removed.
+- Engines moved to `generators.js`.
+- Enhancements made to `Navigator` and `Location`.
+
 ### 2.7.5 (08.05.2024)
 - Added preloading for loading animation.
 - Changed loading animation.
