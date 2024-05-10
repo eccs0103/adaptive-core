@@ -45,16 +45,16 @@
 body {
 	background-color: var(--color-background);
 	color: var(--color-text);
-}
 
-body * {
-	background-color: initial;
-	color: inherit;
-}
+	& * {
+		background-color: initial;
+		color: inherit;
 
-body *::placeholder {
-	color: var(--color-text-description);
-	filter: brightness(0.75);
+		&::placeholder {
+			color: var(--color-text-description);
+			filter: brightness(0.75);
+		}
+	}
 }
 
 *.layer {
@@ -71,26 +71,26 @@ body *::placeholder {
 
 *.rounded {
 	border-radius: var(--size-gap);
-}
 
-*.rounded.in-top {
-	border-top-left-radius: 0;
-	border-top-right-radius: 0;
-}
+	&.in-top {
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+	}
 
-*.rounded.in-right {
-	border-top-right-radius: 0;
-	border-bottom-right-radius: 0;
-}
+	&.in-right {
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+	}
 
-*.rounded.in-bottom {
-	border-bottom-left-radius: 0;
-	border-bottom-right-radius: 0;
-}
+	&.in-bottom {
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+	}
 
-*.rounded.in-left {
-	border-top-left-radius: 0;
-	border-bottom-left-radius: 0;
+	&.in-left {
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
 }
 
 *.transparent {

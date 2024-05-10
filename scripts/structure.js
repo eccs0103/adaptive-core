@@ -7,6 +7,6 @@ import { } from "./modules/palette.js";
 import { } from "./modules/storage.js";
 import { } from "./modules/time.js";
 
-// Your code goes here
+// Your structure goes here
 
 export { };
