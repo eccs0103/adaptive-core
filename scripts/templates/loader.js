@@ -11,7 +11,7 @@ void async function () {
 		dialogLoader.style.placeItems = `center`;
 		{
 			const imgLogo = dialogLoader.appendChild(document.createElement(`img`));
-			imgLogo.src = `../Resources/Loading.gif`;
+			imgLogo.src = `../resources/loading.gif`;
 			imgLogo.alt = `Logo`;
 			{ }
 			const h2Heading = dialogLoader.appendChild(document.createElement(`h2`));
