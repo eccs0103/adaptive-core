@@ -1,6 +1,6 @@
 "use strict";
 
-import { } from "../scriptes/structure.js";
+import { } from "../scripts/structure.js";
 
 await window.ensure(() => {
 	// Your code goes here
