@@ -166,14 +166,14 @@ interface Math {
 	 */
 	toRadians(degrees: number): number;
 	/**
-	 * Maps a value to the range [0, 1].
+	 * Maps a value to the range [0, 1).
 	 * @param value The value to map.
 	 * @param period The period of the mapping.
 	 * @returns The mapped value.
 	 */
 	toFactor(value: number, period: number): number;
 	/**
-	 * Maps a value to the range [-1, 1].
+	 * Maps a value to the range [-1, 1).
 	 * @param value The value to map.
 	 * @param period The period of the mapping.
 	 * @returns The mapped value.

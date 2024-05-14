@@ -607,23 +607,23 @@ Math.toRadians = function (degrees) {
 };
 
 /**
- * Maps a value to the range [0, 1].
+ * Maps a value to the range [0, 1).
  * @param {number} value The value to map.
  * @param {number} period The period of the mapping.
  * @returns {number} The mapped value.
  */
 Math.toFactor = function (value, period) {
-	return value % (period + 1) / period;
+	return value % period / period;
 };
 
 /**
- * Maps a value to the range [-1, 1].
+ * Maps a value to the range [-1, 1).
  * @param {number} value The value to map.
  * @param {number} period The period of the mapping.
  * @returns {number} The mapped value.
  */
 Math.toSignedFactor = function (value, period) {
-	return value % (period + 1) / period * 2 - 1;
+	return Math.toFactor(value, period) * 2 - 1;
 };
 //#endregion
 //#region Promise
