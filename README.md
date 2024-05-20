@@ -5,6 +5,13 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 2.8.3 (21.05.2024)
+- Added method `Promise.withSignal` for convenient handling of one-time handlers.
+- Added method `Window.prototype.insure`. Handled method `Window.prototype.ensure`.
+- Refactored `Random` class. Added global instance `Random.global`.
+- Added method `Random.prototype.subarray`.
+- Added error handling in `Matrix` class.
+
 ### 2.8.0 (11.05.2024)
 - Added `NAN`, `CONSTANT_NAN` to `Point1D`, `Point2D`, `Point3D` classes.
 - Deprecated functions removed.
