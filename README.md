@@ -5,6 +5,12 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 2.8.6 (27.05.2024)
+- Added `Number.prototype.interpolate` function.
+- Removed deprecated `Math.toFactor` and `Math.toSignedFactor` functions.
+- Functions `getElement`, `tryGetElement`, `getElements`, `tryGetElements` moved to `ParentNode` for broader use.
+- Improved structure of the [`material.css`](./styles/themes/material.css) theme.
+
 ### 2.8.3 (21.05.2024)
 - Added method `Promise.withSignal` for convenient handling of one-time handlers.
 - Added method `Window.prototype.insure`. Handled method `Window.prototype.ensure`.
