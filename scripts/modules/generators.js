@@ -389,6 +389,21 @@ class Random {
 		return destination;
 	}
 	/**
+	 * Shuffles the elements of an array in place using the Fisher-Yates algorithm.
+	 * @template T
+	 * @param {T[]} array The array to shuffle.
+	 * @returns {void}
+	 */
+	shuffle(array) {
+		for (let index = 0; index < array.length - 1; index++) {
+			const pair = this.integer(index, array.length);
+			if (pair === index) continue;
+			let temp = array[index];
+			array[index] = array[pair];
+			array[pair] = temp;
+		}
+	}
+	/**
 	 * Selects a random element from a list according to their weights.
 	 * @template T
 	 * @param {Readonly<Map<T, number>>} cases The map with elements and their weights.
@@ -408,7 +423,7 @@ class Random {
 			begin = end;
 		}
 		throw new EvalError(`Unable to select element with value ${random}`);
-	}
+	};
 	/**
 	 * Generates a random GUID identifier.
 	 * @returns {string} A random GUID identifier.
@@ -419,4 +434,4 @@ class Random {
 }
 //#endregion
 
-export { FastEngine, PreciseEngine, Random };
+export { Engine, FastEngine, PreciseEngine, Random };

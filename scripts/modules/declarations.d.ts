@@ -19,6 +19,13 @@ interface Number {
 	 */
 	export(): number;
 	/**
+	 * Clamps a value between a minimum and maximum.
+	 * @param min The minimum value.
+	 * @param max The maximum value.
+	 * @returns The clamped value.
+	 */
+	clamp(min: number, max: number): number;
+	/**
 	 * Interpolates the number from one range to another.
 	 * @param min1 The minimum value of the original range.
 	 * @param max1 The maximum value of the original range.
@@ -155,14 +162,6 @@ interface Math {
 	 * @returns The square of the input number.
 	 */
 	sqpw(x: number): number;
-	/**
-	 * Clamps a value between a minimum and maximum.
-	 * @param value The value to clamp.
-	 * @param min The minimum value.
-	 * @param max The maximum value.
-	 * @returns The clamped value.
-	 */
-	between(value: number, min: number, max: number): number;
 	/**
 	 * Converts radians to degrees.
 	 * @param radians The angle in radians.

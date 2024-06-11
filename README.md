@@ -5,17 +5,22 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 2.8.7 (11.06.2024)
+- `Math.between` изменена на `number.clamp`.
+- Добавлена функция `random.shuffle`.
+- `Time` перемещена в [`measures.js`](./scripts/modules/measures.js).
+
 ### 2.8.6 (27.05.2024)
-- Added `Number.prototype.interpolate` function.
+- Added `number.interpolate` function.
 - Removed deprecated `Math.toFactor` and `Math.toSignedFactor` functions.
 - Functions `getElement`, `tryGetElement`, `getElements`, `tryGetElements` moved to `ParentNode` for broader use.
 - Improved structure of the [`material.css`](./styles/themes/material.css) theme.
 
 ### 2.8.3 (21.05.2024)
 - Added method `Promise.withSignal` for convenient handling of one-time handlers.
-- Added method `Window.prototype.insure`. Handled method `Window.prototype.ensure`.
+- Added method `window.insure`. Handled method `window.ensure`.
 - Refactored `Random` class. Added global instance `Random.global`.
-- Added method `Random.prototype.subarray`.
+- Added method `random.subarray`.
 - Added error handling in `Matrix` class.
 
 ### 2.8.0 (11.05.2024)

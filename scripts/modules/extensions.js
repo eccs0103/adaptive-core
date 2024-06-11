@@ -30,6 +30,19 @@ Number.prototype.export = function () {
 };
 
 /**
+ * Clamps a value between a minimum and maximum.
+ * @param {number} min The minimum value.
+ * @param {number} max The maximum value.
+ * @returns {number} The clamped value.
+ */
+Number.prototype.clamp = function (min, max) {
+	let value = this.valueOf();
+	value = (value > min ? value : min);
+	value = (value < max ? value : max);
+	return value;
+};
+
+/**
  * Interpolates the number from one range to another.
  * @param {number} min1 The minimum value of the original range.
  * @param {number} max1 The maximum value of the original range.
@@ -580,17 +593,6 @@ Math.sqpw = function (x) {
 	return x * x;
 };
 
-/**
- * Clamps a value between a minimum and maximum.
- * @param {number} value The value to clamp.
- * @param {number} min The minimum value.
- * @param {number} max The maximum value.
- * @returns {number} The clamped value.
- */
-Math.between = function (value, min, max) {
-	return Math.min(Math.max(min, value), max);
-};
-
 const toDegreeFactor = 180 / Math.PI;
 /**
  * Converts radians to degrees.
@@ -600,7 +602,6 @@ const toDegreeFactor = 180 / Math.PI;
 Math.toDegrees = function (radians) {
 	return radians * toDegreeFactor;
 };
-
 const toRadianFactor = Math.PI / 180;
 /**
  * Converts degrees to radians.
