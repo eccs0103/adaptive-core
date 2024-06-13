@@ -6,9 +6,9 @@ Core for creating adaptive web pages.\
 
 ## Feed
 ### 2.8.7 (11.06.2024)
-- `Math.between` изменена на `number.clamp`.
-- Добавлена функция `random.shuffle`.
-- `Time` перемещена в [`measures.js`](./scripts/modules/measures.js).
+- `Math.between` renamed to `number.clamp`.
+- Added function `random.shuffle`.
+- `Time` moved to [`measures.js`](./scripts/modules/measures.js).
 
 ### 2.8.6 (27.05.2024)
 - Added `number.interpolate` function.
