@@ -5,6 +5,10 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 2.8.8 (20.06.2024)
+- Improved and optimized template scripts.
+- Enhanced core structure.
+
 ### 2.8.7 (11.06.2024)
 - `Math.between` renamed to `number.clamp`.
 - Added function `random.shuffle`.

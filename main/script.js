@@ -2,6 +2,14 @@
 
 import { } from "../scripts/structure.js";
 
-await window.ensure(() => {
-	// Your code goes here
-});
+//#region Controller
+class Controller {
+	/**
+	 * @returns {Promise<void>}
+	 */
+	async main() {
+		// Your code goes here
+	}
+};
+await window.load(new Controller().main());
+//#endregion

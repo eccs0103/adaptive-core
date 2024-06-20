@@ -752,11 +752,11 @@ class Point3D extends Point2D {
 class Matrix {
 	/**
 	 * @param {Readonly<Point2D>} size The size of the matrix.
-	 * @param {T} initial The initial value for all elements in the matrix.
+	 * @param {(position: Point2D) => T} initializer The value initializer for all elements in the matrix.
 	 * @throws {TypeError} If the x or y coordinate of the size is not an integer.
 	 * @throws {RangeError} If the x or y coordinate of the size is negative.
 	 */
-	constructor(size, initial) {
+	constructor(size, initializer) {
 		if (!Number.isInteger(size.x)) throw new TypeError(`The x-coordinate of size ${size} must be finite integer number`);
 		if (size.x < 0) throw new RangeError(`The x-coordinate of size ${size} is out of range [0 - +∞)`);
 		if (!Number.isInteger(size.y)) throw new TypeError(`The y-coordinate of size ${size} must be finite integer number`);
@@ -768,7 +768,7 @@ class Matrix {
 			/** @type {T[]} */
 			const row = (data[y] = new Array(size.x));
 			for (let x = 0; x < row.length; x++) {
-				(row[x] = initial);
+				row[x] = initializer(new Point2D(x, y));
 			}
 		}
 	}
