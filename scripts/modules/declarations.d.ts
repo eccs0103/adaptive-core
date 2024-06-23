@@ -185,6 +185,12 @@ interface PromiseConstructor {
 	 */
 	fulfill<T>(action: () => T | PromiseLike<T>): Promise<T>;
 	/**
+	 * Creates a promise that resolves after the specified timeout.
+	 * @param timeout The timeout in milliseconds.
+	 * @returns A promise that resolves after the timeout.
+	 */
+	withTimeout(timeout: number): Promise<void>;
+	/**
 	 * Creates a promise that can be controlled with an abort signal.
 	 * @template T
 	 * @param callback The callback to execute with an abort signal, resolve, and reject functions.
@@ -341,11 +347,11 @@ interface Window {
 	 * Asynchronously loads a promise with a loading animation.
 	 * @template T
 	 * @param promise The promise to load.
-	 * @param duration The duration of the loading animation.
 	 * @param delay The delay before the loading animation starts.
+	 * @param duration The duration of the loading animation.
 	 * @returns A promise that resolves to the result of the input promise.
 	 */
-	load<T>(promise: Promise<T>, duration?: number, delay?: number): Promise<T>;
+	load<T>(promise: Promise<T>, delay?: number, duration?: number): Promise<T>;
 }
 
 /**

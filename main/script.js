@@ -11,5 +11,5 @@ class Controller {
 		// Your code goes here
 	}
 };
-await window.load(new Controller().main());
+await window.load(window.ensure(() => new Controller().main()));
 //#endregion

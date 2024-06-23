@@ -630,6 +630,17 @@ Promise.fulfill = function (action) {
 };
 
 /**
+ * Creates a promise that resolves after the specified timeout.
+ * @param {number} timeout The timeout in milliseconds.
+ * @returns {Promise<void>} A promise that resolves after the timeout.
+ */
+Promise.withTimeout = function (timeout) {
+	return new Promise((resolve) => {
+		setTimeout(resolve, timeout);
+	});
+};
+
+/**
  * Creates a promise that can be controlled with an abort signal.
  * @template T
  * @param {(signal: AbortSignal, resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void} callback The callback to execute with an abort signal, resolve, and reject functions.
@@ -1155,11 +1166,11 @@ Window.prototype.insure = async function (action, eventually = () => { }) {
  * Asynchronously loads a promise with a loading animation.
  * @template T
  * @param {Promise<T>} promise The promise to load.
- * @param {number} duration The duration of the loading animation.
  * @param {number} delay The delay before the loading animation starts.
+ * @param {number} duration The duration of the loading animation.
  * @returns {Promise<T>} A promise that resolves to the result of the input promise.
  */
-Window.prototype.load = async function (promise, duration = 200, delay = 0) {
+Window.prototype.load = async function (promise, delay = 0, duration = 200) {
 	const dialogLoader = document.getElement(HTMLDialogElement, `dialog.loader`);
 	try {
 		dialogLoader.showModal();
