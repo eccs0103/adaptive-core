@@ -9,6 +9,50 @@ const { hypot, abs, trunc } = Math;
  */
 class Point {
 	/**
+	 * Checks if every component of the point is NaN.
+	 * @param {Point} point The point to check.
+	 * @returns {boolean} True if every component of the point is NaN, otherwise false.
+	 */
+	static isNaN(point) {
+		for (const metric of point) {
+			if (!Number.isNaN(metric)) return false;
+		}
+		return true;
+	}
+	/**
+	 * Checks if all components of the point are finite numbers.
+	 * @param {Point} point The point to check.
+	 * @returns {boolean} True if all components of the point are finite, otherwise false.
+	 */
+	static isFinite(point) {
+		for (const metric of point) {
+			if (!Number.isFinite(metric)) return false;
+		}
+		return true;
+	}
+	/**
+	 * Checks if all components of the point are integers.
+	 * @param {Point} point The point to check.
+	 * @returns {boolean} True if all components of the point are integers, otherwise false.
+	 */
+	static isInteger(point) {
+		for (const metric of point) {
+			if (!Number.isInteger(metric)) return false;
+		}
+		return true;
+	}
+	/**
+	 * Checks if all components of the point are safe integers.
+	 * @param {Point} point The point to check.
+	 * @returns {boolean} True if all components of the point are safe integers, otherwise false.
+	 */
+	static isSafeInteger(point) {
+		for (const metric of point) {
+			if (!Number.isSafeInteger(metric)) return false;
+		}
+		return true;
+	}
+	/**
 	 * Returns a string representation of the point with a fixed number of digits after the decimal point.
 	 * @param {number} [digits] The number of digits to appear after the decimal point.
 	 * @returns {string} A string representation of the point.
@@ -757,10 +801,8 @@ class Matrix {
 	 * @throws {RangeError} If the x or y coordinate of the size is negative.
 	 */
 	constructor(size, initializer) {
-		if (!Number.isInteger(size.x)) throw new TypeError(`The x-coordinate of size ${size} must be finite integer number`);
-		if (size.x < 0) throw new RangeError(`The x-coordinate of size ${size} is out of range [0 - +∞)`);
-		if (!Number.isInteger(size.y)) throw new TypeError(`The y-coordinate of size ${size} must be finite integer number`);
-		if (size.y < 0) throw new RangeError(`The x-coordinate of size ${size} is out of range [0 - +∞)`);
+		if (!Point.isInteger(size)) throw new TypeError(`The size ${size} must be finite integer point`);
+		if (size.x < 0 || size.y < 0) throw new RangeError(`The size ${size} is out of range [(0, 0) - (+∞, +∞))`);
 		this.#size = size;
 		/** @type {T[][]} */
 		const data = (this.#data = new Array(size.y));
@@ -792,11 +834,11 @@ class Matrix {
 	 * @throws {RangeError} If the x or y coordinate of the position is out of range.
 	 */
 	get(position) {
-		if (!Number.isInteger(position.x)) throw new TypeError(`The x-coordinate of position ${position} must be finite integer number`);
-		if (0 > position.x || position.x >= this.#size.x) throw new RangeError(`The x-coordinate of position ${position} is out of range [0 - ${this.#size.x})`);
-		if (!Number.isInteger(position.y)) throw new TypeError(`The y-coordinate of position ${position} must be finite integer number`);
-		if (0 > position.y || position.y >= this.#size.y) throw new RangeError(`The x-coordinate of position ${position} is out of range [0 - ${this.#size.y})`);
-		return this.#data[position.y][position.x];
+		if (!Point.isInteger(position)) throw new TypeError(`The position ${position} must be finite integer point`);
+		const { x, y } = position;
+		const size = this.#size;
+		if (0 > x || x >= size.x || 0 > y || y >= size.y) throw new RangeError(`The position ${position} is out of range [(0, 0) - ${size})`);
+		return this.#data[y][x];
 	}
 	/**
 	 * Sets the value at the specified position in the matrix.
@@ -806,11 +848,11 @@ class Matrix {
 	 * @throws {RangeError} If the x or y coordinate of the position is out of range.
 	 */
 	set(position, value) {
-		if (!Number.isInteger(position.x)) throw new TypeError(`The x-coordinate of position ${position} must be finite integer number`);
-		if (0 > position.x || position.x >= this.#size.x) throw new RangeError(`The x-coordinate of position ${position} is out of range [0 - ${this.#size.x})`);
-		if (!Number.isInteger(position.y)) throw new TypeError(`The y-coordinate of position ${position} must be finite integer number`);
-		if (0 > position.y || position.y >= this.#size.y) throw new RangeError(`The x-coordinate of position ${position} is out of range [0 - ${this.#size.y})`);
-		this.#data[position.y][position.x] = value;
+		if (!Point.isInteger(position)) throw new TypeError(`The position ${position} must be finite integer point`);
+		const { x, y } = position;
+		const size = this.#size;
+		if (0 > x || x >= size.x || 0 > y || y >= size.y) throw new RangeError(`The position ${position} is out of range [(0, 0) - ${size})`);
+		this.#data[y][x] = value;
 	}
 }
 //#endregion

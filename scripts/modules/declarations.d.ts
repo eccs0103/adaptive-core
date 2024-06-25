@@ -279,6 +279,10 @@ interface Element {
 	tryGetClosest<T extends typeof Element>(type: T, selectors: string, strict?: boolean): Promise<InstanceType<T>>;
 }
 
+interface Document {
+	loadResource(url: string): Promise<HTMLImageElement>;
+};
+
 interface Window {
 	/**
 	 * Gets the type name of a value.
@@ -435,11 +439,3 @@ interface Navigator {
 	 */
 	download(file: File): void;
 }
-
-interface Location {
-	/**
-	 * Parses the search part of the URL and returns it as a map.
-	 * @returns A map containing the search parameters.
-	 */
-	readonly mapSearch: Map<string, string>;
-};

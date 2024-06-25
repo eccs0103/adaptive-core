@@ -907,6 +907,22 @@ Element.prototype.tryGetClosest = function (type, selectors, strict = false) {
 	});
 };
 //#endregion
+//#region Document
+/**
+ * @param {string} url 
+ * @returns {Promise<HTMLImageElement>}
+ */
+Document.prototype.loadResource = async function (url) {
+	const image = new Image();
+	const promise = Promise.withSignal((signal, resolve, reject) => {
+		image.addEventListener(`load`, (event) => resolve(undefined), { signal });
+		image.addEventListener(`error`, (event) => reject(event.error), { signal });
+	});
+	image.src = url;
+	await promise;
+	return image;
+};
+//#endregion
 //#region Window
 /**
  * Gets the type name of a value.
@@ -1273,20 +1289,6 @@ Navigator.prototype.download = function (file) {
 	URL.revokeObjectURL(aLink.href);
 	aLink.remove();
 };
-//#endregion
-//#region Location
-/**
- * Parses the search part of the URL and returns it as a map.
- * @returns {Map<string, string>} A map containing the search parameters.
- */
-Object.defineProperty(Location.prototype, `mapSearch`, {
-	get() {
-		return new Map(window.decodeURI(location.search.replace(/^\??/, ``)).split(`&`).filter(item => item).map((item) => {
-			const [key, value] = item.split(`=`, 2);
-			return [key, value];
-		}));
-	}
-});
 //#endregion
 
 export { Stack, Queue, DataPair, StrictMap };

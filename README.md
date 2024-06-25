@@ -5,6 +5,11 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 2.8.9 (25.06.2024)
+- Added `document.loadResource`.
+- Removed deprecated `location.mapSearch`.
+- Added functions `point.isNaN`, `point.isFinite`, `point.isInteger`, and `point.isSafeInteger`.
+
 ### 2.8.8 (23.06.2024)
 - Improved and optimized template scripts.
 - Enhanced core structure.
