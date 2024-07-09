@@ -88,14 +88,14 @@ class FastEngine extends Engine {
 	constructor(launch = false) {
 		super();
 
-		const controller = new AbortController();
-		this.addEventListener(`update`, (event) => {
-			this.dispatchEvent(new Event(`start`));
-			controller.abort();
-		}, { signal: controller.signal });
+		this.addEventListener(`update`, (event) => this.dispatchEvent(new Event(`start`)), { once: true });
 
 		let previous = 0;
-		const callback = (/** @type {number} */ current) => {
+		/**
+		 * @param {number} current 
+		 * @returns {void}
+		 */
+		const callback = (current) => {
 			const difference = current - previous;
 			if (difference > this.#gap) {
 				if (this.launched) {
@@ -149,12 +149,8 @@ class FastEngine extends Engine {
 	set launched(value) {
 		const previous = this.#launched;
 		this.#launched = value;
-		if (previous !== value) {
-			this.dispatchEvent(new Event(`change`));
-		}
-		if (value) {
-			this.dispatchEvent(new Event(`launch`));
-		}
+		if (previous !== value) this.dispatchEvent(new Event(`change`));
+		if (value) this.dispatchEvent(new Event(`launch`));
 	}
 	/** @type {number} */
 	#gap = 0;
@@ -169,10 +165,10 @@ class FastEngine extends Engine {
 	 * Sets the FPS limit of the engine.
 	 * @param {number} value 
 	 * @returns {void}
-	 * @throws {RangeError} If the FPS limit is not higher than 0.
 	 */
 	set limit(value) {
-		if (value <= 0) throw new RangeError(`FPS limit must be higher than 0`);
+		if (Number.isNaN(value)) return;
+		if (value <= 0) return;
 		this.#gap = 1000 / value;
 	}
 	/** @type {number} */
@@ -212,14 +208,14 @@ class PreciseEngine extends Engine {
 	constructor(launch = false) {
 		super();
 
-		const controller = new AbortController();
-		this.addEventListener(`update`, (event) => {
-			this.dispatchEvent(new Event(`start`));
-			controller.abort();
-		}, { signal: controller.signal });
+		this.addEventListener(`update`, (event) => this.dispatchEvent(new Event(`start`)), { once: true });
 
 		let previous = performance.now();
-		const callback = (/** @type {number} */ current) => {
+		/**
+		 * @param {number} current 
+		 * @returns {void}
+		 */
+		const callback = (current) => {
 			const difference = current - previous;
 			if (this.launched) {
 				this.#FPS = (1000 / difference);
@@ -271,12 +267,8 @@ class PreciseEngine extends Engine {
 	set launched(value) {
 		const previous = this.#launched;
 		this.#launched = value;
-		if (previous !== value) {
-			this.dispatchEvent(new Event(`change`));
-		}
-		if (value) {
-			this.dispatchEvent(new Event(`launch`));
-		}
+		if (previous !== value) this.dispatchEvent(new Event(`change`));
+		if (value) this.dispatchEvent(new Event(`launch`));
 	}
 	/** @type {number} */
 	#gap = 0;
@@ -291,10 +283,10 @@ class PreciseEngine extends Engine {
 	 * Sets the FPS limit of the engine.
 	 * @param {number} value 
 	 * @returns {void}
-	 * @throws {RangeError} If the FPS limit is not higher than 0.
 	 */
 	set limit(value) {
-		if (value <= 0) throw new RangeError(`FPS limit must be higher than 0`);
+		if (Number.isNaN(value)) return;
+		if (value <= 0) return;
 		this.#gap = 1000 / value;
 	}
 	/** @type {number} */
@@ -379,14 +371,14 @@ class Random {
 	 * @throws {RangeError} If count is less than 0 or greater than array length.
 	 */
 	subarray(array, count = 1) {
-		if (!Number.isInteger(count)) throw new TypeError(`Count ${count} must be finite integer number`);
-		if (count < 0 || count > array.length) throw new RangeError(`Count ${count} is out of range [0 - ${array}]`);
+		if (!Number.isInteger(count)) throw new TypeError(`The count ${count} must be a finite integer number`);
+		if (0 > count || count > array.length) throw new RangeError(`The count ${count} is out of range [0 - ${array.length}]`);
 		const clone = Array.from(array);
-		const destination = [];
+		const result = [];
 		for (let index = 0; index < count; index++) {
-			destination.push(...clone.splice(this.integer(0, clone.length), 1));
+			result.push(...clone.splice(this.integer(0, clone.length), 1));
 		}
-		return destination;
+		return result;
 	}
 	/**
 	 * Shuffles the elements of an array in place using the Fisher-Yates algorithm.
@@ -398,9 +390,7 @@ class Random {
 		for (let index = 0; index < array.length - 1; index++) {
 			const pair = this.integer(index, array.length);
 			if (pair === index) continue;
-			let temp = array[index];
-			array[index] = array[pair];
-			array[pair] = temp;
+			[array[index], array[pair]] = [array[pair], array[index]];
 		}
 	}
 	/**
@@ -408,10 +398,10 @@ class Random {
 	 * @template T
 	 * @param {Readonly<Map<T, number>>} cases The map with elements and their weights.
 	 * @returns {T} A random element.
-	 * @throws {EvalError} If the map is empty.
+	 * @throws {RangeError} If the map is empty.
 	 */
 	case(cases) {
-		if (1 > cases.size) throw new EvalError(`Map must have at least 1 item`);
+		if (1 > cases.size) throw new RangeError(`The cases must have at least 1 item`);
 		const summary = Array.from(cases).reduce((previous, [, percentage]) => previous + percentage, 0);
 		const random = this.number(0, summary);
 		let begin = 0;

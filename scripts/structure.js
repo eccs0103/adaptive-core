@@ -1,5 +1,6 @@
 "use strict";
 
+import { } from "./modules/diagnostics.js";
 import { } from "./modules/extensions.js";
 import { } from "./modules/generators.js";
 import { } from "./modules/measures.js";

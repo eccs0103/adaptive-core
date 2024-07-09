@@ -86,36 +86,36 @@ interface String {
 	 * @param text The replacement text.
 	 * @returns The original string if not empty, otherwise the replacement text.
 	 */
-	replaceVoid(text: string): string;
+	insteadOfVoid(text: string): string;
 }
 
 interface Function {
 	/**
-	 * Abstract method for importing.
-	 * @param source The source to import.
-	 * @param name The name of the source.
-	 * @returns The imported value.
-	 * @throws {ReferenceError} If not implemented.
+	 * Imports from a source.
+	 * @abstract
+	 * @param {unknown} source The source to import.
+	 * @param {string} name The name of the source.
+	 * @returns {any} The imported value.
 	 */
-	abstract import(source: unknown, name?: string): any;
+	import(source: unknown, name?: string): any;
 	/**
-	 * Abstract method for exporting.
-	 * @returns The exported value.
-	 * @throws {ReferenceError} If not implemented.
+	 * Exports the result.
+	 * @abstract
+	 * @returns {any} The exported value.
 	 */
-	abstract export(): any;
+	export(): any;
 }
 
 interface ObjectConstructor {
 	/**
 	 * Maps a non-null value using a callback function.
 	 * @template T
-	 * @template U
+	 * @template R
 	 * @param value The value to map.
 	 * @param callback The callback function.
 	 * @returns The result of the callback or null if the value is null.
 	 */
-	map<T, U>(value: NonNullable<T> | null, callback: (object: NonNullable<T>) => U): U | null;
+	map<T, R>(value: NonNullable<T> | null, callback: (object: NonNullable<T>) => R): R | null;
 	/**
 	 * Imports an object from a source.
 	 * @param source The source to import from.
@@ -202,10 +202,10 @@ interface PromiseConstructor {
 interface ErrorConstructor {
 	/**
 	 * Generates an Error object from the provided input.
-	 * @param error The error input.
+	 * @param exception The exception input.
 	 * @returns An Error object representing the input.
 	 */
-	generate(error: any): Error;
+	generate(exception: any): Error;
 }
 
 interface Error {
@@ -331,14 +331,14 @@ interface Window {
 	 */
 	catch(error: Error, reload?: boolean): Promise<void>;
 	/**
-	 * Ensures the execution of an action or stops the program if errors occur.
+	 * Asserts the execution of an action or stops the program if errors occur.
 	 * @template T
 	 * @param action The action to execute.
 	 * @param reload Indicates whether the application should be reloaded after an error.
 	 * @returns A Promise that resolves with the result of the action or rejects with the error.
 	 * @throws {Error} If the action throws an error.
 	 */
-	ensure<T>(action: () => T, reload?: boolean): Promise<T>;
+	assert<T>(action: () => T, reload?: boolean): Promise<T>;
 	/**
 	 * Insures that no errors occur when executing an action.
 	 * @template T
@@ -392,14 +392,14 @@ declare function promptAsync(message?: string, _default?: string, title?: string
  */
 declare function warn(message?: any): Promise<void>;
 /**
- * Ensures the execution of an action or stops the program if errors occur.
+ * Asserts the execution of an action or stops the program if errors occur.
  * @template T
  * @param action The action to execute.
  * @param reload Indicates whether the application should be reloaded after an error.
  * @returns A Promise that resolves with the result of the action or rejects with the error.
  * @throws {Error} If the action throws an error.
  */
-declare function ensure<T>(action: () => T, reload?: boolean): Promise<T>;
+declare function assert<T>(action: () => T, reload?: boolean): Promise<T>;
 /**
  * Insures that no errors occur when executing an action.
  * @template T
@@ -438,4 +438,36 @@ interface Navigator {
 	 * @param file The file to download.
 	 */
 	download(file: File): void;
+}
+
+/**
+ * Interface representing an instance that can be archived.
+ * @template N The type of the archived data.
+ */
+interface ArchivableInstance<N> {
+	/**
+	 * Exports the instance.
+	 * @returns {N} The exported data.
+	 */
+	export(): N;
+}
+
+/**
+ * Interface representing a prototype that can create archivable instances.
+ * @template N The type of the archived data.
+ * @template I The type of the archivable instance.
+ * @template A The types of the constructor arguments for the instance.
+ */
+interface ArchivablePrototype<N, I extends ArchivableInstance<N>, A extends readonly any[]> {
+	/**
+	 * Imports data and creates an instance.
+	 * @param {N} source The source data to import.
+	 * @param {string} [name] An optional name for the source.
+	 * @returns {I} The created instance.
+	 */
+	import(source: N, name?: string): I;
+	/**
+	 * @param {...A} args The constructor arguments.
+	 */
+	new(...args: A): I;
 }

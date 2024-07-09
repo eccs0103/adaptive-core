@@ -2,22 +2,18 @@
 
 "use strict";
 
+const { PI } = Math;
+
 //#region Number
 /**
  * Imports a number from a source.
  * @param {unknown} source The source value to import.
  * @param {string} name The name of the source value.
  * @returns {number} The imported number value.
- * @throws {ReferenceError} If the source is undefined.
  * @throws {TypeError} If the source is not a number.
  */
 Number.import = function (source, name = `source`) {
-	if (source === undefined) {
-		throw new ReferenceError(`${name.replace(/^\w/, part => part.toUpperCase())} is not defined`);
-	}
-	if (typeof (source) !== `number`) {
-		throw new TypeError(`Unable to import ${(name)} due its ${typename(source)} type`);
-	}
+	if (typeof (source) !== `number`) throw new TypeError(`Unable to import ${name} due its ${typename(source)} type`);
 	return source.valueOf();
 };
 
@@ -63,16 +59,10 @@ Number.prototype.interpolate = function (min1, max1, min2 = 0, max2 = 1) {
  * @param {unknown} source The source value to import.
  * @param {string} name The name of the source value.
  * @returns {boolean} The imported boolean value.
- * @throws {ReferenceError} If the source is undefined.
  * @throws {TypeError} If the source is not a boolean.
  */
 Boolean.import = function (source, name = `source`) {
-	if (source === undefined) {
-		throw new ReferenceError(`${name.replace(/^\w/, part => part.toUpperCase())} is not defined`);
-	}
-	if (typeof (source) !== `boolean`) {
-		throw new TypeError(`Unable to import ${(name)} due its ${typename(source)} type`);
-	}
+	if (typeof (source) !== `boolean`) throw new TypeError(`Unable to import ${name} due its ${typename(source)} type`);
 	return source.valueOf();
 };
 
@@ -90,16 +80,10 @@ Boolean.prototype.export = function () {
  * @param {unknown} source The source value to import.
  * @param {string} name The name of the source value.
  * @returns {string} The imported string value.
- * @throws {ReferenceError} If the source is undefined.
  * @throws {TypeError} If the source is not a string.
  */
 String.import = function (source, name = `source`) {
-	if (source === undefined) {
-		throw new ReferenceError(`${name.replace(/^\w/, part => part.toUpperCase())} is not defined`);
-	}
-	if (typeof (source) !== `string`) {
-		throw new TypeError(`Unable to import ${(name)} due its ${typename(source)} type`);
-	}
+	if (typeof (source) !== `string`) throw new TypeError(`Unable to import ${name} due its ${typename(source)} type`);
 	return source.valueOf();
 };
 
@@ -125,28 +109,26 @@ String.prototype.export = function () {
  * @param {string} text The replacement text.
  * @returns {string} The original string if not empty, otherwise the replacement text.
  */
-String.prototype.replaceVoid = function (text) {
+String.prototype.insteadOfVoid = function (text) {
 	return (this.length > 0 ? this.valueOf() : text);
 };
 //#endregion
 //#region Function
 /**
- * Abstract method for importing.
+ * Imports from a source.
  * @abstract
  * @param {unknown} source The source to import.
  * @param {string} name The name of the source.
  * @returns {any} The imported value.
- * @throws {ReferenceError} If not implemented.
  */
 Function.prototype.import = function (source, name = `source`) {
 	throw new ReferenceError(`Not implemented function`);
 };
 
 /**
- * Abstract method for exporting.
+ * Exports the result.
  * @abstract
  * @returns {any} The exported value.
- * @throws {ReferenceError} If not implemented.
  */
 Function.prototype.export = function () {
 	throw new ReferenceError(`Not implemented function`);
@@ -156,10 +138,10 @@ Function.prototype.export = function () {
 /**
  * Maps a non-null value using a callback function.
  * @template T
- * @template U
+ * @template R
  * @param {NonNullable<T>?} value The value to map.
- * @param {(object: NonNullable<T>) => U} callback The callback function.
- * @returns {U?} The result of the callback or null if the value is null.
+ * @param {(object: NonNullable<T>) => R} callback The callback function.
+ * @returns {R?} The result of the callback or null if the value is null.
  */
 Object.map = function (value, callback) {
 	if (value === null) return value;
@@ -171,19 +153,10 @@ Object.map = function (value, callback) {
  * @param {unknown} source The source to import from.
  * @param {string} name The name of the source.
  * @returns {Object} The imported object.
- * @throws {ReferenceError} Throws a ReferenceError if the source is undefined.
- * @throws {TypeError} Throws a TypeError if the source is not an object or null.
+ * @throws {TypeError} If the source is not an object or null.
  */
 Object.import = function (source, name = `source`) {
-	if (source === undefined) {
-		throw new ReferenceError(`${name.replace(/^\w/, part => part.toUpperCase())} is not defined`);
-	}
-	if (typeof (source) !== `object`) {
-		throw new TypeError(`Unable to import ${(name)} due its ${typename(source)} type`);
-	}
-	if (source === null) {
-		throw new TypeError(`Unable to import ${(name)} due its ${typename(null)} type`);
-	}
+	if (typeof (source) !== `object` || source === null) throw new TypeError(`Unable to import ${name} due its ${typename(source)} type`);
 	return source.valueOf();
 };
 
@@ -201,16 +174,10 @@ Object.prototype.export = function () {
  * @param {unknown} source The source to import from.
  * @param {string} name The name of the source.
  * @returns {any[]} The imported array.
- * @throws {ReferenceError} Throws a ReferenceError if the source is undefined.
  * @throws {TypeError} Throws a TypeError if the source is not an array.
  */
 Array.import = function (source, name = `source`) {
-	if (source === undefined) {
-		throw new ReferenceError(`${name.replace(/^\w/, part => part.toUpperCase())} is not defined`);
-	}
-	if (!(source instanceof Array)) {
-		throw new TypeError(`Unable to import ${name} due its ${typename(source)} type`);
-	}
+	if (!(source instanceof Array)) throw new TypeError(`Unable to import ${name} due its ${typename(source)} type`);
 	return Array.from(source);
 };
 
@@ -593,7 +560,7 @@ Math.sqpw = function (x) {
 	return x * x;
 };
 
-const toDegreeFactor = 180 / Math.PI;
+const toDegreeFactor = 180 / PI;
 /**
  * Converts radians to degrees.
  * @param {number} radians The angle in radians.
@@ -602,7 +569,8 @@ const toDegreeFactor = 180 / Math.PI;
 Math.toDegrees = function (radians) {
 	return radians * toDegreeFactor;
 };
-const toRadianFactor = Math.PI / 180;
+
+const toRadianFactor = PI / 180;
 /**
  * Converts degrees to radians.
  * @param {number} degrees The angle in degrees.
@@ -635,9 +603,12 @@ Promise.fulfill = function (action) {
  * @returns {Promise<void>} A promise that resolves after the timeout.
  */
 Promise.withTimeout = function (timeout) {
-	return new Promise((resolve) => {
-		setTimeout(resolve, timeout);
+	let index;
+	const promise = new Promise((resolve) => {
+		index = setTimeout(resolve, timeout);
 	});
+	promise.then(() => clearTimeout(index));
+	return promise;
 };
 
 /**
@@ -648,23 +619,19 @@ Promise.withTimeout = function (timeout) {
  */
 Promise.withSignal = function (callback) {
 	const abortController = new AbortController();
-	const promise = new Promise((resolve, reject) => {
-		callback(abortController.signal, resolve, reject);
-	});
-	promise.finally(() => {
-		abortController.abort();
-	});
+	const promise = new Promise((resolve, reject) => callback(abortController.signal, resolve, reject));
+	promise.then(() => abortController.abort(), () => abortController.abort());
 	return promise;
 };
 //#endregion
 //#region Error
 /**
  * Generates an Error object from the provided input.
- * @param {any} error The error input.
+ * @param {any} exception The exception input.
  * @returns {Error} An Error object representing the input.
  */
-Error.generate = function (error) {
-	return error instanceof Error ? error : new Error(`Undefined error type`);
+Error.generate = function (exception) {
+	return exception instanceof Error ? exception : new Error(`Undefined error type`);
 };
 
 /**
@@ -673,9 +640,7 @@ Error.generate = function (error) {
  */
 Error.prototype.toString = function () {
 	let text = this.stack ?? `${this.name}: ${this.message}`;
-	if (this.cause !== undefined) {
-		text += ` cause of:\n\r${Error.generate(this.cause)}`;
-	}
+	if (this.cause !== undefined) text += ` cause of:\n\r${Error.generate(this.cause)}`;
 	return text;
 };
 //#endregion
@@ -691,9 +656,8 @@ Error.prototype.toString = function () {
  */
 Element.prototype.getElement = function (type, selectors) {
 	const element = this.querySelector(selectors);
-	if (element instanceof type) {
-		return (/** @type {InstanceType<T>} */ (element));
-	} else throw new TypeError(`Element ${selectors} is missing or has invalid type`);
+	if (element instanceof type) return (/** @type {InstanceType<T>} */ (element));
+	else throw new TypeError(`Element ${selectors} is missing or has invalid type`);
 };
 
 /**
@@ -708,11 +672,8 @@ Element.prototype.getElement = function (type, selectors) {
 Element.prototype.tryGetElement = function (type, selectors, strict = false) {
 	return new Promise((resolve, reject) => {
 		const element = this.querySelector(selectors);
-		if (element instanceof type) {
-			resolve(/** @type {InstanceType<T>} */(element));
-		} else if (strict) {
-			reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
-		}
+		if (element instanceof type) resolve(/** @type {InstanceType<T>} */(element));
+		else if (strict) reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
 	});
 };
 
@@ -726,9 +687,8 @@ Element.prototype.tryGetElement = function (type, selectors, strict = false) {
  */
 Element.prototype.getElements = function (type, selectors) {
 	const elements = this.querySelectorAll(selectors);
-	if (Array.from(elements).every(element => element instanceof type)) {
-		return (/** @type {NodeListOf<InstanceType<T>>} */ (elements));
-	} else throw new TypeError(`Element ${selectors} is missing or has invalid type`);
+	if (Array.from(elements).every(element => element instanceof type)) return (/** @type {NodeListOf<InstanceType<T>>} */ (elements));
+	else throw new TypeError(`Element ${selectors} is missing or has invalid type`);
 };
 
 /**
@@ -743,11 +703,8 @@ Element.prototype.getElements = function (type, selectors) {
 Element.prototype.tryGetElements = function (type, selectors, strict = false) {
 	return new Promise((resolve, reject) => {
 		const elements = this.querySelectorAll(selectors);
-		if (Array.from(elements).every(element => element instanceof type)) {
-			resolve(/** @type {NodeListOf<InstanceType<T>>} */(elements));
-		} else if (strict) {
-			reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
-		}
+		if (Array.from(elements).every(element => element instanceof type)) resolve(/** @type {NodeListOf<InstanceType<T>>} */(elements));
+		else if (strict) reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
 	});
 };
 
@@ -811,9 +768,8 @@ Document.prototype.tryGetElements = function (type, selectors, strict = false) {
  */
 DocumentFragment.prototype.getElement = function (type, selectors) {
 	const element = this.querySelector(selectors);
-	if (element instanceof type) {
-		return (/** @type {InstanceType<T>} */ (element));
-	} else throw new TypeError(`Element ${selectors} is missing or has invalid type`);
+	if (element instanceof type) return (/** @type {InstanceType<T>} */ (element));
+	else throw new TypeError(`Element ${selectors} is missing or has invalid type`);
 };
 
 /**
@@ -828,11 +784,8 @@ DocumentFragment.prototype.getElement = function (type, selectors) {
 DocumentFragment.prototype.tryGetElement = function (type, selectors, strict = false) {
 	return new Promise((resolve, reject) => {
 		const element = this.querySelector(selectors);
-		if (element instanceof type) {
-			resolve(/** @type {InstanceType<T>} */(element));
-		} else if (strict) {
-			reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
-		}
+		if (element instanceof type) resolve(/** @type {InstanceType<T>} */(element));
+		else if (strict) reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
 	});
 };
 
@@ -846,9 +799,8 @@ DocumentFragment.prototype.tryGetElement = function (type, selectors, strict = f
  */
 DocumentFragment.prototype.getElements = function (type, selectors) {
 	const elements = this.querySelectorAll(selectors);
-	if (Array.from(elements).every(element => element instanceof type)) {
-		return (/** @type {NodeListOf<InstanceType<T>>} */ (elements));
-	} else throw new TypeError(`Element ${selectors} is missing or has invalid type`);
+	if (Array.from(elements).every(element => element instanceof type)) return (/** @type {NodeListOf<InstanceType<T>>} */ (elements));
+	else throw new TypeError(`Element ${selectors} is missing or has invalid type`);
 };
 
 /**
@@ -863,11 +815,8 @@ DocumentFragment.prototype.getElements = function (type, selectors) {
 DocumentFragment.prototype.tryGetElements = function (type, selectors, strict = false) {
 	return new Promise((resolve, reject) => {
 		const elements = this.querySelectorAll(selectors);
-		if (Array.from(elements).every(element => element instanceof type)) {
-			resolve(/** @type {NodeListOf<InstanceType<T>>} */(elements));
-		} else if (strict) {
-			reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
-		}
+		if (Array.from(elements).every(element => element instanceof type)) resolve(/** @type {NodeListOf<InstanceType<T>>} */(elements));
+		else if (strict) reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
 	});
 };
 //#endregion
@@ -882,9 +831,8 @@ DocumentFragment.prototype.tryGetElements = function (type, selectors, strict = 
  */
 Element.prototype.getClosest = function (type, selectors) {
 	const element = this.closest(selectors);
-	if (element instanceof type) {
-		return (/** @type {InstanceType<T>} */ (element));
-	} else throw new TypeError(`Element ${selectors} is missing or has invalid type`);
+	if (element instanceof type) return (/** @type {InstanceType<T>} */ (element));
+	else throw new TypeError(`Element ${selectors} is missing or has invalid type`);
 };
 
 /**
@@ -899,11 +847,8 @@ Element.prototype.getClosest = function (type, selectors) {
 Element.prototype.tryGetClosest = function (type, selectors, strict = false) {
 	return new Promise((resolve, reject) => {
 		const element = this.closest(selectors);
-		if (element instanceof type) {
-			resolve(/** @type {InstanceType<T>} */(element));
-		} else if (strict) {
-			reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
-		}
+		if (element instanceof type) resolve(/** @type {InstanceType<T>} */(element));
+		else if (strict) reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
 	});
 };
 //#endregion
@@ -972,16 +917,10 @@ Window.prototype.alertAsync = function (message = ``, title = `Message`) {
 	const htmlContainer = dialogAlert.getElement(HTMLElement, `*.container`);
 	htmlContainer.innerText = `${message}`;
 	//#endregion
-	const controller = new AbortController();
-	const promise = ( /** @type {Promise<void>} */(new Promise((resolve) => {
-		dialogAlert.addEventListener(`close`, (event) => {
-			resolve();
-		}, { signal: controller.signal });
-	})));
-	promise.finally(() => {
-		controller.abort();
-		dialogAlert.close();
+	const promise = Promise.withSignal((signal, resolve, reject) => {
+		dialogAlert.addEventListener(`close`, (event) => resolve(undefined), { signal });
 	});
+	promise.finally(() => dialogAlert.close());
 	return promise;
 };
 
@@ -1031,22 +970,13 @@ Window.prototype.confirmAsync = function (message = ``, title = `Message`) {
 	const buttonDecline = htmlFooter.getElement(HTMLButtonElement, `button.invalid`);
 	//#endregion
 	//#endregion
-	const controller = new AbortController();
-	const promise = (/** @type {Promise<boolean>} */(new Promise((resolve) => {
-		dialogConfirm.addEventListener(`close`, (event) => {
-			resolve(false);
-		}, { signal: controller.signal });
-		buttonAccept.addEventListener(`click`, (event) => {
-			resolve(true);
-		}, { signal: controller.signal });
-		buttonDecline.addEventListener(`click`, (event) => {
-			resolve(false);
-		}, { signal: controller.signal });
-	})));
-	promise.finally(() => {
-		controller.abort();
-		dialogConfirm.close();
+	/** @type {Promise<boolean>} */
+	const promise = Promise.withSignal((signal, resolve, reject) => {
+		dialogConfirm.addEventListener(`close`, (event) => resolve(false), { signal });
+		buttonAccept.addEventListener(`click`, (event) => resolve(true), { signal });
+		buttonDecline.addEventListener(`click`, (event) => resolve(false), { signal });
 	});
+	promise.finally(() => dialogConfirm.close());
 	return promise;
 };
 
@@ -1097,19 +1027,12 @@ Window.prototype.promptAsync = function (message = ``, _default = ``, title = `M
 	inputPrompt.value = _default;
 	//#endregion
 	//#endregion
-	const controller = new AbortController();
-	const promise = (/** @type {Promise<string?>} */(new Promise((resolve) => {
-		dialogPrompt.addEventListener(`close`, (event) => {
-			resolve(null);
-		}, { signal: controller.signal });
-		buttonAccept.addEventListener(`click`, (event) => {
-			resolve(inputPrompt.value);
-		}, { signal: controller.signal });
-	})));
-	promise.finally(() => {
-		controller.abort();
-		dialogPrompt.close();
+	/** @type {Promise<string?>} */
+	const promise = Promise.withSignal((signal, resolve, reject) => {
+		dialogPrompt.addEventListener(`close`, (event) => resolve(null), { signal });
+		buttonAccept.addEventListener(`click`, (event) => resolve(inputPrompt.value), { signal });
 	});
+	promise.finally(() => dialogConfirm.close());
 	return promise;
 };
 
@@ -1139,20 +1062,18 @@ Window.prototype.throw = async function (message = ``) {
  */
 Window.prototype.catch = async function (error, reload = true) {
 	await window.throw(error);
-	if (reload) {
-		location.reload();
-	}
+	if (reload) location.reload();
 };
 
 /**
- * Ensures the execution of an action or stops the program if errors occur.
+ * Asserts the execution of an action or stops the program if errors occur.
  * @template T
  * @param {() => T | PromiseLike<T>} action The action to execute.
  * @param {boolean} reload Indicates whether the application should be reloaded after an error.
  * @returns {Promise<T>} A Promise that resolves with the result of the action or rejects with the error.
  * @throws {Error} If the action throws an error.
  */
-Window.prototype.ensure = async function (action, reload = true) {
+Window.prototype.assert = async function (action, reload = true) {
 	try {
 		return await action();
 	} catch (error) {
@@ -1178,28 +1099,25 @@ Window.prototype.insure = async function (action, eventually = () => { }) {
 	}
 };
 
+const keyframeAppear = { opacity: `1` };
+const keyframeDisappear = { opacity: `0` };
+
 /**
  * Asynchronously loads a promise with a loading animation.
  * @template T
  * @param {Promise<T>} promise The promise to load.
- * @param {number} delay The delay before the loading animation starts.
  * @param {number} duration The duration of the loading animation.
+ * @param {number} delay The delay before the loading animation starts.
  * @returns {Promise<T>} A promise that resolves to the result of the input promise.
  */
-Window.prototype.load = async function (promise, delay = 0, duration = 200) {
+Window.prototype.load = async function (promise, duration = 200, delay = 0) {
 	const dialogLoader = document.getElement(HTMLDialogElement, `dialog.loader`);
 	try {
 		dialogLoader.showModal();
-		await dialogLoader.animate([
-			{ opacity: `0` },
-			{ opacity: `1` },
-		], { duration: duration, fill: `both` }).finished;
+		await dialogLoader.animate([keyframeDisappear, keyframeAppear], { duration, fill: `both` }).finished;
 		return await promise;
 	} finally {
-		await dialogLoader.animate([
-			{ opacity: `1` },
-			{ opacity: `0` },
-		], { duration: duration, fill: `both`, delay: delay }).finished;
+		await dialogLoader.animate([keyframeAppear, keyframeDisappear], { duration, fill: `both`, delay }).finished;
 		dialogLoader.close();
 	}
 };
@@ -1209,16 +1127,18 @@ Window.prototype.load = async function (promise, delay = 0, duration = 200) {
  * Represents a version manager for parsing and comparing version numbers.
  */
 class VersionManager {
+	/** @type {RegExp} */
+	static #patternVersion = /^(\d+)\.(\d+)\.(\d+)$/;
 	/**
-	 * Parses a version number from the given text.
-	 * @param {string} text The text representing the version number.
+	 * Parses a version number from the given string.
+	 * @param {string} string The string representing the version number.
 	 * @returns {VersionManager} A VersionManager instance representing the parsed version.
 	 * @throws {SyntaxError} If the version syntax is invalid.
 	 */
-	static parse(text) {
-		const match = /^(\d+)\.(\d+)\.(\d+)$/.exec(text);
-		if (match === null) throw new SyntaxError(`Invalid version '${text}' syntax. Version must have <number>.<number>.<number> syntax`);
-		const [, major, minor, patch] = match.map(part => Number.parseInt(part));
+	static parse(string) {
+		const match = VersionManager.#patternVersion.exec(string);
+		if (match === null) throw new SyntaxError(`Invalid version '${string}' syntax. Version must have <number>.<number>.<number> syntax`);
+		const [, major, minor, patch] = match.map(part => Number(part));
 		const version = new VersionManager();
 		version.#major = major;
 		version.#minor = minor;

@@ -5,6 +5,40 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 3.0.0 (09.07.2024)
+- Added module [diagnostics.js](./scripts/modules/diagnostics.js) with the `Analyser` class.
+- Improved code structure using the latest functions.
+- Fixed execution delays in `Promise.withTimeout` and `Promise.withSignal`.
+- Renamed `window.ensure` to `window.assert` for a clear distinction from `window.insure`.
+- Optimized and improved the `window.load` function.
+- Optimized `VersionManager.parse`.
+- `fastEngine.limit` now simply ignores incorrect values.
+- `preciseEngine.limit` now simply ignores incorrect values.
+- Removed redundant static functions in `Point1D`, `Point2D`, `Point3D` classes.
+- Added methods `Point1D.parse`, `Point2D.parse`, `Point3D.parse`, `point1D.map`, `point2D.map`, `point3D.map`.
+- Renamed `Point1D.repeat`, `Point2D.repeat`, `Point3D.repeat` to `Point1D.fill`, `Point2D.fill`, `Point3D.fill`.
+- Fixed and optimized the `Timespan.parse` method.
+- `Timespan` now supports going beyond allowed ranges and will self-correct.
+- Removed redundant static functions in the `Timespan` class.
+- `Timespan` properties now simply ignore incorrect values.
+- Fixed `Timespan` conversion to primitive.
+- Non-static `Timespan` modifiers now modify the instance itself to optimize memory usage.
+- Added `Stopwatch` class for measuring time intervals.
+- Added descriptions for `ColorFormats`.
+- Improved and optimized functions for converting between color types.
+- Removed redundant static functions in the `Color` class.
+- Improved and optimized color conversion to and from strings.
+- `Color` now supports going beyond allowed ranges and will self-correct.
+- Non-static `Color` modifiers now modify the instance itself to optimize memory usage.
+- Fixed and accelerated `ImageData` to `Texture` conversion function.
+- Optimized texture cloning.
+- Non-static `Texture` modifiers now modify the instance itself to optimize memory usage.
+- Improved `ArchiveManager` class.
+- Created `ArchivableInstance` and `ArchivablePrototype` interfaces for working with it.
+- Fully fixed and restored `Database` and `Store` classes for autonomous browser database work.
+- Moved `Store` class into `Database` as a nested class.
+- Improved controller structure.
+
 ### 2.8.9 (25.06.2024)
 - Added `document.loadResource`.
 - Removed deprecated `location.mapSearch`.
@@ -18,13 +52,13 @@ Core for creating adaptive web pages.\
 ### 2.8.7 (11.06.2024)
 - `Math.between` renamed to `number.clamp`.
 - Added function `random.shuffle`.
-- `Time` moved to [`measures.js`](./scripts/modules/measures.js).
+- `Time` moved to [measures.js](./scripts/modules/measures.js).
 
 ### 2.8.6 (27.05.2024)
 - Added `number.interpolate` function.
 - Removed deprecated `Math.toFactor` and `Math.toSignedFactor` functions.
 - Functions `getElement`, `tryGetElement`, `getElements`, `tryGetElements` moved to `ParentNode` for broader use.
-- Improved structure of the [`material.css`](./styles/themes/material.css) theme.
+- Improved structure of the [material.css](./styles/themes/material.css) theme.
 
 ### 2.8.3 (21.05.2024)
 - Added method `Promise.withSignal` for convenient handling of one-time handlers.
