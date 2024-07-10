@@ -4,7 +4,7 @@ body {
 }
 
 dialog.loader img[alt="Logo"] {
-	content: url(../../resources/loading.gif);
+	content: url(../resources/loading.gif);
 }
 
 /* Your styles goes here */
