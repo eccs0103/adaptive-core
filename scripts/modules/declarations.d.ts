@@ -32,7 +32,7 @@ interface Number {
 	 * @param min2 The minimum value of the target range.
 	 * @param max2 The maximum value of the target range.
 	 * @returns The interpolated value within the target range.
-	 * @throws {EvalError} If the minimum and maximum values of either range are equal.
+	 * @throws {Error} If the minimum and maximum values of either range are equal.
 	 */
 	interpolate(min1: number, max1: number, min2?: number, max2?: number): number;
 }

@@ -30,7 +30,7 @@ class Archive {
 	 */
 	get data() {
 		const item = localStorage.getItem(this.#key);
-		if (item === null) throw new EvalError(`Key '${this.#key}' isn't defined`);
+		if (item === null) throw new Error(`Key '${this.#key}' isn't defined`);
 		return JSON.parse(item);
 	}
 	/**

@@ -45,11 +45,11 @@ Number.prototype.clamp = function (min, max) {
  * @param {number} min2 The minimum value of the target range.
  * @param {number} max2 The maximum value of the target range.
  * @returns {number} The interpolated value within the target range.
- * @throws {EvalError} If the minimum and maximum values of either range are equal.
+ * @throws {Error} If the minimum and maximum values of either range are equal.
  */
 Number.prototype.interpolate = function (min1, max1, min2 = 0, max2 = 1) {
-	if (min1 === max1) throw new EvalError(`Minimum and maximum of the original range cant be equal`);
-	if (min2 === max2) throw new EvalError(`Minimum and maximum of the target range cant be equal`);
+	if (min1 === max1) throw new Error(`Minimum and maximum of the original range cant be equal`);
+	if (min2 === max2) throw new Error(`Minimum and maximum of the target range cant be equal`);
 	return min2 + (max2 - min2) * ((this.valueOf() - min1) / (max1 - min1));
 };
 //#endregion
@@ -215,21 +215,21 @@ class Stack {
 	 * Returns the item at the top of the stack without removing it.
 	 * @readonly
 	 * @returns {T} The item at the top of the stack.
-	 * @throws {EvalError} If the stack is empty.
+	 * @throws {Error} If the stack is empty.
 	 */
 	get peek() {
 		const value = this.#array.at(-1);
-		if (value === undefined) throw new EvalError(`Stack is empty`);
+		if (value === undefined) throw new Error(`Stack is empty`);
 		return value;
 	}
 	/**
 	 * Removes and returns the item at the top of the stack.
 	 * @returns {T} The item that was removed from the top of the stack.
-	 * @throws {EvalError} If the stack is empty.
+	 * @throws {Error} If the stack is empty.
 	 */
 	pop() {
 		const value = this.#array.pop();
-		if (value === undefined) throw new EvalError(`Stack is empty`);
+		if (value === undefined) throw new Error(`Stack is empty`);
 		return value;
 	}
 	/**
@@ -305,21 +305,21 @@ class Queue {
 	 * Returns the item at the front of the queue without removing it.
 	 * @readonly
 	 * @returns {T} The item at the front of the queue.
-	 * @throws {EvalError} If the queue is empty.
+	 * @throws {Error} If the queue is empty.
 	 */
 	get peek() {
 		const value = this.#array.at(0);
-		if (value === undefined) throw new EvalError(`Queue is empty`);
+		if (value === undefined) throw new Error(`Queue is empty`);
 		return value;
 	}
 	/**
 	 * Removes and returns the item at the front of the queue.
 	 * @returns {T} The item that was removed from the front of the queue.
-	 * @throws {EvalError} If the queue is empty.
+	 * @throws {Error} If the queue is empty.
 	 */
 	shift() {
 		const value = this.#array.shift();
-		if (value === undefined) throw new EvalError(`Queue is empty`);
+		if (value === undefined) throw new Error(`Queue is empty`);
 		return value;
 	}
 	/**
@@ -450,11 +450,11 @@ class StrictMap {
 	 * Gets the value associated with the specified key.
 	 * @param {NonNullable<K>} key The key to look up in the map.
 	 * @returns {V} The value associated with the specified key.
-	 * @throws {EvalError} If the key is missing in the map.
+	 * @throws {Error} If the key is missing in the map.
 	 */
 	get(key) {
 		const value = this.#map.get(key);
-		if (value === undefined) throw new EvalError(`Value for key '${key}' is missing`);
+		if (value === undefined) throw new Error(`Value for key '${key}' is missing`);
 		return value;
 	}
 	/**
@@ -471,10 +471,10 @@ class StrictMap {
 	 * @param {NonNullable<K>} key The key to add to the map.
 	 * @param {V} value The value associated with the key.
 	 * @returns {void}
-	 * @throws {EvalError} If the key already exists in the map.
+	 * @throws {Error} If the key already exists in the map.
 	 */
 	add(key, value) {
-		if (this.#map.has(key)) throw new EvalError(`Value for key '${key}' already exists`);
+		if (this.#map.has(key)) throw new Error(`Value for key '${key}' already exists`);
 		this.#map.set(key, value);
 	}
 	/**
@@ -498,10 +498,10 @@ class StrictMap {
 	 * Deletes the key-value pair associated with the specified key from the map.
 	 * @param {NonNullable<K>} key The key to delete from the map.
 	 * @returns {void}
-	 * @throws {EvalError} If the key is missing in the map.
+	 * @throws {Error} If the key is missing in the map.
 	 */
 	delete(key) {
-		if (!this.#map.delete(key)) throw new EvalError(`Value for key '${key}' is missing`);
+		if (!this.#map.delete(key)) throw new Error(`Value for key '${key}' is missing`);
 	}
 	/**
 	 * Removes all key-value pairs from the map.

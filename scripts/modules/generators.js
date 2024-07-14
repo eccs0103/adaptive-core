@@ -355,10 +355,10 @@ class Random {
 	 * @template T
 	 * @param {Readonly<T[]>} array The array of elements.
 	 * @returns {T} A random element.
-	 * @throws {EvalError} If the array is empty.
+	 * @throws {Error} If the array is empty.
 	 */
 	item(array) {
-		if (1 > array.length) throw new EvalError(`Array must have at least 1 item`);
+		if (1 > array.length) throw new Error(`Array must have at least 1 item`);
 		return array[this.integer(0, array.length)];
 	}
 	/**
@@ -412,7 +412,7 @@ class Random {
 			}
 			begin = end;
 		}
-		throw new EvalError(`Unable to select element with value ${random}`);
+		throw new Error(`Unable to select element with value ${random}`);
 	};
 	/**
 	 * Generates a random GUID identifier.

@@ -74,7 +74,7 @@ class Color {
 			case red: return (green - blue) / difference + 0;
 			case green: return (blue - red) / difference + 2;
 			case blue: return (red - green) / difference + 4;
-			default: throw new EvalError(`Invalid ${maximum} maximum value`);
+			default: throw new Error(`Invalid ${maximum} maximum value`);
 		}
 	}
 	/**
