@@ -89,19 +89,36 @@ interface String {
 	insteadOfVoid(text: string): string;
 }
 
+interface FunctionConstructor {
+	/**
+	 * Checks if the given function is implemented by running it and seeing if it throws a specific `ReferenceError`.
+	 * @param action The function to check for implementation.
+	 * @returns A promise that resolves to `true` if the function is implemented, `false` otherwise.
+	 */
+	isImplemented(action: (...args: any) => unknown): Promise<boolean>;
+	/**
+	 * Ensures the given function is implemented by checking it and throwing an error if it is not.
+	 * @param action The function to check for implementation.
+	 * @param name The name of the function to be used in the error message if the function is not implemented.
+	 * @returns A promise that resolves if the function is implemented, otherwise it rejects with an error.
+	 * @throws {Error} Throws an error if the function is not implemented.
+	 */
+	checkImplementation(action: (...args: any) => unknown, name: string): Promise<void>;
+}
+
 interface Function {
 	/**
 	 * Imports from a source.
 	 * @abstract
-	 * @param {unknown} source The source to import.
-	 * @param {string} name The name of the source.
-	 * @returns {any} The imported value.
+	 * @param source The source to import.
+	 * @param name The name of the source.
+	 * @returns The imported value.
 	 */
 	import(source: unknown, name?: string): any;
 	/**
 	 * Exports the result.
 	 * @abstract
-	 * @returns {any} The exported value.
+	 * @returns The exported value.
 	 */
 	export(): any;
 }
@@ -156,6 +173,12 @@ interface Array<T extends Function> {
 }
 
 interface Math {
+	/**
+	 * Splits a number into its integer and fractional parts.
+	 * @param x The number to be split.
+	 * @returns A tuple where the first element is the integer part and the second element is the fractional part.
+	 */
+	split(x: number): [number, number];
 	/**
 	 * Calculates the square of a number.
 	 * @param x The number to square.
@@ -447,7 +470,7 @@ interface Navigator {
 interface ArchivableInstance<N> {
 	/**
 	 * Exports the instance.
-	 * @returns {N} The exported data.
+	 * @returns The exported data.
 	 */
 	export(): N;
 }
@@ -461,13 +484,13 @@ interface ArchivableInstance<N> {
 interface ArchivablePrototype<N, I extends ArchivableInstance<N>, A extends readonly any[]> {
 	/**
 	 * Imports data and creates an instance.
-	 * @param {N} source The source data to import.
-	 * @param {string} [name] An optional name for the source.
-	 * @returns {I} The created instance.
+	 * @param source The source data to import.
+	 * @param name An optional name for the source.
+	 * @returns The created instance.
 	 */
 	import(source: N, name?: string): I;
 	/**
-	 * @param {...A} args The constructor arguments.
+	 * @param args The constructor arguments.
 	 */
 	new(...args: A): I;
 }

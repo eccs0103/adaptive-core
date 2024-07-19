@@ -5,6 +5,10 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 3.0.1 (20.07.2024)
+- Added `Math.split` function.
+- Added `Function.isImplemented` and `Function.checkImplementation` functions.
+
 ### 3.0.0 (09.07.2024)
 - Added module [diagnostics.js](./scripts/modules/diagnostics.js) with the `Analyser` class.
 - Improved code structure using the latest functions.

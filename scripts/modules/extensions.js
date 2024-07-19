@@ -115,6 +115,33 @@ String.prototype.insteadOfVoid = function (text) {
 //#endregion
 //#region Function
 /**
+ * Checks if the given function is implemented by running it and seeing if it throws a specific `ReferenceError`.
+ * @param {(...args: any) => unknown} action The function to check for implementation.
+ * @returns {Promise<boolean>} A promise that resolves to `true` if the function is implemented, `false` otherwise.
+ */
+Function.isImplemented = async function (action) {
+	try {
+		await action();
+		return true;
+	} catch (error) {
+		if (!(error instanceof ReferenceError)) return true;
+		if (error.message !== `Not implemented function`) return true;
+		return false;
+	}
+};
+
+/**
+ * Ensures the given function is implemented by checking it and throwing an error if it is not.
+ * @param {(...args: any) => unknown} action The function to check for implementation.
+ * @param {string} name The name of the function to be used in the error message if the function is not implemented.
+ * @returns {Promise<void>} A promise that resolves if the function is implemented, otherwise it rejects with an error.
+ * @throws {Error} Throws an error if the function is not implemented.
+ */
+Function.checkImplementation = async function (action, name) {
+	if (!(await Function.isImplemented(action))) throw new Error(`Function '${name}' not implemented`);
+};
+
+/**
  * Imports from a source.
  * @abstract
  * @param {unknown} source The source to import.
@@ -551,6 +578,17 @@ class StrictMap {
 }
 //#endregion
 //#region Math
+/**
+ * Splits a number into its integer and fractional parts.
+ * @param {number} x The number to be split.
+ * @returns {[number, number]} A tuple where the first element is the integer part and the second element is the fractional part.
+ */
+Math.split = function (x) {
+	const integer = Math.trunc(x);
+	const fractional = x - integer;
+	return [integer, fractional];
+};
+
 /**
  * Calculates the square of a number.
  * @param {number} x The number to square.
@@ -1099,7 +1137,9 @@ Window.prototype.insure = async function (action, eventually = () => { }) {
 	}
 };
 
+/** @type {Keyframe} */
 const keyframeAppear = { opacity: `1` };
+/** @type {Keyframe} */
 const keyframeDisappear = { opacity: `0` };
 
 /**
