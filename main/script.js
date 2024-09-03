@@ -12,7 +12,7 @@ class Controller {
 	 * @returns {Promise<void>}
 	 */
 	async main() {
-		// Your code within loading goes here
+		// Your code goes here
 	}
 };
 const controller = new Controller();
