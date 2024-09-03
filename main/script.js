@@ -8,13 +8,6 @@ import { } from "../scripts/structure.js";
  */
 class Controller {
 	/**
-	 * Performs initial setup and loads necessary resources before the main logic.
-	 * @returns {Promise<void>}
-	 */
-	async awake() {
-		// Your code before loading goes here
-	}
-	/**
 	 * Contains the main logic for the application.
 	 * @returns {Promise<void>}
 	 */
@@ -23,6 +16,5 @@ class Controller {
 	}
 };
 const controller = new Controller();
-await window.assert(() => controller.awake());
-await window.assert(() => window.load(controller.main()));
+await window.assert(controller.main);
 //#endregion

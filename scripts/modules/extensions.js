@@ -124,8 +124,7 @@ Function.isImplemented = async function (action) {
 		await action();
 		return true;
 	} catch (error) {
-		if (!(error instanceof ReferenceError)) return true;
-		if (error.message !== `Not implemented function`) return true;
+		if (!(error instanceof ImplementationError)) return true;
 		return false;
 	}
 };
@@ -149,7 +148,7 @@ Function.checkImplementation = async function (action, name) {
  * @returns {any} The imported value.
  */
 Function.prototype.import = function (source, name = `source`) {
-	throw new ReferenceError(`Not implemented function`);
+	throw new ImplementationError();
 };
 
 /**
@@ -158,7 +157,7 @@ Function.prototype.import = function (source, name = `source`) {
  * @returns {any} The exported value.
  */
 Function.prototype.export = function () {
-	throw new ReferenceError(`Not implemented function`);
+	throw new ImplementationError();
 };
 //#endregion
 //#region Object
@@ -682,6 +681,18 @@ Error.prototype.toString = function () {
 	return text;
 };
 //#endregion
+//#region Implementation error
+/**
+ * @param {ErrorOptions} options 
+ */
+class ImplementationError extends ReferenceError {
+	constructor(options = {}) {
+		super(`Not implemented function`, options);
+		if (new.target !== ImplementationError) throw new TypeError(`Unable to create an instance of sealed-extended class`);
+		this.name = `ImplementationError`;
+	}
+}
+//#endregion
 
 //#region Parent node
 /**
@@ -895,7 +906,7 @@ Element.prototype.tryGetClosest = function (type, selectors, strict = false) {
  * @param {string} url 
  * @returns {Promise<HTMLImageElement>}
  */
-Document.prototype.loadResource = async function (url) {
+Document.prototype.loadImage = async function (url) {
 	const image = new Image();
 	const promise = Promise.withSignal((signal, resolve, reject) => {
 		image.addEventListener(`load`, (event) => resolve(undefined), { signal });
@@ -1251,4 +1262,4 @@ Navigator.prototype.download = function (file) {
 };
 //#endregion
 
-export { Stack, Queue, DataPair, StrictMap };
+export { Stack, Queue, DataPair, StrictMap, ImplementationError };

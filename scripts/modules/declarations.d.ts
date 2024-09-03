@@ -303,7 +303,7 @@ interface Element {
 }
 
 interface Document {
-	loadResource(url: string): Promise<HTMLImageElement>;
+	loadImage(url: string): Promise<HTMLImageElement>;
 };
 
 interface Window {

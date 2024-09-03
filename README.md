@@ -5,6 +5,13 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 3.0.6 (03.09.2024)
+- Fixed the name of the function `document.loadResource`.
+- Added `ImplementationError` class for explicit indication of implementation issues.
+- Introduced abstract (`Engine`, `Point`) and sealed (`ImplementationError`) classes.
+- Fixed nested class structures, enabling more embedded classes.
+- Simplified the program entry point.
+
 ### 3.0.1 (20.07.2024)
 - Added `Math.split` function.
 - Added `Function.isImplemented` and `Function.checkImplementation` functions.

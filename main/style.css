@@ -3,8 +3,8 @@ body {
 	inset: 0;
 }
 
+/* Your styles goes here */
+
 dialog.loader img[alt="Logo"] {
 	content: url(../resources/loading.gif);
 }
-
-/* Your styles goes here */

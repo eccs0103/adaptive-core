@@ -1,5 +1,7 @@
 "use strict";
 
+import { ImplementationError } from "./extensions.js";
+
 const { hypot, abs, trunc } = Math;
 
 //#region Point
@@ -60,6 +62,9 @@ class Point {
 	static #join(metrics) {
 		return `(${metrics.join(`, `)})`;
 	}
+	constructor() {
+		if (new.target === Point) throw new TypeError(`Unable to create an instance of an abstract class`);
+	}
 	//#endregion
 	//#region Modifiers
 	/**
@@ -109,7 +114,7 @@ class Point {
 	 * @returns {Iterator<number>} An iterator object.
 	 */
 	*[Symbol.iterator]() {
-		throw new ReferenceError(`Not implemented function`);
+		throw new ImplementationError();
 	}
 	//#endregion
 }
