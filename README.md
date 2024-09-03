@@ -11,6 +11,7 @@ Core for creating adaptive web pages.\
 - Introduced abstract (`Engine`, `Point`) and sealed (`ImplementationError`) classes.
 - Fixed nested class structures, enabling more embedded classes.
 - Simplified the program entry point.
+- Add `.flex.reversed` css-class.
 
 ### 3.0.1 (20.07.2024)
 - Added `Math.split` function.
