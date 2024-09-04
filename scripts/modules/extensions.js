@@ -682,10 +682,10 @@ Error.prototype.toString = function () {
 };
 //#endregion
 //#region Implementation error
-/**
- * @param {ErrorOptions} options 
- */
 class ImplementationError extends ReferenceError {
+	/**
+	 * @param {ErrorOptions} options 
+	 */
 	constructor(options = {}) {
 		super(`Not implemented function`, options);
 		if (new.target !== ImplementationError) throw new TypeError(`Unable to create an instance of sealed-extended class`);
@@ -1104,47 +1104,33 @@ Window.prototype.throw = async function (message = ``) {
 };
 
 /**
- * Asynchronously handles an error, displaying it in an alert.
- * @param {Error} error The error to handle.
- * @param {boolean} reload Indicates whether the application should be reloaded after displaying the error.
- * @returns {Promise<void>} A promise that resolves once the error handling is complete.
+ * Executes an action and handles any errors that occur.
+ * @param {() => unknown} action The action to be executed.
+ * @param {boolean} silent In silent mode errors are silently ignored; otherwise, they are thrown and the page is reloaded.
+ * @returns {Promise<void>} A promise that resolves the action.
  */
-Window.prototype.catch = async function (error, reload = true) {
-	await window.throw(error);
-	if (reload) location.reload();
-};
-
-/**
- * Asserts the execution of an action or stops the program if errors occur.
- * @template T
- * @param {() => T | PromiseLike<T>} action The action to execute.
- * @param {boolean} reload Indicates whether the application should be reloaded after an error.
- * @returns {Promise<T>} A Promise that resolves with the result of the action or rejects with the error.
- * @throws {Error} If the action throws an error.
- */
-Window.prototype.assert = async function (action, reload = true) {
+Window.prototype.assert = async function (action, silent = false) {
 	try {
-		return await action();
+		await action();
 	} catch (error) {
-		await window.catch(Error.generate(error), reload);
-		throw error;
+		if (silent) return;
+		await window.throw(Error.generate(error));
+		location.reload();
 	}
 };
 
 /**
- * Insures that no errors occur when executing an action.
- * @template T
- * @param {() => T | PromiseLike<T>} action The action to execute.
- * @param {() => unknown} eventually The callback to execute after the action is complete.
- * @returns {Promise<T | void>} A Promise that resolves with the result of the action, or void if it fails.
+ * Executes an action and returns its result, or a default value if an error occurs.
+ * @template T The type of the result returned by the action and the default value.
+ * @param {() => T | PromiseLike<T>} action The action to be executed.
+ * @param {T} $default The default value to return if the action throws an error.
+ * @returns {Promise<T>} A promise that resolves to the result of the action or the default value.
  */
-Window.prototype.insure = async function (action, eventually = () => { }) {
+Window.prototype.insure = async function (action, $default) {
 	try {
 		return await action();
-	} catch (error) {
-		await window.catch(Error.generate(error), false);
-	} finally {
-		await eventually();
+	} catch {
+		return $default;
 	}
 };
 

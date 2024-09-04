@@ -347,29 +347,20 @@ interface Window {
 	 */
 	throw(message?: any): Promise<void>;
 	/**
-	 * Asynchronously handles an error, displaying it in an alert.
-	 * @param error The error to handle.
-	 * @param reload Indicates whether the application should be reloaded after displaying the error.
-	 * @returns A promise that resolves once the error handling is complete.
+	 * Executes an action and handles any errors that occur.
+	 * @param action The action to be executed.
+	 * @param silent In silent mode errors are silently ignored; otherwise, they are thrown and the page is reloaded.
+	 * @returns A promise that resolves the action.
 	 */
-	catch(error: Error, reload?: boolean): Promise<void>;
+	assert(action: () => unknown, silent?: boolean): Promise<void>;
 	/**
-	 * Asserts the execution of an action or stops the program if errors occur.
-	 * @template T
-	 * @param action The action to execute.
-	 * @param reload Indicates whether the application should be reloaded after an error.
-	 * @returns A Promise that resolves with the result of the action or rejects with the error.
-	 * @throws {Error} If the action throws an error.
+	 * Executes an action and returns its result, or a default value if an error occurs.
+	 * @template T The type of the result returned by the action and the default value.
+	 * @param action The action to be executed.
+	 * @param $default The default value to return if the action throws an error.
+	 * @returns A promise that resolves to the result of the action or the default value.
 	 */
-	assert<T>(action: () => T, reload?: boolean): Promise<T>;
-	/**
-	 * Insures that no errors occur when executing an action.
-	 * @template T
-	 * @param action The action to execute.
-	 * @param eventually The callback to execute after the action is complete.
-	 * @returns A Promise that resolves with the result of the action, or void if it fails.
-	 */
-	insure<T>(action: () => T, eventually?: () => unknown): Promise<T | void>;
+	insure<T>(action: () => T | PromiseLike<T>, $default: T): Promise<T>;
 	/**
 	 * Asynchronously loads a promise with a loading animation.
 	 * @template T
@@ -415,22 +406,20 @@ declare function promptAsync(message?: string, _default?: string, title?: string
  */
 declare function warn(message?: any): Promise<void>;
 /**
- * Asserts the execution of an action or stops the program if errors occur.
- * @template T
- * @param action The action to execute.
- * @param reload Indicates whether the application should be reloaded after an error.
- * @returns A Promise that resolves with the result of the action or rejects with the error.
- * @throws {Error} If the action throws an error.
+ * Executes an action and handles any errors that occur.
+ * @param action The action to be executed.
+ * @param silent In silent mode errors are silently ignored; otherwise, they are thrown and the page is reloaded.
+ * @returns A promise that resolves the action.
  */
-declare function assert<T>(action: () => T, reload?: boolean): Promise<T>;
+declare function assert(action: () => unknown, silent?: boolean): Promise<void>;
 /**
- * Insures that no errors occur when executing an action.
- * @template T
- * @param action The action to execute.
- * @param eventually The callback to execute after the action is complete.
- * @returns A Promise that resolves with the result of the action, or void if it fails.
+ * Executes an action and returns its result, or a default value if an error occurs.
+ * @template T The type of the result returned by the action and the default value.
+ * @param action The action to be executed.
+ * @param $default The default value to return if the action throws an error.
+ * @returns A promise that resolves to the result of the action or the default value.
  */
-declare function insure<T>(action: () => T, eventually?: () => unknown): Promise<T | void>;
+declare function insure<T>(action: () => T | PromiseLike<T>, $default: T): Promise<T>;
 /**
  * Asynchronously loads a promise with a loading animation.
  * @template T

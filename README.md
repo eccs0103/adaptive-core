@@ -5,6 +5,10 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 3.0.7 (05.09.2024)
+- Removed `window.catch` function.
+- Improved `window.assert` and `window.insure` functions.
+
 ### 3.0.6 (03.09.2024)
 - Fixed the name of the function `document.loadResource`.
 - Added `ImplementationError` class for explicit indication of implementation issues.
