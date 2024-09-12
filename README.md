@@ -5,6 +5,12 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 3.0.9 (12.09.2024)
+- Added `Array.sequence` function.
+- Added `document.loadImages` function and description for `document.loadImage`.
+- Improved `Analyser.benchmark` function.
+- Enhanced `Stopwatch` class and `Promise.withTimeout` function for small values.
+
 ### 3.0.7 (05.09.2024)
 - Removed `window.catch` function.
 - Improved `window.assert` and `window.insure` functions.

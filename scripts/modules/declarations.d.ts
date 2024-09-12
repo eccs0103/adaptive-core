@@ -162,6 +162,13 @@ interface ArrayConstructor {
 	 * @throws {TypeError} Throws a TypeError if the source is not an array.
 	 */
 	import(source: unknown, name?: string): any[];
+	/**
+	 * Generates a sequence of numbers from min to max (exclusive).
+	 * @param min The starting number of the sequence (inclusive).
+	 * @param max The ending number of the sequence (exclusive).
+	 * @returns An array containing the sequence of numbers.
+	 */
+	sequence(min: number, max: number): number[];
 }
 
 interface Array<T extends Function> {
@@ -303,7 +310,20 @@ interface Element {
 }
 
 interface Document {
+	/**
+	 * Asynchronously loads an image from the specified URL.
+	 * @param url The URL of the image to be loaded.
+	 * @returns A promise that resolves with the loaded image element.
+	 * @throws {Error} If the image fails to load.
+	 */
 	loadImage(url: string): Promise<HTMLImageElement>;
+	/**
+	 * Asynchronously loads multiple images from the provided URLs.
+	 * @param urls An array of image URLs to be loaded.
+	 * @returns A promise that resolves with an array of loaded image elements.
+	 * @throws {Error} If any image fails to load.
+	 */
+	loadImages(urls: string[]): Promise<HTMLImageElement[]>;
 };
 
 interface Window {

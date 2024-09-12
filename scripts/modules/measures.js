@@ -1198,32 +1198,32 @@ class Stopwatch {
 	 * @param {boolean} launch Whether to start the stopwatch immediately.
 	 */
 	constructor(launch = false) {
-		let previous = 0;
+		this.#launched = launch;
+
+		let previous = performance.now();
 		/**
 		 * @param {number} current 
 		 * @returns {void}
 		 */
 		const callback = (current) => {
 			const difference = current - previous;
-			if (this.#launched) {
+			if (this.launched) {
 				this.#elapsed += difference;
 			}
 			previous = current;
-			requestAnimationFrame(callback);
+			setTimeout(callback, 0, performance.now());
 		};
-		requestAnimationFrame(callback);
-
-		this.#launched = launch;
+		setTimeout(callback, 0, performance.now());
 	}
-	/** @type {number} */
+	/** @type {DOMHighResTimeStamp} */
 	#elapsed = 0;
 	/**
-	 * Gets the elapsed time as a Timespan instance.
+	 * Gets the elapsed time as milliseconds.
 	 * @readonly
-	 * @returns {Timespan}
+	 * @returns {DOMHighResTimeStamp}
 	 */
 	get elapsed() {
-		return Timespan.viaDuration(this.#elapsed);
+		return this.#elapsed;
 	}
 	/**
 	 * Resets the elapsed time to zero.

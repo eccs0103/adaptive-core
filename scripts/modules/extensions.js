@@ -208,6 +208,20 @@ Array.import = function (source, name = `source`) {
 };
 
 /**
+ * Generates a sequence of numbers from min to max (exclusive).
+ * @param {number} min The starting number of the sequence (inclusive).
+ * @param {number} max The ending number of the sequence (exclusive).
+ * @returns {number[]} An array containing the sequence of numbers.
+ */
+Array.sequence = function (min, max) {
+	const result = new Array(max - min);
+	for (let index = 0; index < max - min; index++) {
+		result[index] = index + min;
+	}
+	return result;
+};
+
+/**
  * Exports the array.
  * @returns {this[]} The exported array.
  */
@@ -639,13 +653,10 @@ Promise.fulfill = function (action) {
  * @param {number} timeout The timeout in milliseconds.
  * @returns {Promise<void>} A promise that resolves after the timeout.
  */
-Promise.withTimeout = function (timeout) {
-	let index;
-	const promise = new Promise((resolve) => {
-		index = setTimeout(resolve, timeout);
-	});
-	promise.then(() => clearTimeout(index));
-	return promise;
+Promise.withTimeout = async function (timeout) {
+	clearTimeout(await new Promise((resolve) => {
+		const index = setTimeout(() => resolve(index), timeout);
+	}));
 };
 
 /**
@@ -903,18 +914,30 @@ Element.prototype.tryGetClosest = function (type, selectors, strict = false) {
 //#endregion
 //#region Document
 /**
- * @param {string} url 
- * @returns {Promise<HTMLImageElement>}
+ * Asynchronously loads an image from the specified URL.
+ * @param {string} url The URL of the image to be loaded.
+ * @returns {Promise<HTMLImageElement>} A promise that resolves with the loaded image element.
+ * @throws {Error} If the image fails to load.
  */
 Document.prototype.loadImage = async function (url) {
 	const image = new Image();
 	const promise = Promise.withSignal((signal, resolve, reject) => {
 		image.addEventListener(`load`, (event) => resolve(undefined), { signal });
-		image.addEventListener(`error`, (event) => reject(event.error), { signal });
+		image.addEventListener(`error`, (event) => reject(Error.generate(event.error)), { signal });
 	});
 	image.src = url;
 	await promise;
 	return image;
+};
+
+/**
+ * Asynchronously loads multiple images from the provided URLs.
+ * @param {string[]} urls An array of image URLs to be loaded.
+ * @returns {Promise<HTMLImageElement[]>} A promise that resolves with an array of loaded image elements.
+ * @throws {Error} If any image fails to load.
+ */
+Document.prototype.loadImages = async function (urls) {
+	return await Promise.all(urls.map(url => this.loadImage(url)));
 };
 //#endregion
 //#region Window
