@@ -497,7 +497,7 @@ interface ArchivablePrototype<N, I extends ArchivableInstance<N>, A extends read
 	 * @param name An optional name for the source.
 	 * @returns The created instance.
 	 */
-	import(source: N, name?: string): I;
+	import(source: unknown, name?: string): I;
 	/**
 	 * @param args The constructor arguments.
 	 */
