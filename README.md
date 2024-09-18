@@ -5,6 +5,11 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 3.0.11 (18.09.2024)
+- `Error.generate` renamed to `Error.from`.
+- Added `StaticEngine` class.
+- Added `random.sequence` function.
+
 ### 3.0.9 (12.09.2024)
 - Added `Array.sequence` function.
 - Added `document.loadImages` function and description for `document.loadImage`.

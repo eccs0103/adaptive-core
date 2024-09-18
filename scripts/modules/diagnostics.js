@@ -10,7 +10,7 @@ import { Stopwatch } from "./measures.js";
 class Analyser {
 	/**
 	 * Executes a given action multiple times and returns the average time taken.
-	 * @param {(...args: void[]) => unknown} action The function to be benchmarked.
+	 * @param {() => unknown} action The function to be benchmarked.
 	 * @param {number} count The number of times to run the action. Defaults to 1.
 	 * @returns {Promise<number>} The average time taken in milliseconds.
 	 */

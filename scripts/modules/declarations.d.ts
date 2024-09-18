@@ -235,7 +235,7 @@ interface ErrorConstructor {
 	 * @param exception The exception input.
 	 * @returns An Error object representing the input.
 	 */
-	generate(exception: any): Error;
+	from(exception: any): Error;
 }
 
 interface Error {

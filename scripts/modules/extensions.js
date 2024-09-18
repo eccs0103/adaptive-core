@@ -653,10 +653,11 @@ Promise.fulfill = function (action) {
  * @param {number} timeout The timeout in milliseconds.
  * @returns {Promise<void>} A promise that resolves after the timeout.
  */
-Promise.withTimeout = async function (timeout) {
-	clearTimeout(await new Promise((resolve) => {
-		const index = setTimeout(() => resolve(index), timeout);
-	}));
+Promise.withTimeout = function (timeout) {
+	const { promise, resolve } = Promise.withResolvers();
+	promise.then(_ => clearTimeout(index));
+	const index = setTimeout(resolve, timeout);
+	return promise;
 };
 
 /**
@@ -666,9 +667,10 @@ Promise.withTimeout = async function (timeout) {
  * @returns {Promise<T>} A promise that can be controlled with an abort signal.
  */
 Promise.withSignal = function (callback) {
-	const abortController = new AbortController();
-	const promise = new Promise((resolve, reject) => callback(abortController.signal, resolve, reject));
-	promise.then(() => abortController.abort(), () => abortController.abort());
+	const controller = new AbortController();
+	const { promise, resolve, reject } = Promise.withResolvers();
+	promise.then(_ => controller.abort(), _ => controller.abort());
+	callback(controller.signal, resolve, reject);
 	return promise;
 };
 //#endregion
@@ -678,7 +680,7 @@ Promise.withSignal = function (callback) {
  * @param {any} exception The exception input.
  * @returns {Error} An Error object representing the input.
  */
-Error.generate = function (exception) {
+Error.from = function (exception) {
 	return exception instanceof Error ? exception : new Error(`Undefined error type`);
 };
 
@@ -688,7 +690,7 @@ Error.generate = function (exception) {
  */
 Error.prototype.toString = function () {
 	let text = this.stack ?? `${this.name}: ${this.message}`;
-	if (this.cause !== undefined) text += ` cause of:\n\r${Error.generate(this.cause)}`;
+	if (this.cause !== undefined) text += ` cause of:\n\r${Error.from(this.cause)}`;
 	return text;
 };
 //#endregion
@@ -923,7 +925,7 @@ Document.prototype.loadImage = async function (url) {
 	const image = new Image();
 	const promise = Promise.withSignal((signal, resolve, reject) => {
 		image.addEventListener(`load`, (event) => resolve(undefined), { signal });
-		image.addEventListener(`error`, (event) => reject(Error.generate(event.error)), { signal });
+		image.addEventListener(`error`, (event) => reject(Error.from(event.error)), { signal });
 	});
 	image.src = url;
 	await promise;
@@ -1137,7 +1139,7 @@ Window.prototype.assert = async function (action, silent = false) {
 		await action();
 	} catch (error) {
 		if (silent) return;
-		await window.throw(Error.generate(error));
+		await window.throw(Error.from(error));
 		location.reload();
 	}
 };
