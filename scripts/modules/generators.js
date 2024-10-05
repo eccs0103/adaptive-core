@@ -532,7 +532,7 @@ class Random {
 		for (let index = 0; index < array.length - 1; index++) {
 			const pair = this.integer(index, array.length);
 			if (pair === index) continue;
-			[array[index], array[pair]] = [array[pair], array[index]];
+			array.swap(index, pair);
 		}
 	}
 	/**
@@ -544,11 +544,11 @@ class Random {
 	 */
 	case(cases) {
 		if (1 > cases.size) throw new RangeError(`The cases must have at least 1 item`);
-		const summary = Array.from(cases).reduce((previous, [, percentage]) => previous + percentage, 0);
+		const summary = Array.from(cases).reduce((previous, [, weight]) => previous + weight, 0);
 		const random = this.number(0, summary);
 		let begin = 0;
-		for (const [item, percentage] of cases) {
-			const end = begin + percentage;
+		for (const [item, weight] of cases) {
+			const end = begin + weight;
 			if (begin <= random && random < end) {
 				return item;
 			}
@@ -561,7 +561,7 @@ class Random {
 	 * @returns {string} A random GUID identifier.
 	 */
 	GUID() {
-		return `${crypto.randomUUID()}`;
+		return crypto.randomUUID();
 	}
 }
 //#endregion

@@ -5,6 +5,12 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 3.0.14 (05.10.2024)
+- Added extensions `number.orDefault`, `String.empty`, `String.isWhitespace`, `string.orDefault`, `string.toTitleCase`, `toLocalTitleCase`, `Object.enforce`, `array.swap`.
+- Extension `Function.checkImplementation` renamed to `ensureImplementation`.
+- `Array.sequence` will now convert to integer arguments.
+- `random.shuffle` accelerated with new extensions.
+
 ### 3.0.11 (18.09.2024)
 - `Error.generate` renamed to `Error.from`.
 - Added `StaticEngine` class.

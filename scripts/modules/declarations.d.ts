@@ -35,6 +35,12 @@ interface Number {
 	 * @throws {Error} If the minimum and maximum values of either range are equal.
 	 */
 	interpolate(min1: number, max1: number, min2?: number, max2?: number): number;
+	/**
+	 * Returns the current number or a default value if the current number is NaN.
+	 * @param value The default value to return if the current number is NaN.
+	 * @returns The current number if it is not NaN, otherwise the default value.
+	 */
+	orDefault(value: number): number;
 }
 
 interface BooleanConstructor {
@@ -68,11 +74,21 @@ interface StringConstructor {
 	 */
 	import(source: unknown, name?: string): string;
 	/**
+	 * A constant empty string.
+	 */
+	readonly empty: string;
+	/**
 	 * Checks if a string is empty.
 	 * @param text The string to check.
 	 * @returns True if the string is empty, otherwise false.
 	 */
 	isEmpty(text: string): boolean;
+	/**
+	 * Checks if a string contains only whitespace characters.
+	 * @param text The string to check.
+	 * @returns True if the string is empty or contains only whitespace, otherwise false.
+	 */
+	isWhitespace(text: string): boolean;
 }
 
 interface String {
@@ -82,11 +98,22 @@ interface String {
 	 */
 	export(): string;
 	/**
-	 * Replaces the string with another if it's empty.
-	 * @param text The replacement text.
-	 * @returns The original string if not empty, otherwise the replacement text.
+	 * Returns the current string value or a default value if the string is empty.
+	 * @param value The default value to return if the string is empty.
+	 * @returns The current string value or the provided default value.
 	 */
-	insteadOfVoid(text: string): string;
+	orDefault(value: string): string;
+	/**
+	 * Converts the string to title case, where the first letter of each word is capitalized.
+	 * @returns The string converted to title case.
+	 */
+	toTitleCase(): string;
+	/**
+	 * Converts the string to title case based on the specified locale, where the first letter of each word is capitalized.
+	 * @param locale The locale to use for the conversion, defaults to the user's language.
+	 * @returns The string converted to title case based on the specified locale.
+	 */
+	toLocalTitleCase(locales?: Intl.LocalesArgument): string;
 }
 
 interface FunctionConstructor {
@@ -103,7 +130,7 @@ interface FunctionConstructor {
 	 * @returns A promise that resolves if the function is implemented, otherwise it rejects with an error.
 	 * @throws {Error} Throws an error if the function is not implemented.
 	 */
-	checkImplementation(action: (...args: any) => unknown, name: string): Promise<void>;
+	ensureImplementation(action: (...args: any) => unknown, name: string): Promise<void>;
 }
 
 interface Function {
@@ -125,6 +152,15 @@ interface Function {
 
 interface ObjectConstructor {
 	/**
+	 * Imports an object from a source.
+	 * @param source The source to import from.
+	 * @param name The name of the source.
+	 * @returns The imported object.
+	 * @throws {ReferenceError} Throws a ReferenceError if the source is undefined.
+	 * @throws {TypeError} Throws a TypeError if the source is not an object or null.
+	 */
+	import(source: unknown, name?: string): Object;
+	/**
 	 * Maps a non-null value using a callback function.
 	 * @template T
 	 * @template R
@@ -134,14 +170,14 @@ interface ObjectConstructor {
 	 */
 	map<T, R>(value: NonNullable<T> | null, callback: (object: NonNullable<T>) => R): R | null;
 	/**
-	 * Imports an object from a source.
-	 * @param source The source to import from.
-	 * @param name The name of the source.
-	 * @returns The imported object.
-	 * @throws {ReferenceError} Throws a ReferenceError if the source is undefined.
-	 * @throws {TypeError} Throws a TypeError if the source is not an object or null.
+	 * Ensures that a value is neither null nor undefined, throwing an error if it is.
+	 * @template T
+	 * @param value The value to check.
+	 * @param name The name of the value, used in error messages.
+	 * @returns The value if it is not null or undefined.
+	 * @throws {Error} If the value is null or undefined.
 	 */
-	import(source: unknown, name?: string): Object;
+	enforce<T>(value: T, name?: string): NonNullable<T>;
 }
 
 interface Object {
@@ -177,6 +213,13 @@ interface Array<T extends Function> {
 	 * @returns The exported array.
 	 */
 	export(): T[];
+	/**
+	 * Swaps the elements at the given indices in the array.
+	 * @param index1 The index of the first element.
+	 * @param index2 The index of the second element.
+	 * @returns {void}
+	 */
+	swap(index1: number, index2: number): void;
 }
 
 interface Math {
@@ -377,10 +420,10 @@ interface Window {
 	 * Executes an action and returns its result, or a default value if an error occurs.
 	 * @template T The type of the result returned by the action and the default value.
 	 * @param action The action to be executed.
-	 * @param $default The default value to return if the action throws an error.
+	 * @param _default The default value to return if the action throws an error.
 	 * @returns A promise that resolves to the result of the action or the default value.
 	 */
-	insure<T>(action: () => T | PromiseLike<T>, $default: T): Promise<T>;
+	insure<T>(action: () => T | PromiseLike<T>, _default: T): Promise<T>;
 	/**
 	 * Asynchronously loads a promise with a loading animation.
 	 * @template T

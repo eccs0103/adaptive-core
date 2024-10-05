@@ -31,5 +31,5 @@ class Controller {
 	}
 };
 const controller = new Controller();
-await window.assert(() => controller.main());
+await window.assert(controller.main.bind(controller));
 //#endregion

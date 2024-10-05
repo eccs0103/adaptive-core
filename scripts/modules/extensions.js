@@ -2,7 +2,7 @@
 
 "use strict";
 
-const { PI } = Math;
+const { PI, trunc } = Math;
 
 //#region Number
 /**
@@ -52,6 +52,16 @@ Number.prototype.interpolate = function (min1, max1, min2 = 0, max2 = 1) {
 	if (min2 === max2) throw new Error(`Minimum and maximum of the target range cant be equal`);
 	return min2 + (max2 - min2) * ((this.valueOf() - min1) / (max1 - min1));
 };
+
+/**
+ * Returns the current number or a default value if the current number is NaN.
+ * @param {number} value The default value to return if the current number is NaN.
+ * @returns {number} The current number if it is not NaN, otherwise the default value.
+ */
+Number.prototype.orDefault = function (value) {
+	const primitive = this.valueOf();
+	return (Number.isNaN(primitive) ? value : primitive);
+};
 //#endregion
 //#region Boolean
 /**
@@ -87,6 +97,11 @@ String.import = function (source, name = `source`) {
 	return source.valueOf();
 };
 
+Object.defineProperty(String, `empty`, {
+	value: ``,
+	writable: false,
+});
+
 /**
  * Checks if a string is empty.
  * @param {string} text The string to check.
@@ -94,6 +109,15 @@ String.import = function (source, name = `source`) {
  */
 String.isEmpty = function (text) {
 	return (text.length === 0);
+};
+
+/**
+ * Checks if a string contains only whitespace characters.
+ * @param {string} text The string to check.
+ * @returns {boolean} True if the string is empty or contains only whitespace, otherwise false.
+ */
+String.isWhitespace = function (text) {
+	return String.isEmpty(text.trim());
 };
 
 /**
@@ -105,12 +129,32 @@ String.prototype.export = function () {
 };
 
 /**
- * Replaces the string with another if it's empty.
- * @param {string} text The replacement text.
- * @returns {string} The original string if not empty, otherwise the replacement text.
+ * Returns the current string value or a default value if the string is empty.
+ * @param {string} value The default value to return if the string is empty.
+ * @returns {string} The current string value or the provided default value.
  */
-String.prototype.insteadOfVoid = function (text) {
-	return (this.length > 0 ? this.valueOf() : text);
+String.prototype.orDefault = function (value) {
+	const primitive = this.valueOf();
+	return (String.isEmpty(primitive) ? value : primitive);
+};
+
+const patternWordsFirstLetter = /\b\w/g;
+
+/**
+ * Converts the string to title case, where the first letter of each word is capitalized.
+ * @returns {string} The string converted to title case.
+ */
+String.prototype.toTitleCase = function () {
+	return this.toLowerCase().replace(patternWordsFirstLetter, char => char.toUpperCase());
+};
+
+/**
+ * Converts the string to title case based on the specified locale, where the first letter of each word is capitalized.
+ * @param {Intl.LocalesArgument} locale The locale to use for the conversion, defaults to the user's language.
+ * @returns {string} The string converted to title case based on the specified locale.
+ */
+String.prototype.toLocalTitleCase = function (locale = navigator.language) {
+	return this.toLocaleLowerCase(locale).replace(patternWordsFirstLetter, char => char.toLocaleUpperCase(locale));
 };
 //#endregion
 //#region Function
@@ -136,7 +180,7 @@ Function.isImplemented = async function (action) {
  * @returns {Promise<void>} A promise that resolves if the function is implemented, otherwise it rejects with an error.
  * @throws {Error} Throws an error if the function is not implemented.
  */
-Function.checkImplementation = async function (action, name) {
+Function.ensureImplementation = async function (action, name) {
 	if (!(await Function.isImplemented(action))) throw new Error(`Function '${name}' not implemented`);
 };
 
@@ -162,6 +206,18 @@ Function.prototype.export = function () {
 //#endregion
 //#region Object
 /**
+ * Imports an object from a source.
+ * @param {unknown} source The source to import from.
+ * @param {string} name The name of the source.
+ * @returns {Object} The imported object.
+ * @throws {TypeError} If the source is not an object or null.
+ */
+Object.import = function (source, name = `source`) {
+	if (typeof (source) !== `object` || source === null) throw new TypeError(`Unable to import ${name} due its ${typename(source)} type`);
+	return source.valueOf();
+};
+
+/**
  * Maps a non-null value using a callback function.
  * @template T
  * @template R
@@ -175,15 +231,19 @@ Object.map = function (value, callback) {
 };
 
 /**
- * Imports an object from a source.
- * @param {unknown} source The source to import from.
- * @param {string} name The name of the source.
- * @returns {Object} The imported object.
- * @throws {TypeError} If the source is not an object or null.
+ * Ensures that a value is neither null nor undefined, throwing an error if it is.
+ * @template T
+ * @param {T} value The value to check.
+ * @param {string} name The name of the value, used in error messages.
+ * @returns {NonNullable<T>} The value if it is not null or undefined.
+ * @throws {Error} If the value is null or undefined.
  */
-Object.import = function (source, name = `source`) {
-	if (typeof (source) !== `object` || source === null) throw new TypeError(`Unable to import ${name} due its ${typename(source)} type`);
-	return source.valueOf();
+Object.enforce = function (value, name = `value`) {
+	switch (value) {
+		case null: throw new Error(`${name.toTitleCase()} mustn't be null`);
+		case undefined: throw new Error(`${name.toTitleCase()} mustn't be undefined`);
+		default: return (/** @type {NonNullable<T>} */ (value));
+	}
 };
 
 /**
@@ -214,6 +274,8 @@ Array.import = function (source, name = `source`) {
  * @returns {number[]} An array containing the sequence of numbers.
  */
 Array.sequence = function (min, max) {
+	min = trunc(min);
+	max = trunc(max);
 	const result = new Array(max - min);
 	for (let index = 0; index < max - min; index++) {
 		result[index] = index + min;
@@ -227,6 +289,20 @@ Array.sequence = function (min, max) {
  */
 Array.prototype.export = function () {
 	return Array.from(this);
+};
+
+/**
+ * Swaps the elements at the given indices in the array.
+ * @param {number} index1 The index of the first element.
+ * @param {number} index2 The index of the second element.
+ * @returns {void}
+ */
+Array.prototype.swap = function (index1, index2) {
+	index1 = trunc(index1);
+	index2 = trunc(index2);
+	const temporary = this[index1];
+	this[index1] = this[index2];
+	this[index2] = temporary;
 };
 //#endregion
 //#region Stack
@@ -639,13 +715,13 @@ Math.toRadians = function (degrees) {
  * @returns {Promise<T>} A promise that fulfills with the result of the action.
  */
 Promise.fulfill = function (action) {
-	return new Promise((resolve, reject) => {
-		try {
-			resolve(action());
-		} catch (error) {
-			reject(error);
-		}
-	});
+	const { promise, resolve, reject } = Promise.withResolvers();
+	try {
+		resolve(action());
+	} catch (error) {
+		reject(error);
+	}
+	return promise;
 };
 
 /**
@@ -1148,14 +1224,14 @@ Window.prototype.assert = async function (action, silent = false) {
  * Executes an action and returns its result, or a default value if an error occurs.
  * @template T The type of the result returned by the action and the default value.
  * @param {() => T | PromiseLike<T>} action The action to be executed.
- * @param {T} $default The default value to return if the action throws an error.
+ * @param {T} _default The default value to return if the action throws an error.
  * @returns {Promise<T>} A promise that resolves to the result of the action or the default value.
  */
-Window.prototype.insure = async function (action, $default) {
+Window.prototype.insure = async function (action, _default) {
 	try {
 		return await action();
 	} catch {
-		return $default;
+		return _default;
 	}
 };
 
