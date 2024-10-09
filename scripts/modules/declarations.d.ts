@@ -207,7 +207,7 @@ interface ArrayConstructor {
 	sequence(min: number, max: number): number[];
 }
 
-interface Array<T extends Function> {
+interface Array<T> {
 	/**
 	 * Exports the array.
 	 * @returns The exported array.
@@ -479,10 +479,10 @@ declare function assert(action: () => unknown, silent?: boolean): Promise<void>;
  * Executes an action and returns its result, or a default value if an error occurs.
  * @template T The type of the result returned by the action and the default value.
  * @param action The action to be executed.
- * @param $default The default value to return if the action throws an error.
+ * @param _default The default value to return if the action throws an error.
  * @returns A promise that resolves to the result of the action or the default value.
  */
-declare function insure<T>(action: () => T | PromiseLike<T>, $default: T): Promise<T>;
+declare function insure<T>(action: () => T | PromiseLike<T>, _default: T): Promise<T>;
 /**
  * Asynchronously loads a promise with a loading animation.
  * @template T

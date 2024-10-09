@@ -6,7 +6,7 @@ Core for creating adaptive web pages.\
 
 ## Feed
 ### 3.0.14 (05.10.2024)
-- Added extensions `number.orDefault`, `String.empty`, `String.isWhitespace`, `string.orDefault`, `string.toTitleCase`, `toLocalTitleCase`, `Object.enforce`, `array.swap`.
+- Added extensions `number.orDefault`, `String.empty`, `String.isWhitespace`, `string.orDefault`, `string.toTitleCase`, `string.toLocalTitleCase`, `Object.enforce`, `array.swap`.
 - Extension `Function.checkImplementation` renamed to `ensureImplementation`.
 - `Array.sequence` will now convert to integer arguments.
 - `random.shuffle` accelerated with new extensions.
