@@ -7,29 +7,43 @@ import { } from "../scripts/structure.js";
  * Represents the controller for the application.
  */
 class Controller {
+	//#region Launch
+	/** @type {boolean} */
+	static #locked = true;
 	/**
-	 * Preloads necessary data or resources before running the main logic.
+	 * This method orchestrates the preload process and then starts the main application flow.
+	 * @param {ConstructorParameters<typeof Controller>} args 
+	 * @returns {Promise<Controller>}
+	 */
+	static async construct(...args) {
+		Controller.#locked = false;
+		const self = new Controller(...args);
+		Controller.#locked = true;
+
+		await self.#preload();
+		await window.load(self.#run());
+
+		return self;
+	}
+	constructor() {
+		if (Controller.#locked) throw new TypeError(`Illegal constructor`);
+	}
+	//#endregion
+	//#region Logic
+	/**
 	 * @returns {Promise<void>}
 	 */
 	async #preload() {
 		// Your preload logic goes here
 	}
 	/**
-	 * Executes the main run logic of the application.
 	 * @returns {Promise<void>}
 	 */
 	async #run() {
 		// Your run logic goes here
 	}
-	/**
-	 * This method orchestrates the preload process and then starts the main application flow.
-	 * @returns {Promise<void>}
-	 */
-	async main() {
-		await this.#preload();
-		await window.load(this.#run());
-	}
-};
-const controller = new Controller();
-await window.assert(controller.main.bind(controller));
+	//#endregion
+}
+
+await window.assert(Controller.construct);
 //#endregion
