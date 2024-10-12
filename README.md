@@ -5,6 +5,21 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 3.1.0 (12.10.2024)
+- Added `PrimitivesHintMap` for overriding `Symbol.toPrimitive`.
+- Added `string.reverse` for quick reversal.
+- Removed deprecated `diagnostics.js`.
+- `Object.enforce` renamed to a more appropriate `Object.suppress`.
+- Fixed an issue in the OOP class `Engine` that caused its events not to display.
+- Introduced method overloading.
+- Classes `Point`, `Point1D`, `Point2D`, and `Point3D` replaced with more advanced `Vector`, `Vector1D`, `Vector2D`, and `Vector3D`.
+- Added overloads and operators for `Timespan`.
+- Improved controller structure.
+- Enhanced description of `Symbol.toPrimitive` for `Timespan`.
+- Accelerated color conversion to HEX string.
+- Added overloads for `Color`.
+- Fixed errors in `Texture` conversion.
+
 ### 3.0.14 (05.10.2024)
 - Added extensions `number.orDefault`, `String.empty`, `String.isWhitespace`, `string.orDefault`, `string.toTitleCase`, `string.toLocalTitleCase`, `Object.enforce`, `array.swap`.
 - Extension `Function.checkImplementation` renamed to `ensureImplementation`.

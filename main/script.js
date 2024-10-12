@@ -20,8 +20,8 @@ class Controller {
 		const self = new Controller(...args);
 		Controller.#locked = true;
 
-		await self.#preload();
-		await window.load(self.#run());
+		if (self.#usePreload) await window.load(self.#preload());
+		await self.#run();
 
 		return self;
 	}
@@ -30,6 +30,8 @@ class Controller {
 	}
 	//#endregion
 	//#region Logic
+	/** @type {boolean} */
+	#usePreload = true;
 	/**
 	 * @returns {Promise<void>}
 	 */

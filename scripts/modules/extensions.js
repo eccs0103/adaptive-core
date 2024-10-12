@@ -156,6 +156,18 @@ String.prototype.toTitleCase = function () {
 String.prototype.toLocalTitleCase = function (locale = navigator.language) {
 	return this.toLocaleLowerCase(locale).replace(patternWordsFirstLetter, char => char.toLocaleUpperCase(locale));
 };
+
+/**
+ * Reverses the string.
+ * @returns {string} The reversed string.
+ */
+String.prototype.reverse = function () {
+	let result = String.empty;
+	for (let index = this.length - 1; index >= 0; index--) {
+		result += this[index];
+	}
+	return result;
+};
 //#endregion
 //#region Function
 /**
@@ -238,7 +250,7 @@ Object.map = function (value, callback) {
  * @returns {NonNullable<T>} The value if it is not null or undefined.
  * @throws {Error} If the value is null or undefined.
  */
-Object.enforce = function (value, name = `value`) {
+Object.suppress = function (value, name = `value`) {
 	switch (value) {
 		case null: throw new Error(`${name.toTitleCase()} mustn't be null`);
 		case undefined: throw new Error(`${name.toTitleCase()} mustn't be undefined`);

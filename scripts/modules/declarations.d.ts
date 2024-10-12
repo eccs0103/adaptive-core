@@ -1,5 +1,15 @@
 /// <reference path="./extensions.js" />
 
+/**
+ * A mapping interface that associates primitive types with string keys.
+ * This is used to handle conversions to different primitive types.
+ */
+interface PrimitivesHintMap {
+	"number": number;
+	"boolean": boolean;
+	"string": string;
+}
+
 interface NumberConstructor {
 	/**
 	 * Imports a number from a source.
@@ -114,6 +124,11 @@ interface String {
 	 * @returns The string converted to title case based on the specified locale.
 	 */
 	toLocalTitleCase(locales?: Intl.LocalesArgument): string;
+	/**
+	 * Reverses the string.
+	 * @returns The reversed string.
+	 */
+	reverse(): string;
 }
 
 interface FunctionConstructor {
@@ -150,6 +165,38 @@ interface Function {
 	export(): any;
 }
 
+/**
+ * Interface representing an instance that can be archived.
+ * @template N The type of the archived data.
+ */
+interface ArchivableInstance<N> {
+	/**
+	 * Exports the instance.
+	 * @returns The exported data.
+	 */
+	export(): N;
+}
+
+/**
+ * Interface representing a prototype that can create archivable instances.
+ * @template N The type of the archived data.
+ * @template I The type of the archivable instance.
+ * @template A The types of the constructor arguments for the instance.
+ */
+interface ArchivablePrototype<N, I extends ArchivableInstance<N>, A extends readonly any[]> {
+	/**
+	 * Imports data and creates an instance.
+	 * @param source The source data to import.
+	 * @param name An optional name for the source.
+	 * @returns The created instance.
+	 */
+	import(source: unknown, name?: string): I;
+	/**
+	 * @param args The constructor arguments.
+	 */
+	new(...args: A): I;
+}
+
 interface ObjectConstructor {
 	/**
 	 * Imports an object from a source.
@@ -177,7 +224,7 @@ interface ObjectConstructor {
 	 * @returns The value if it is not null or undefined.
 	 * @throws {Error} If the value is null or undefined.
 	 */
-	enforce<T>(value: T, name?: string): NonNullable<T>;
+	suppress<T>(value: T, name?: string): NonNullable<T>;
 }
 
 interface Object {
@@ -515,34 +562,4 @@ interface Navigator {
 	download(file: File): void;
 }
 
-/**
- * Interface representing an instance that can be archived.
- * @template N The type of the archived data.
- */
-interface ArchivableInstance<N> {
-	/**
-	 * Exports the instance.
-	 * @returns The exported data.
-	 */
-	export(): N;
-}
-
-/**
- * Interface representing a prototype that can create archivable instances.
- * @template N The type of the archived data.
- * @template I The type of the archivable instance.
- * @template A The types of the constructor arguments for the instance.
- */
-interface ArchivablePrototype<N, I extends ArchivableInstance<N>, A extends readonly any[]> {
-	/**
-	 * Imports data and creates an instance.
-	 * @param source The source data to import.
-	 * @param name An optional name for the source.
-	 * @returns The created instance.
-	 */
-	import(source: unknown, name?: string): I;
-	/**
-	 * @param args The constructor arguments.
-	 */
-	new(...args: A): I;
-}
+// type NonUndefined<T> = T extends undefined ? never : T;

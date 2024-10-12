@@ -25,6 +25,26 @@ class Engine extends EventTarget {
 		if (new.target === Engine) throw new TypeError(`Unable to create an instance of an abstract class`);
 	}
 	/**
+	 * @template {keyof EngineEventMap} K
+	 * @param {K} type
+	 * @param {(this: Engine, ev: EngineEventMap[K]) => any} listener
+	 * @param {boolean | AddEventListenerOptions} options
+	 * @returns {void}
+	 */
+	addEventListener(type, listener, options = false) {
+		return super.addEventListener(type, listener, options);
+	}
+	/**
+	 * @template {keyof EngineEventMap} K
+	 * @param {K} type
+	 * @param {(this: Engine, ev: EngineEventMap[K]) => any} listener
+	 * @param {boolean | EventListenerOptions} options
+	 * @returns {void}
+	 */
+	removeEventListener(type, listener, options = false) {
+		return super.removeEventListener(type, listener, options);
+	}
+	/**
 	 * Gets the launch status of the engine.
 	 * @abstract
 	 * @returns {boolean}
@@ -126,7 +146,7 @@ class FastEngine extends Engine {
 	 * @returns {void}
 	 */
 	addEventListener(type, listener, options = false) {
-		return super.addEventListener(type, listener, options);
+		return super.addEventListener(type, /** @type {(this: Engine, ev: EngineEventMap[K]) => any} */(listener), options);
 	}
 	/**
 	 * @template {keyof FastEngineEventMap} K
@@ -136,7 +156,7 @@ class FastEngine extends Engine {
 	 * @returns {void}
 	 */
 	removeEventListener(type, listener, options = false) {
-		return super.addEventListener(type, listener, options);
+		return super.removeEventListener(type, /** @type {(this: Engine, ev: EngineEventMap[K]) => any} */(listener), options);
 	}
 	/** @type {boolean} */
 	#launched;
@@ -244,7 +264,7 @@ class PreciseEngine extends Engine {
 	 * @returns {void}
 	 */
 	addEventListener(type, listener, options = false) {
-		return super.addEventListener(type, listener, options);
+		return super.addEventListener(type, /** @type {(this: Engine, ev: EngineEventMap[K]) => any} */(listener), options);
 	}
 	/**
 	 * @template {keyof PreciseEngineEventMap} K
@@ -254,7 +274,7 @@ class PreciseEngine extends Engine {
 	 * @returns {void}
 	 */
 	removeEventListener(type, listener, options = false) {
-		return super.addEventListener(type, listener, options);
+		return super.removeEventListener(type, /** @type {(this: Engine, ev: EngineEventMap[K]) => any} */(listener), options);
 	}
 	/** @type {boolean} */
 	#launched;
@@ -364,7 +384,7 @@ class StaticEngine extends Engine {
 	 * @returns {void}
 	 */
 	addEventListener(type, listener, options = false) {
-		return super.addEventListener(type, listener, options);
+		return super.addEventListener(type, /** @type {(this: Engine, ev: EngineEventMap[K]) => any} */(listener), options);
 	}
 	/**
 	 * @template {keyof StaticEngineEventMap} K
@@ -374,7 +394,7 @@ class StaticEngine extends Engine {
 	 * @returns {void}
 	 */
 	removeEventListener(type, listener, options = false) {
-		return super.addEventListener(type, listener, options);
+		return super.removeEventListener(type, /** @type {(this: Engine, ev: EngineEventMap[K]) => any} */(listener), options);
 	}
 	/** @type {boolean} */
 	#launched;
