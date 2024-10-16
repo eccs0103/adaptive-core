@@ -214,14 +214,15 @@ interface ObjectConstructor {
 	 */
 	import(source: unknown, name?: string): Object;
 	/**
-	 * Maps a non-null value using a callback function.
-	 * @template T
-	 * @template R
+	 * Applies a callback function to a non-nullable value, or returns the original nullable value.
+	 * @template T The type of the input value.
+	 * @template N The type representing nullable.
+	 * @template R The return type of the callback function.
 	 * @param value The value to map.
-	 * @param callback The callback function.
-	 * @returns The result of the callback or null if the value is null.
+	 * @param callback The function to apply if the value is non-nullable.
+	 * @returns The mapped result.
 	 */
-	map<T, R>(value: NonNullable<T> | null, callback: (object: NonNullable<T>) => R): R | null;
+	map<T, N extends Exclude<T, NonNullable<T>>, R>(value: NonNullable<T> | N, callback: (object: NonNullable<T>) => R): R | N;
 	/**
 	 * Ensures that a value is neither null nor undefined, throwing an error if it is.
 	 * @template T
@@ -420,7 +421,7 @@ interface Document {
 	 * @throws {Error} If any image fails to load.
 	 */
 	loadImages(urls: string[]): Promise<HTMLImageElement[]>;
-};
+}
 
 interface Window {
 	/**
@@ -551,5 +552,3 @@ interface Navigator {
 	 */
 	download(file: File): void;
 }
-
-// type NonUndefined<T> = T extends undefined ? never : T;

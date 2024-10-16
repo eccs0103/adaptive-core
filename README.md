@@ -10,6 +10,7 @@ Core for creating adaptive web pages.\
 - Renamed functions `window.alertAsync`, `confirmAsync`, `promptAsync`.
 - Removed function `window.insure`.
 - Fixed minor bugs.
+- Improved `Object.map` functionality.
 
 ### 3.1.0 (12.10.2024)
 - Added `PrimitivesHintMap` for overriding `Symbol.toPrimitive`.
