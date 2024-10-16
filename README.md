@@ -5,6 +5,12 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 3.1.1 (17.10.2024)
+- Added function `Function.getPrototypeOf`.
+- Renamed functions `window.alertAsync`, `confirmAsync`, `promptAsync`.
+- Removed function `window.insure`.
+- Fixed minor bugs.
+
 ### 3.1.0 (12.10.2024)
 - Added `PrimitivesHintMap` for overriding `Symbol.toPrimitive`.
 - Added `string.reverse` for quick reversal.

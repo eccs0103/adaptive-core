@@ -171,6 +171,16 @@ String.prototype.reverse = function () {
 //#endregion
 //#region Function
 /**
+ * Returns the prototype of the given non-nullable value.
+ * @template T
+ * @param {NonNullable<T>} value The value whose prototype is to be retrieved. It cannot be null or undefined.
+ * @returns {Function}
+ */
+Function.getPrototypeOf = function (value) {
+	return value.constructor;
+};
+
+/**
  * Checks if the given function is implemented by running it and seeing if it throws a specific `ReferenceError`.
  * @param {(...args: any) => unknown} action The function to check for implementation.
  * @returns {Promise<boolean>} A promise that resolves to `true` if the function is implemented, `false` otherwise.
@@ -1033,13 +1043,15 @@ Document.prototype.loadImages = async function (urls) {
 //#region Window
 /**
  * Gets the type name of a value.
- * @param {unknown} value The value to get the type name of.
+ * @param {any} value The value to get the type name of.
  * @returns {string} The type name of the value.
  */
 Window.prototype.typename = function (value) {
-	if (value === undefined) return `Undefined`;
-	else if (value === null) return `Null`;
-	else return value.constructor.name;
+	switch (value) {
+		case undefined:
+		case null: return String(value).toTitleCase();
+		default: return Function.getPrototypeOf(value).name;
+	}
 };
 
 const dialogAlert = document.getElement(HTMLDialogElement, `dialog.pop-up.alert`);
@@ -1055,7 +1067,7 @@ dialogAlert.addEventListener(`click`, (event) => {
  * @param {string} title The title of the alert.
  * @returns {Promise<void>} A promise that resolves when the alert is closed.
  */
-Window.prototype.alertAsync = function (message = ``, title = `Message`) {
+Window.prototype.write = function (message = ``, title = `Message`) {
 	dialogAlert.showModal();
 	//#region Header
 	const htmlHeader = dialogAlert.getElement(HTMLElement, `*.header`);
@@ -1079,7 +1091,7 @@ Window.prototype.alertAsync = function (message = ``, title = `Message`) {
 	const htmlContainer = dialogAlert.getElement(HTMLElement, `*.container`);
 	htmlContainer.innerText = `${message}`;
 	//#endregion
-	const promise = Promise.withSignal((signal, resolve, reject) => {
+	const promise = Promise.withSignal((signal, resolve) => {
 		dialogAlert.addEventListener(`close`, (event) => resolve(undefined), { signal });
 	});
 	promise.finally(() => dialogAlert.close());
@@ -1099,7 +1111,7 @@ dialogConfirm.addEventListener(`click`, (event) => {
  * @param {string} title The title of the confirmation dialog.
  * @returns {Promise<boolean>} A promise that resolves to true if the user confirms, and false otherwise.
  */
-Window.prototype.confirmAsync = function (message = ``, title = `Message`) {
+Window.prototype.ask = function (message = ``, title = `Message`) {
 	dialogConfirm.showModal();
 	//#region Header
 	const htmlHeader = dialogConfirm.getElement(HTMLElement, `*.header`);
@@ -1155,7 +1167,7 @@ dialogPrompt.addEventListener(`click`, (event) => {
  * @param {string} title The title of the prompt dialog.
  * @returns {Promise<string?>} A promise that resolves to the user's input value if accepted, or null if canceled.
  */
-Window.prototype.promptAsync = function (message = ``, _default = ``, title = `Message`) {
+Window.prototype.read = function (message = ``, _default = ``, title = `Message`) {
 	dialogPrompt.showModal();
 	//#region Header
 	const htmlHeader = dialogPrompt.getElement(HTMLElement, `*.header`);
@@ -1194,7 +1206,7 @@ Window.prototype.promptAsync = function (message = ``, _default = ``, title = `M
 		dialogPrompt.addEventListener(`close`, (event) => resolve(null), { signal });
 		buttonAccept.addEventListener(`click`, (event) => resolve(inputPrompt.value), { signal });
 	});
-	promise.finally(() => dialogConfirm.close());
+	promise.finally(() => dialogPrompt.close());
 	return promise;
 };
 
@@ -1204,7 +1216,7 @@ Window.prototype.promptAsync = function (message = ``, _default = ``, title = `M
  * @returns {Promise<void>} A Promise that resolves when the warning is displayed.
  */
 Window.prototype.warn = async function (message = ``) {
-	await this.alertAsync(message, `Warning`);
+	await this.write(message, `Warning`);
 };
 
 /**
@@ -1213,7 +1225,7 @@ Window.prototype.warn = async function (message = ``) {
  * @returns {Promise<void>} A Promise that resolves when the error is displayed.
  */
 Window.prototype.throw = async function (message = ``) {
-	await this.alertAsync(message, `Error`);
+	await this.write(message, `Error`);
 };
 
 /**
@@ -1227,23 +1239,8 @@ Window.prototype.assert = async function (action, silent = false) {
 		await action();
 	} catch (error) {
 		if (silent) return;
-		await window.throw(Error.from(error));
+		await this.throw(Error.from(error));
 		location.reload();
-	}
-};
-
-/**
- * Executes an action and returns its result, or a default value if an error occurs.
- * @template T The type of the result returned by the action and the default value.
- * @param {() => T | PromiseLike<T>} action The action to be executed.
- * @param {T} _default The default value to return if the action throws an error.
- * @returns {Promise<T>} A promise that resolves to the result of the action or the default value.
- */
-Window.prototype.insure = async function (action, _default) {
-	try {
-		return await action();
-	} catch {
-		return _default;
 	}
 };
 

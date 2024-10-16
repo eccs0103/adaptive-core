@@ -133,6 +133,12 @@ interface String {
 
 interface FunctionConstructor {
 	/**
+	 * Returns the prototype of the given non-nullable value.
+	 * @template T
+	 * @param value The value whose prototype is to be retrieved. It cannot be null or undefined.
+	 */
+	getPrototypeOf<T>(value: NonNullable<T>): Function;
+	/**
 	 * Checks if the given function is implemented by running it and seeing if it throws a specific `ReferenceError`.
 	 * @param action The function to check for implementation.
 	 * @returns A promise that resolves to `true` if the function is implemented, `false` otherwise.
@@ -422,28 +428,28 @@ interface Window {
 	 * @param value The value to get the type name of.
 	 * @returns The type name of the value.
 	 */
-	typename(value: unknown): string;
+	typename(value: any): string;
 	/**
 	 * Asynchronously displays an alert message.
 	 * @param message The message to display.
 	 * @param title The title of the alert.
 	 * @returns A promise that resolves when the alert is closed.
 	 */
-	alertAsync(message?: any, title?: string): Promise<void>;
+	write(message?: any, title?: string): Promise<void>;
 	/**
 	 * Asynchronously displays a confirmation dialog.
 	 * @param message The message to display.
 	 * @param title The title of the confirmation dialog.
 	 * @returns A promise that resolves to true if the user confirms, and false otherwise.
 	 */
-	confirmAsync(message?: string, title?: string): Promise<boolean>;
+	ask(message?: string, title?: string): Promise<boolean>;
 	/**
 	 * Asynchronously displays a prompt dialog.
 	 * @param message The message to display.
 	 * @param title The title of the prompt dialog.
 	 * @returns A promise that resolves to the user's input value if accepted, or null if canceled.
 	 */
-	promptAsync(message?: string, _default?: string, title?: string): Promise<string?>;
+	read(message?: string, _default?: string, title?: string): Promise<string?>;
 	/**
 	 * Issues a warning message.
 	 * @param message The warning message to be issued.
@@ -464,14 +470,6 @@ interface Window {
 	 */
 	assert(action: () => unknown, silent?: boolean): Promise<void>;
 	/**
-	 * Executes an action and returns its result, or a default value if an error occurs.
-	 * @template T The type of the result returned by the action and the default value.
-	 * @param action The action to be executed.
-	 * @param _default The default value to return if the action throws an error.
-	 * @returns A promise that resolves to the result of the action or the default value.
-	 */
-	insure<T>(action: () => T | PromiseLike<T>, _default: T): Promise<T>;
-	/**
 	 * Asynchronously loads a promise with a loading animation.
 	 * @template T
 	 * @param promise The promise to load.
@@ -487,28 +485,28 @@ interface Window {
  * @param value The value to get the type name of.
  * @returns The type name of the value.
  */
-declare function typename(value: unknown): string;
+declare function typename(value: any): string;
 /**
  * Asynchronously displays an alert message.
  * @param message The message to display.
  * @param title The title of the alert.
  * @returns A promise that resolves when the alert is closed.
  */
-declare function alertAsync(message?: any, title?: string): Promise<void>;
+declare function write(message?: any, title?: string): Promise<void>;
 /**
  * Asynchronously displays a confirmation dialog.
  * @param message The message to display.
  * @param title The title of the confirmation dialog.
  * @returns A promise that resolves to true if the user confirms, and false otherwise.
  */
-declare function confirmAsync(message?: string, title?: string): Promise<boolean>;
+declare function ask(message?: string, title?: string): Promise<boolean>;
 /**
  * Asynchronously displays a prompt dialog.
  * @param message The message to display.
  * @param title The title of the prompt dialog.
  * @returns A promise that resolves to the user's input value if accepted, or null if canceled.
  */
-declare function promptAsync(message?: string, _default?: string, title?: string): Promise<string?>;
+declare function read(message?: string, _default?: string, title?: string): Promise<string?>;
 /**
  * Issues a warning message.
  * @param message The warning message to be issued.
@@ -522,14 +520,6 @@ declare function warn(message?: any): Promise<void>;
  * @returns A promise that resolves the action.
  */
 declare function assert(action: () => unknown, silent?: boolean): Promise<void>;
-/**
- * Executes an action and returns its result, or a default value if an error occurs.
- * @template T The type of the result returned by the action and the default value.
- * @param action The action to be executed.
- * @param _default The default value to return if the action throws an error.
- * @returns A promise that resolves to the result of the action or the default value.
- */
-declare function insure<T>(action: () => T | PromiseLike<T>, _default: T): Promise<T>;
 /**
  * Asynchronously loads a promise with a loading animation.
  * @template T
