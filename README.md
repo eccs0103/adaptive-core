@@ -5,9 +5,19 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 3.1.6 (28.10.2024)
+- Updated template section.
+- Global functions divided.
+- Removed `function.import`, `function.export`, `Promise.fulfill`, `window.warn`, `window.throw`.
+- Improved and renamed functions `parentNode.tryGetElement`, `parentNode.tryGetElements`, `parentNode.tryGetClosest`.
+- Accelerated custom dialog windows.
+- Fixed delays associated with `Promise.withTimeout` and `Promise.withSignal`.
+- Added `PromiseFactory` class.
+- Fixed `Error.from` for incomplete exceptions.
+- Fixed minor bugs.
+
 ### 3.1.1 (17.10.2024)
 - Added function `Function.getPrototypeOf`.
-- Renamed functions `window.alertAsync`, `confirmAsync`, `promptAsync`.
 - Removed function `window.insure`.
 - Fixed minor bugs.
 - Improved `Object.map` functionality.

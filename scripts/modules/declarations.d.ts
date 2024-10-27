@@ -19,7 +19,7 @@ interface NumberConstructor {
 	 * @throws {ReferenceError} If the source is undefined.
 	 * @throws {TypeError} If the source is not a number.
 	 */
-	import(source: unknown, name?: string): number;
+	import(source: any, name?: string): number;
 }
 
 interface Number {
@@ -62,7 +62,7 @@ interface BooleanConstructor {
 	 * @throws {ReferenceError} If the source is undefined.
 	 * @throws {TypeError} If the source is not a boolean.
 	 */
-	import(source: unknown, name?: string): boolean;
+	import(source: any, name?: string): boolean;
 }
 
 interface Boolean {
@@ -82,7 +82,7 @@ interface StringConstructor {
 	 * @throws {ReferenceError} If the source is undefined.
 	 * @throws {TypeError} If the source is not a string.
 	 */
-	import(source: unknown, name?: string): string;
+	import(source: any, name?: string): string;
 	/**
 	 * A constant empty string.
 	 */
@@ -133,12 +133,6 @@ interface String {
 
 interface FunctionConstructor {
 	/**
-	 * Returns the prototype of the given non-nullable value.
-	 * @template T
-	 * @param value The value whose prototype is to be retrieved. It cannot be null or undefined.
-	 */
-	getPrototypeOf<T>(value: NonNullable<T>): Function;
-	/**
 	 * Checks if the given function is implemented by running it and seeing if it throws a specific `ReferenceError`.
 	 * @param action The function to check for implementation.
 	 * @returns A promise that resolves to `true` if the function is implemented, `false` otherwise.
@@ -152,23 +146,6 @@ interface FunctionConstructor {
 	 * @throws {Error} Throws an error if the function is not implemented.
 	 */
 	ensureImplementation(action: (...args: any) => unknown, name: string): Promise<void>;
-}
-
-interface Function {
-	/**
-	 * Imports from a source.
-	 * @abstract
-	 * @param source The source to import.
-	 * @param name The name of the source.
-	 * @returns The imported value.
-	 */
-	import(source: unknown, name?: string): any;
-	/**
-	 * Exports the result.
-	 * @abstract
-	 * @returns The exported value.
-	 */
-	export(): any;
 }
 
 /**
@@ -196,7 +173,7 @@ interface ArchivablePrototype<N, I extends ArchivableInstance<N>, A extends read
 	 * @param name An optional name for the source.
 	 * @returns The created instance.
 	 */
-	import(source: unknown, name?: string): I;
+	import(source: any, name?: string): I;
 	/**
 	 * @param args The constructor arguments.
 	 */
@@ -212,7 +189,7 @@ interface ObjectConstructor {
 	 * @throws {ReferenceError} Throws a ReferenceError if the source is undefined.
 	 * @throws {TypeError} Throws a TypeError if the source is not an object or null.
 	 */
-	import(source: unknown, name?: string): Object;
+	import(source: any, name?: string): Object;
 	/**
 	 * Applies a callback function to a non-nullable value, or returns the original nullable value.
 	 * @template T The type of the input value.
@@ -251,7 +228,7 @@ interface ArrayConstructor {
 	 * @throws {ReferenceError} Throws a ReferenceError if the source is undefined.
 	 * @throws {TypeError} Throws a TypeError if the source is not an array.
 	 */
-	import(source: unknown, name?: string): any[];
+	import(source: any, name?: string): any[];
 	/**
 	 * Generates a sequence of numbers from min to max (exclusive).
 	 * @param min The starting number of the sequence (inclusive).
@@ -305,13 +282,6 @@ interface Math {
 
 interface PromiseConstructor {
 	/**
-	 * Creates a promise that fulfills with the result of calling the provided action.
-	 * @template T
-	 * @param action The action to execute.
-	 * @returns A promise that fulfills with the result of the action.
-	 */
-	fulfill<T>(action: () => T | PromiseLike<T>): Promise<T>;
-	/**
 	 * Creates a promise that resolves after the specified timeout.
 	 * @param timeout The timeout in milliseconds.
 	 * @returns A promise that resolves after the timeout.
@@ -343,6 +313,21 @@ interface Error {
 	toString(): string;
 }
 
+namespace globalThis {
+	/**
+	 * Returns the prototype of the given non-nullable value.
+	 * @template T
+	 * @param value The value whose prototype is to be retrieved. It cannot be null or undefined.
+	 */
+	function prototype<T>(value: NonNullable<T>): Function;
+	/**
+	 * Gets the type name of a value.
+	 * @param value The value to get the type name of.
+	 * @returns The type name of the value.
+	 */
+	function typename(value: any): string;
+}
+
 interface ParentNode {
 	/**
 	 * Retrieves an element of the specified type and selectors.
@@ -354,15 +339,14 @@ interface ParentNode {
 	 */
 	getElement<T extends typeof Element>(type: T, selectors: string): InstanceType<T>;
 	/**
-	 * Tries to retrieve an element of the specified type and selectors.
+	 * Asynchronously retrieves an element of the specified type and selectors.
 	 * @template T
 	 * @param type The type of element to retrieve.
 	 * @param selectors The selectors to search for the element.
-	 * @param strict Whether to reject if the element is missing or has an invalid type.
-	 * @returns A promise that resolves to the element instance.
-	 * @throws {TypeError} If the element is missing or has an invalid type and strict mode is enabled.
+	 * @returns The element instance.
+	 * @throws {TypeError} If the element is missing or has an invalid type.
 	 */
-	tryGetElement<T extends typeof Element>(type: T, selectors: string, strict?: boolean): Promise<InstanceType<T>>;
+	getElementAsync<T extends typeof Element>(type: T, selectors: string): Promise<InstanceType<T>>;
 	/**
 	 * Retrieves elements of the specified type and selectors.
 	 * @template T
@@ -373,15 +357,14 @@ interface ParentNode {
 	 */
 	getElements<T extends typeof Element>(type: T, selectors: string): NodeListOf<InstanceType<T>>;
 	/**
-	 * Tries to retrieve elements of the specified type and selectors.
+	 * Asynchronously retrieves elements of the specified type and selectors.
 	 * @template T
 	 * @param type The type of elements to retrieve.
 	 * @param selectors The selectors to search for the elements.
-	 * @param strict Whether to reject if any element is missing or has an invalid type.
-	 * @returns A promise that resolves to the NodeList of element instances.
-	 * @throws {TypeError} If any element is missing or has an invalid type and strict mode is enabled.
+	 * @returns The NodeList of element instances.
+	 * @throws {TypeError} If any element is missing or has an invalid type.
 	 */
-	tryGetElements<T extends typeof Element>(type: T, selectors: string, strict?: boolean): Promise<NodeListOf<InstanceType<T>>>;
+	getElementsAsync<T extends typeof Element>(type: T, selectors: string): Promise<NodeListOf<InstanceType<T>>>;
 }
 
 interface Element {
@@ -395,15 +378,14 @@ interface Element {
 	 */
 	getClosest<T extends typeof Element>(type: T, selectors: string): InstanceType<T>;
 	/**
-	 * Tries to retrieve the closest ancestor element of the specified type and selectors.
+	 * Asynchronously retrieves the closest ancestor element of the specified type and selectors.
 	 * @template T
 	 * @param type The type of element to retrieve.
 	 * @param selectors The selectors to search for the element.
-	 * @param strict Whether to reject if the element is missing or has an invalid type.
-	 * @returns A promise that resolves to the element instance.
-	 * @throws {TypeError} If the element is missing or has an invalid type and strict mode is enabled.
+	 * @returns The element instance.
+	 * @throws {TypeError} If the element is missing or has an invalid type.
 	 */
-	tryGetClosest<T extends typeof Element>(type: T, selectors: string, strict?: boolean): Promise<InstanceType<T>>;
+	getClosestAsync<T extends typeof Element>(type: T, selectors: string): Promise<InstanceType<T>>;
 }
 
 interface Document {
@@ -425,51 +407,30 @@ interface Document {
 
 interface Window {
 	/**
-	 * Gets the type name of a value.
-	 * @param value The value to get the type name of.
-	 * @returns The type name of the value.
-	 */
-	typename(value: any): string;
-	/**
 	 * Asynchronously displays an alert message.
 	 * @param message The message to display.
-	 * @param title The title of the alert.
 	 * @returns A promise that resolves when the alert is closed.
 	 */
-	write(message?: any, title?: string): Promise<void>;
+	alertAsync(message?: any): Promise<void>;
 	/**
 	 * Asynchronously displays a confirmation dialog.
 	 * @param message The message to display.
-	 * @param title The title of the confirmation dialog.
 	 * @returns A promise that resolves to true if the user confirms, and false otherwise.
 	 */
-	ask(message?: string, title?: string): Promise<boolean>;
+	confirmAsync(message?: string): Promise<boolean>;
 	/**
 	 * Asynchronously displays a prompt dialog.
 	 * @param message The message to display.
-	 * @param title The title of the prompt dialog.
 	 * @returns A promise that resolves to the user's input value if accepted, or null if canceled.
 	 */
-	read(message?: string, _default?: string, title?: string): Promise<string?>;
-	/**
-	 * Issues a warning message.
-	 * @param message The warning message to be issued.
-	 * @returns A Promise that resolves when the warning is displayed.
-	 */
-	warn(message?: any): Promise<void>;
-	/**
-	 * Throws an error message.
-	 * @param message The error message to be thrown.
-	 * @returns A Promise that resolves when the error is displayed.
-	 */
-	throw(message?: any): Promise<void>;
+	promptAsync(message?: string, _default?: string): Promise<string?>;
 	/**
 	 * Executes an action and handles any errors that occur.
 	 * @param action The action to be executed.
 	 * @param silent In silent mode errors are silently ignored; otherwise, they are thrown and the page is reloaded.
 	 * @returns A promise that resolves the action.
 	 */
-	assert(action: () => unknown, silent?: boolean): Promise<void>;
+	assert(action: VoidFunction, silent?: boolean): Promise<void>;
 	/**
 	 * Asynchronously loads a promise with a loading animation.
 	 * @template T
@@ -482,45 +443,33 @@ interface Window {
 }
 
 /**
- * Gets the type name of a value.
- * @param value The value to get the type name of.
- * @returns The type name of the value.
- */
-declare function typename(value: any): string;
-/**
  * Asynchronously displays an alert message.
  * @param message The message to display.
  * @param title The title of the alert.
  * @returns A promise that resolves when the alert is closed.
  */
-declare function write(message?: any, title?: string): Promise<void>;
+declare function alertAsync(message?: any): Promise<void>;
 /**
  * Asynchronously displays a confirmation dialog.
  * @param message The message to display.
  * @param title The title of the confirmation dialog.
  * @returns A promise that resolves to true if the user confirms, and false otherwise.
  */
-declare function ask(message?: string, title?: string): Promise<boolean>;
+declare function confirmAsync(message?: string): Promise<boolean>;
 /**
  * Asynchronously displays a prompt dialog.
  * @param message The message to display.
  * @param title The title of the prompt dialog.
  * @returns A promise that resolves to the user's input value if accepted, or null if canceled.
  */
-declare function read(message?: string, _default?: string, title?: string): Promise<string?>;
-/**
- * Issues a warning message.
- * @param message The warning message to be issued.
- * @returns A Promise that resolves when the warning is displayed.
- */
-declare function warn(message?: any): Promise<void>;
+declare function promptAsync(message?: string, _default?: string): Promise<string?>;
 /**
  * Executes an action and handles any errors that occur.
  * @param action The action to be executed.
  * @param silent In silent mode errors are silently ignored; otherwise, they are thrown and the page is reloaded.
  * @returns A promise that resolves the action.
  */
-declare function assert(action: () => unknown, silent?: boolean): Promise<void>;
+declare function assert(action: VoidFunction, silent?: boolean): Promise<void>;
 /**
  * Asynchronously loads a promise with a loading animation.
  * @template T

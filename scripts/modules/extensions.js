@@ -2,12 +2,15 @@
 
 "use strict";
 
+import { bSubtitle, dialogLoader } from "../templates/loader.js";
+import { buttonConfirmAccept, buttonConfirmDecline, buttonPromptAccept, dialogAlert, dialogConfirm, dialogPrompt, divAlertCoontainer, divConfirmContainer, divPromptContainer, inputPrompt } from "../templates/popup.js";
+
 const { PI, trunc } = Math;
 
 //#region Number
 /**
  * Imports a number from a source.
- * @param {unknown} source The source value to import.
+ * @param {any} source The source value to import.
  * @param {string} name The name of the source value.
  * @returns {number} The imported number value.
  * @throws {TypeError} If the source is not a number.
@@ -66,7 +69,7 @@ Number.prototype.orDefault = function (value) {
 //#region Boolean
 /**
  * Imports a boolean value from a source.
- * @param {unknown} source The source value to import.
+ * @param {any} source The source value to import.
  * @param {string} name The name of the source value.
  * @returns {boolean} The imported boolean value.
  * @throws {TypeError} If the source is not a boolean.
@@ -87,7 +90,7 @@ Boolean.prototype.export = function () {
 //#region String
 /**
  * Imports a string from a source.
- * @param {unknown} source The source value to import.
+ * @param {any} source The source value to import.
  * @param {string} name The name of the source value.
  * @returns {string} The imported string value.
  * @throws {TypeError} If the source is not a string.
@@ -171,16 +174,6 @@ String.prototype.reverse = function () {
 //#endregion
 //#region Function
 /**
- * Returns the prototype of the given non-nullable value.
- * @template T
- * @param {NonNullable<T>} value The value whose prototype is to be retrieved. It cannot be null or undefined.
- * @returns {Function}
- */
-Function.getPrototypeOf = function (value) {
-	return value.constructor;
-};
-
-/**
  * Checks if the given function is implemented by running it and seeing if it throws a specific `ReferenceError`.
  * @param {(...args: any) => unknown} action The function to check for implementation.
  * @returns {Promise<boolean>} A promise that resolves to `true` if the function is implemented, `false` otherwise.
@@ -205,31 +198,11 @@ Function.isImplemented = async function (action) {
 Function.ensureImplementation = async function (action, name) {
 	if (!(await Function.isImplemented(action))) throw new Error(`Function '${name}' not implemented`);
 };
-
-/**
- * Imports from a source.
- * @abstract
- * @param {unknown} source The source to import.
- * @param {string} name The name of the source.
- * @returns {any} The imported value.
- */
-Function.prototype.import = function (source, name = `source`) {
-	throw new ImplementationError();
-};
-
-/**
- * Exports the result.
- * @abstract
- * @returns {any} The exported value.
- */
-Function.prototype.export = function () {
-	throw new ImplementationError();
-};
 //#endregion
 //#region Object
 /**
  * Imports an object from a source.
- * @param {unknown} source The source to import from.
+ * @param {any} source The source to import from.
  * @param {string} name The name of the source.
  * @returns {Object} The imported object.
  * @throws {TypeError} If the source is not an object or null.
@@ -280,7 +253,7 @@ Object.prototype.export = function () {
 //#region Array
 /**
  * Imports an array from a source.
- * @param {unknown} source The source to import from.
+ * @param {any} source The source to import from.
  * @param {string} name The name of the source.
  * @returns {any[]} The imported array.
  * @throws {TypeError} Throws a TypeError if the source is not an array.
@@ -696,9 +669,8 @@ class StrictMap {
  * @returns {[number, number]} A tuple where the first element is the integer part and the second element is the fractional part.
  */
 Math.split = function (x) {
-	const integer = Math.trunc(x);
-	const fractional = x - integer;
-	return [integer, fractional];
+	const integer = trunc(x);
+	return [integer, (x - integer)];
 };
 
 /**
@@ -732,31 +704,19 @@ Math.toRadians = function (degrees) {
 //#endregion
 //#region Promise
 /**
- * Creates a promise that fulfills with the result of calling the provided action.
- * @template T
- * @param {() => T | PromiseLike<T>} action The action to execute.
- * @returns {Promise<T>} A promise that fulfills with the result of the action.
- */
-Promise.fulfill = function (action) {
-	const { promise, resolve, reject } = Promise.withResolvers();
-	try {
-		resolve(action());
-	} catch (error) {
-		reject(error);
-	}
-	return promise;
-};
-
-/**
  * Creates a promise that resolves after the specified timeout.
  * @param {number} timeout The timeout in milliseconds.
  * @returns {Promise<void>} A promise that resolves after the timeout.
  */
-Promise.withTimeout = function (timeout) {
+Promise.withTimeout = async function (timeout) {
 	const { promise, resolve } = Promise.withResolvers();
-	promise.then(_ => clearTimeout(index));
-	const index = setTimeout(resolve, timeout);
-	return promise;
+	let index;
+	try {
+		index = setTimeout(resolve, timeout);
+		return await promise;
+	} finally {
+		clearTimeout(index);
+	}
 };
 
 /**
@@ -765,13 +725,71 @@ Promise.withTimeout = function (timeout) {
  * @param {(signal: AbortSignal, resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void} callback The callback to execute with an abort signal, resolve, and reject functions.
  * @returns {Promise<T>} A promise that can be controlled with an abort signal.
  */
-Promise.withSignal = function (callback) {
+Promise.withSignal = async function (callback) {
 	const controller = new AbortController();
 	const { promise, resolve, reject } = Promise.withResolvers();
-	promise.then(_ => controller.abort(), _ => controller.abort());
-	callback(controller.signal, resolve, reject);
-	return promise;
+	try {
+		callback(controller.signal, resolve, reject);
+		return await promise;
+	} finally {
+		controller.abort();
+	}
 };
+//#endregion
+//#region Promise factory
+/**
+ * A factory that allows running promises with a custom executor.
+ * @template T
+ */
+class PromiseFactory {
+	/**
+	 * @param {(resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void} executor The executor function that takes two arguments: resolve and reject.
+	 */
+	constructor(executor) {
+		this.#executor = executor;
+	}
+	/** @type {(resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void} */
+	#executor;
+	/**
+	 * Runs the promise using the provided executor.
+	 * @returns {Promise<T>} The promise that resolves with the value produced by the executor.
+	 */
+	async run() {
+		const { promise, resolve, reject } = Promise.withResolvers();
+		this.#executor.call(promise, resolve, reject);
+		return await promise;
+	}
+	/**
+	 * Repeatedly runs the promise until the given predicate returns true.
+	 * @param {(value: T) => boolean} predicate A function that tests the resolved value.
+	 * @returns {Promise<T>} The promise that resolves when the predicate is true.
+	 */
+	async runUntil(predicate) {
+		while (true) {
+			try {
+				const result = await this.run();
+				if (!predicate(result)) continue;
+				return result;
+			} catch {
+				continue;
+			}
+		}
+	}
+	/**
+	 * @template U
+	 * @param {(value: T) => U} callback 
+	 * @returns {Promise<U>}
+	 */
+	async runMapping(callback) {
+		while (true) {
+			try {
+				return callback(await this.run());
+			} catch {
+				continue;
+			}
+		}
+	}
+}
 //#endregion
 //#region Error
 /**
@@ -780,7 +798,7 @@ Promise.withSignal = function (callback) {
  * @returns {Error} An Error object representing the input.
  */
 Error.from = function (exception) {
-	return exception instanceof Error ? exception : new Error(`Undefined error type`);
+	return exception instanceof Error ? exception : new Error(exception ?? `Undefined error type`);
 };
 
 /**
@@ -806,6 +824,31 @@ class ImplementationError extends ReferenceError {
 }
 //#endregion
 
+//#region Global
+/**
+ * Returns the prototype of the given non-nullable value.
+ * @template T
+ * @param {NonNullable<T>} value The value whose prototype is to be retrieved. It cannot be null or undefined.
+ * @returns {Function}
+ */
+globalThis.prototype = function (value) {
+	return value.constructor;
+};
+
+/**
+ * Gets the type name of a value.
+ * @param {any} value The value to get the type name of.
+ * @returns {string} The type name of the value.
+ */
+globalThis.typename = function (value) {
+	switch (value) {
+		case undefined:
+		case null: return String(value).toTitleCase();
+		default: return prototype(value).name;
+	}
+};
+//#endregion
+
 //#region Parent node
 /**
  * Retrieves an element of the specified type and selectors.
@@ -822,20 +865,15 @@ Element.prototype.getElement = function (type, selectors) {
 };
 
 /**
- * Tries to retrieve an element of the specified type and selectors.
+ * Asynchronously retrieves an element of the specified type and selectors.
  * @template {typeof Element} T
  * @param {T} type The type of element to retrieve.
  * @param {string} selectors The selectors to search for the element.
- * @param {boolean} strict Whether to reject if the element is missing or has an invalid type.
- * @returns {Promise<InstanceType<T>>} A promise that resolves to the element instance.
- * @throws {TypeError} If the element is missing or has an invalid type and strict mode is enabled.
+ * @returns {Promise<InstanceType<T>>} The element instance.
+ * @throws {TypeError} If the element is missing or has an invalid type.
  */
-Element.prototype.tryGetElement = function (type, selectors, strict = false) {
-	return new Promise((resolve, reject) => {
-		const element = this.querySelector(selectors);
-		if (element instanceof type) resolve(/** @type {InstanceType<T>} */(element));
-		else if (strict) reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
-	});
+Element.prototype.getElementAsync = function (type, selectors) {
+	return Promise.resolve(this.getElement(type, selectors));
 };
 
 /**
@@ -848,25 +886,20 @@ Element.prototype.tryGetElement = function (type, selectors, strict = false) {
  */
 Element.prototype.getElements = function (type, selectors) {
 	const elements = this.querySelectorAll(selectors);
-	if (Array.from(elements).every(element => element instanceof type)) return (/** @type {NodeListOf<InstanceType<T>>} */ (elements));
+	if (elements.values().every(element => element instanceof type)) return (/** @type {NodeListOf<InstanceType<T>>} */ (elements));
 	else throw new TypeError(`Element ${selectors} is missing or has invalid type`);
 };
 
 /**
- * Tries to retrieve elements of the specified type and selectors.
+ * Asynchronously retrieves elements of the specified type and selectors.
  * @template {typeof Element} T
  * @param {T} type The type of elements to retrieve.
  * @param {string} selectors The selectors to search for the elements.
- * @param {boolean} strict Whether to reject if any element is missing or has an invalid type.
- * @returns {Promise<NodeListOf<InstanceType<T>>>} A promise that resolves to the NodeList of element instances.
- * @throws {TypeError} If any element is missing or has an invalid type and strict mode is enabled.
+ * @returns {Promise<NodeListOf<InstanceType<T>>>} The NodeList of element instances.
+ * @throws {TypeError} If any element is missing or has an invalid type.
  */
-Element.prototype.tryGetElements = function (type, selectors, strict = false) {
-	return new Promise((resolve, reject) => {
-		const elements = this.querySelectorAll(selectors);
-		if (Array.from(elements).every(element => element instanceof type)) resolve(/** @type {NodeListOf<InstanceType<T>>} */(elements));
-		else if (strict) reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
-	});
+Element.prototype.getElementsAsync = function (type, selectors) {
+	return Promise.resolve(this.getElements(type, selectors));
 };
 
 /**
@@ -882,16 +915,15 @@ Document.prototype.getElement = function (type, selectors) {
 };
 
 /**
- * Tries to retrieve an element of the specified type and selectors.
+ * Asynchronously retrieves an element of the specified type and selectors.
  * @template {typeof Element} T
  * @param {T} type The type of element to retrieve.
  * @param {string} selectors The selectors to search for the element.
- * @param {boolean} strict Whether to reject if the element is missing or has an invalid type.
- * @returns {Promise<InstanceType<T>>} A promise that resolves to the element instance.
- * @throws {TypeError} If the element is missing or has an invalid type and strict mode is enabled.
+ * @returns {Promise<InstanceType<T>>} The element instance.
+ * @throws {TypeError} If the element is missing or has an invalid type.
  */
-Document.prototype.tryGetElement = function (type, selectors, strict = false) {
-	return this.documentElement.tryGetElement(type, selectors, strict);
+Document.prototype.getElementAsync = function (type, selectors) {
+	return this.documentElement.getElementAsync(type, selectors);
 };
 
 /**
@@ -907,16 +939,15 @@ Document.prototype.getElements = function (type, selectors) {
 };
 
 /**
- * Tries to retrieve elements of the specified type and selectors.
+ * Asynchronously retrieves elements of the specified type and selectors.
  * @template {typeof Element} T
  * @param {T} type The type of elements to retrieve.
  * @param {string} selectors The selectors to search for the elements.
- * @param {boolean} strict Whether to reject if any element is missing or has an invalid type.
- * @returns {Promise<NodeListOf<InstanceType<T>>>} A promise that resolves to the NodeList of element instances.
- * @throws {TypeError} If any element is missing or has an invalid type and strict mode is enabled.
+ * @returns {Promise<NodeListOf<InstanceType<T>>>} The NodeList of element instances.
+ * @throws {TypeError} If any element is missing or has an invalid type.
  */
-Document.prototype.tryGetElements = function (type, selectors, strict = false) {
-	return this.documentElement.tryGetElements(type, selectors, strict);
+Document.prototype.getElementsAsync = function (type, selectors) {
+	return this.documentElement.getElementsAsync(type, selectors);
 };
 
 /**
@@ -934,20 +965,15 @@ DocumentFragment.prototype.getElement = function (type, selectors) {
 };
 
 /**
- * Tries to retrieve an element of the specified type and selectors.
+ * Asynchronously retrieves an element of the specified type and selectors.
  * @template {typeof Element} T
  * @param {T} type The type of element to retrieve.
  * @param {string} selectors The selectors to search for the element.
- * @param {boolean} strict Whether to reject if the element is missing or has an invalid type.
- * @returns {Promise<InstanceType<T>>} A promise that resolves to the element instance.
- * @throws {TypeError} If the element is missing or has an invalid type and strict mode is enabled.
+ * @returns {Promise<InstanceType<T>>} The element instance.
+ * @throws {TypeError} If the element is missing or has an invalid type.
  */
-DocumentFragment.prototype.tryGetElement = function (type, selectors, strict = false) {
-	return new Promise((resolve, reject) => {
-		const element = this.querySelector(selectors);
-		if (element instanceof type) resolve(/** @type {InstanceType<T>} */(element));
-		else if (strict) reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
-	});
+DocumentFragment.prototype.getElementAsync = function (type, selectors) {
+	return Promise.resolve(this.getElement(type, selectors));
 };
 
 /**
@@ -960,25 +986,20 @@ DocumentFragment.prototype.tryGetElement = function (type, selectors, strict = f
  */
 DocumentFragment.prototype.getElements = function (type, selectors) {
 	const elements = this.querySelectorAll(selectors);
-	if (Array.from(elements).every(element => element instanceof type)) return (/** @type {NodeListOf<InstanceType<T>>} */ (elements));
+	if (elements.values().every(element => element instanceof type)) return (/** @type {NodeListOf<InstanceType<T>>} */ (elements));
 	else throw new TypeError(`Element ${selectors} is missing or has invalid type`);
 };
 
 /**
- * Tries to retrieve elements of the specified type and selectors.
+ * Asynchronously retrieves elements of the specified type and selectors.
  * @template {typeof Element} T
  * @param {T} type The type of elements to retrieve.
  * @param {string} selectors The selectors to search for the elements.
- * @param {boolean} strict Whether to reject if any element is missing or has an invalid type.
- * @returns {Promise<NodeListOf<InstanceType<T>>>} A promise that resolves to the NodeList of element instances.
- * @throws {TypeError} If any element is missing or has an invalid type and strict mode is enabled.
+ * @returns {Promise<NodeListOf<InstanceType<T>>>} The NodeList of element instances.
+ * @throws {TypeError} If any element is missing or has an invalid type.
  */
-DocumentFragment.prototype.tryGetElements = function (type, selectors, strict = false) {
-	return new Promise((resolve, reject) => {
-		const elements = this.querySelectorAll(selectors);
-		if (Array.from(elements).every(element => element instanceof type)) resolve(/** @type {NodeListOf<InstanceType<T>>} */(elements));
-		else if (strict) reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
-	});
+DocumentFragment.prototype.getElementsAsync = function (type, selectors) {
+	return Promise.resolve(this.getElements(type, selectors));
 };
 //#endregion
 //#region Element
@@ -997,20 +1018,15 @@ Element.prototype.getClosest = function (type, selectors) {
 };
 
 /**
- * Tries to retrieve the closest ancestor element of the specified type and selectors.
+ * Asynchronously retrieves the closest ancestor element of the specified type and selectors.
  * @template {typeof Element} T
  * @param {T} type The type of element to retrieve.
  * @param {string} selectors The selectors to search for the element.
- * @param {boolean} strict Whether to reject if the element is missing or has an invalid type.
- * @returns {Promise<InstanceType<T>>} A promise that resolves to the element instance.
- * @throws {TypeError} If the element is missing or has an invalid type and strict mode is enabled.
+ * @returns {Promise<InstanceType<T>>} The element instance.
+ * @throws {TypeError} If the element is missing or has an invalid type.
  */
-Element.prototype.tryGetClosest = function (type, selectors, strict = false) {
-	return new Promise((resolve, reject) => {
-		const element = this.closest(selectors);
-		if (element instanceof type) resolve(/** @type {InstanceType<T>} */(element));
-		else if (strict) reject(new TypeError(`Element ${selectors} is missing or has invalid type`));
-	});
+Element.prototype.getClosestAsync = function (type, selectors) {
+	return Promise.resolve(this.getClosest(type, selectors));
 };
 //#endregion
 //#region Document
@@ -1042,191 +1058,77 @@ Document.prototype.loadImages = async function (urls) {
 };
 //#endregion
 //#region Window
-/**
- * Gets the type name of a value.
- * @param {any} value The value to get the type name of.
- * @returns {string} The type name of the value.
- */
-Window.prototype.typename = function (value) {
-	switch (value) {
-		case undefined:
-		case null: return String(value).toTitleCase();
-		default: return Function.getPrototypeOf(value).name;
-	}
-};
-
-const dialogAlert = document.getElement(HTMLDialogElement, `dialog.pop-up.alert`);
 dialogAlert.addEventListener(`click`, (event) => {
-	if (event.target === dialogAlert) {
-		dialogAlert.close();
-	}
+	if (event.target === dialogAlert) dialogAlert.close(JSON.stringify(true));
 });
 
 /**
  * Asynchronously displays an alert message.
  * @param {any} message The message to display.
- * @param {string} title The title of the alert.
  * @returns {Promise<void>} A promise that resolves when the alert is closed.
  */
-Window.prototype.write = function (message = ``, title = `Message`) {
+Window.prototype.alertAsync = async function (message = ``) {
 	dialogAlert.showModal();
-	//#region Header
-	const htmlHeader = dialogAlert.getElement(HTMLElement, `*.header`);
-	//#region Title
-	const h3Title = htmlHeader.getElement(HTMLHeadingElement, `h3`);
-	switch (title) {
-		case `Error`: {
-			h3Title.classList.add(`invalid`);
-		} break;
-		case `Warning`: {
-			h3Title.classList.add(`warn`);
-		} break;
-		default: {
-			h3Title.classList.add(`highlight`);
-		} break;
+
+	divAlertCoontainer.innerText = String(message);
+
+	try {
+		return await Promise.withSignal((signal, resolve) => {
+			dialogAlert.addEventListener(`close`, (event) => { if (JSON.parse(dialogAlert.returnValue)) resolve(); }, { signal });
+		});
+	} finally {
+		dialogAlert.close(JSON.stringify(false));
 	}
-	h3Title.innerText = title;
-	//#endregion
-	//#endregion
-	//#region Container
-	const htmlContainer = dialogAlert.getElement(HTMLElement, `*.container`);
-	htmlContainer.innerText = `${message}`;
-	//#endregion
-	const promise = Promise.withSignal((signal, resolve) => {
-		dialogAlert.addEventListener(`close`, (event) => resolve(undefined), { signal });
-	});
-	promise.finally(() => dialogAlert.close());
-	return promise;
 };
 
-const dialogConfirm = document.getElement(HTMLDialogElement, `dialog.pop-up.confirm`);
 dialogConfirm.addEventListener(`click`, (event) => {
-	if (event.target === dialogConfirm) {
-		dialogConfirm.close();
-	}
+	if (event.target === dialogConfirm) dialogConfirm.close(JSON.stringify(true));
 });
 
 /**
  * Asynchronously displays a confirmation dialog.
  * @param {string} message The message to display.
- * @param {string} title The title of the confirmation dialog.
  * @returns {Promise<boolean>} A promise that resolves to true if the user confirms, and false otherwise.
  */
-Window.prototype.ask = function (message = ``, title = `Message`) {
+Window.prototype.confirmAsync = async function (message = ``) {
 	dialogConfirm.showModal();
-	//#region Header
-	const htmlHeader = dialogConfirm.getElement(HTMLElement, `*.header`);
-	//#region Title
-	const h3Title = htmlHeader.getElement(HTMLHeadingElement, `h3`);
-	switch (title) {
-		case `Error`: {
-			h3Title.classList.add(`invalid`);
-		} break;
-		case `Warning`: {
-			h3Title.classList.add(`warn`);
-		} break;
-		default: {
-			h3Title.classList.add(`highlight`);
-		} break;
+
+	divConfirmContainer.innerText = message;
+
+	try {
+		return await Promise.withSignal((signal, resolve) => {
+			buttonConfirmAccept.addEventListener(`click`, (event) => resolve(true), { signal });
+			buttonConfirmDecline.addEventListener(`click`, (event) => resolve(false), { signal });
+			dialogConfirm.addEventListener(`close`, (event) => { if (JSON.parse(dialogConfirm.returnValue)) resolve(false); }, { signal });
+		});
+	} finally {
+		dialogConfirm.close(JSON.stringify(false));
 	}
-	h3Title.innerText = title;
-	//#endregion
-	//#endregion
-	//#region Container
-	const htmlContainer = dialogConfirm.getElement(HTMLElement, `*.container`);
-	htmlContainer.innerText = message;
-	//#endregion
-	//#region Footer
-	const htmlFooter = dialogConfirm.getElement(HTMLElement, `*.footer`);
-	//#region Button Accept
-	const buttonAccept = htmlFooter.getElement(HTMLButtonElement, `button.highlight`);
-	//#endregion
-	//#region Button Decline
-	const buttonDecline = htmlFooter.getElement(HTMLButtonElement, `button.invalid`);
-	//#endregion
-	//#endregion
-	/** @type {Promise<boolean>} */
-	const promise = Promise.withSignal((signal, resolve, reject) => {
-		dialogConfirm.addEventListener(`close`, (event) => resolve(false), { signal });
-		buttonAccept.addEventListener(`click`, (event) => resolve(true), { signal });
-		buttonDecline.addEventListener(`click`, (event) => resolve(false), { signal });
-	});
-	promise.finally(() => dialogConfirm.close());
-	return promise;
 };
 
-const dialogPrompt = document.getElement(HTMLDialogElement, `dialog.pop-up.prompt`);
 dialogPrompt.addEventListener(`click`, (event) => {
-	if (event.target === dialogPrompt) {
-		dialogPrompt.close();
-	}
+	if (event.target === dialogPrompt) dialogPrompt.close(JSON.stringify(true));
 });
 
 /**
  * Asynchronously displays a prompt dialog.
  * @param {string} message The message to display.
- * @param {string} title The title of the prompt dialog.
  * @returns {Promise<string?>} A promise that resolves to the user's input value if accepted, or null if canceled.
  */
-Window.prototype.read = function (message = ``, _default = ``, title = `Message`) {
+Window.prototype.promptAsync = async function (message = ``, _default = ``) {
 	dialogPrompt.showModal();
-	//#region Header
-	const htmlHeader = dialogPrompt.getElement(HTMLElement, `*.header`);
-	//#region Title
-	const h3Title = htmlHeader.getElement(HTMLHeadingElement, `h3`);
-	switch (title) {
-		case `Error`: {
-			h3Title.classList.add(`invalid`);
-		} break;
-		case `Warning`: {
-			h3Title.classList.add(`warn`);
-		} break;
-		default: {
-			h3Title.classList.add(`highlight`);
-		} break;
-	}
-	h3Title.innerText = title;
-	//#endregion
-	//#endregion
-	//#region Container
-	const htmlContainer = dialogPrompt.getElement(HTMLElement, `*.container`);
-	htmlContainer.innerText = message;
-	//#endregion
-	//#region Footer
-	const htmlFooter = dialogPrompt.getElement(HTMLElement, `*.footer`);
-	//#region Button Accept
-	const buttonAccept = htmlFooter.getElement(HTMLButtonElement, `button.highlight`);
-	//#endregion
-	//#region Input Prompt
-	const inputPrompt = htmlFooter.getElement(HTMLInputElement, `input[type="text"]`);
+
+	divPromptContainer.innerText = message;
+
 	inputPrompt.value = _default;
-	//#endregion
-	//#endregion
-	/** @type {Promise<string?>} */
-	const promise = Promise.withSignal((signal, resolve, reject) => {
-		dialogPrompt.addEventListener(`close`, (event) => resolve(null), { signal });
-		buttonAccept.addEventListener(`click`, (event) => resolve(inputPrompt.value), { signal });
-	});
-	promise.finally(() => dialogPrompt.close());
-	return promise;
-};
-
-/**
- * Issues a warning message.
- * @param {any} message The warning message to be issued.
- * @returns {Promise<void>} A Promise that resolves when the warning is displayed.
- */
-Window.prototype.warn = async function (message = ``) {
-	await this.write(message, `Warning`);
-};
-
-/**
- * Throws an error message.
- * @param {any} message The error message to be thrown.
- * @returns {Promise<void>} A Promise that resolves when the error is displayed.
- */
-Window.prototype.throw = async function (message = ``) {
-	await this.write(message, `Error`);
+	try {
+		return await Promise.withSignal((signal, resolve) => {
+			dialogPrompt.addEventListener(`close`, (event) => resolve(null), { signal });
+			buttonPromptAccept.addEventListener(`click`, (event) => { if (JSON.parse(dialogPrompt.returnValue)) resolve(inputPrompt.value); }, { signal });
+		});
+	} finally {
+		dialogPrompt.close(JSON.stringify(false));
+	}
 };
 
 /**
@@ -1240,10 +1142,22 @@ Window.prototype.assert = async function (action, silent = false) {
 		await action();
 	} catch (error) {
 		if (silent) return;
-		await this.throw(Error.from(error));
+		await this.alertAsync(Error.from(error));
 		location.reload();
 	}
 };
+
+void async function () {
+	const subtitle = bSubtitle.innerText;
+	const period = 4;
+	let counter = 0;
+	while (true) {
+		await Promise.withTimeout(1000 / period);
+		if (!dialogLoader.open) continue;
+		bSubtitle.innerText = `${subtitle}${`.`.repeat(counter)}`;
+		counter = (counter + 1) % period;
+	}
+}();
 
 /** @type {Keyframe} */
 const keyframeAppear = { opacity: `1` };
@@ -1259,7 +1173,6 @@ const keyframeDisappear = { opacity: `0` };
  * @returns {Promise<T>} A promise that resolves to the result of the input promise.
  */
 Window.prototype.load = async function (promise, duration = 200, delay = 0) {
-	const dialogLoader = document.getElement(HTMLDialogElement, `dialog.loader`);
 	try {
 		dialogLoader.showModal();
 		await dialogLoader.animate([keyframeDisappear, keyframeAppear], { duration, fill: `both` }).finished;
@@ -1359,4 +1272,4 @@ Navigator.prototype.download = function (file) {
 };
 //#endregion
 
-export { Stack, Queue, DataPair, StrictMap, ImplementationError };
+export { Stack, Queue, DataPair, StrictMap, PromiseFactory, ImplementationError };

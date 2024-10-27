@@ -256,6 +256,7 @@ dialog {
 	&.pop-up div.container {
 		overflow: hidden auto;
 		word-wrap: break-word;
+		white-space: pre-wrap;
 	}
 }
 
