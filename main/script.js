@@ -2,50 +2,83 @@
 
 import { } from "../scripts/structure.js";
 
+//#region Alert severity
+/**
+ * @enum {number}
+ */
+const AlertSeverity = {
+	/**
+	 * Ignore the response, taking no action.
+	 * @readonly
+	 */
+	ignore: 0,
+	/**
+	 * Log the response for informational purposes.
+	 * @readonly
+	 */
+	log: 1,
+	/**
+	 * Throw an error in response to a critical event.
+	 * @readonly
+	 */
+	throw: 2,
+};
+Object.freeze(AlertSeverity);
+//#endregion
 //#region Controller
 /**
  * Represents the controller for the application.
  */
 class Controller {
-	//#region Launch
+	//#region Internal
 	/** @type {boolean} */
 	static #locked = true;
 	/**
-	 * This method orchestrates the preload process and then starts the main application flow.
-	 * @param {ConstructorParameters<typeof Controller>} args 
-	 * @returns {Promise<Controller>}
+	 * Starts the main application flow.
+	 * @returns {Promise<void>}
 	 */
-	static async construct(...args) {
+	static async launch() {
 		Controller.#locked = false;
-		const self = new Controller(...args);
+		const self = new Controller();
 		Controller.#locked = true;
 
-		if (self.#usePreload) await window.load(self.#preload());
-		await self.#run();
-
-		return self;
+		try {
+			await self.#main();
+		} catch (error) {
+			await self.#catch(Error.from(error));
+		}
 	}
 	constructor() {
 		if (Controller.#locked) throw new TypeError(`Illegal constructor`);
 	}
-	//#endregion
-	//#region Logic
-	/** @type {boolean} */
-	#usePreload = true;
+	/** @type {AlertSeverity} */
+	#severity = AlertSeverity.throw;
 	/**
+	 * @param {Error} error 
 	 * @returns {Promise<void>}
 	 */
-	async #preload() {
-		// Your preload logic goes here
+	async #catch(error) {
+		switch (this.#severity) {
+			case AlertSeverity.ignore: break;
+			case AlertSeverity.log: {
+				console.error(error);
+			} break;
+			case AlertSeverity.throw: {
+				await window.alertAsync(error);
+				location.reload();
+			} break;
+		}
 	}
+	//#endregion
+	//#region Implementation
 	/**
 	 * @returns {Promise<void>}
 	 */
-	async #run() {
+	async #main() {
 		// Your run logic goes here
 	}
 	//#endregion
 }
 
-await window.assert(Controller.construct);
+await Controller.launch();
 //#endregion
