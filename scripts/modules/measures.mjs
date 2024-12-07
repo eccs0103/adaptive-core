@@ -1,7 +1,7 @@
 "use strict";
 
-import { ImplementationError } from "./extensions.js";
-import { FastEngine } from "./generators.js";
+import { ImplementationError } from "./extensions.mjs";
+import { FastEngine } from "./generators.mjs";
 
 const { hypot, abs, trunc } = Math;
 

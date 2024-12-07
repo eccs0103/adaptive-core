@@ -1,6 +1,6 @@
 "use strict";
 
-import { } from "../scripts/structure.js";
+import { } from "../scripts/structure.mjs";
 
 //#region Alert severity
 /**

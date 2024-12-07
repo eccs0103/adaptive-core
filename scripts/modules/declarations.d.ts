@@ -1,4 +1,4 @@
-/// <reference path="./extensions.js" />
+/// <reference path="./extensions.mjs" />
 
 /**
  * A mapping interface that associates primitive types with string keys.

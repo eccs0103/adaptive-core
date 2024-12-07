@@ -1,6 +1,6 @@
 "use strict";
 
-import { ImplementationError } from "./extensions.js";
+import { ImplementationError } from "./extensions.mjs";
 
 const { random, round, trunc } = Math;
 

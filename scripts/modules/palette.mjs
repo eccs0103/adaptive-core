@@ -1,7 +1,7 @@
 "use strict";
 
-import { } from "./extensions.js";
-import { Matrix, Vector2D } from "./measures.js";
+import { } from "./extensions.mjs";
+import { Matrix, Vector2D } from "./measures.mjs";
 
 const { min, max, trunc, abs } = Math;
 

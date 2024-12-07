@@ -2,8 +2,8 @@
 
 "use strict";
 
-import { bSubtitle, dialogLoader } from "../templates/loader.js";
-import { buttonConfirmAccept, buttonConfirmDecline, buttonPromptAccept, dialogAlert, dialogConfirm, dialogPrompt, divAlertCoontainer, divConfirmContainer, divPromptContainer, inputPrompt } from "../templates/popup.js";
+import { bSubtitle, dialogLoader } from "../templates/loader.mjs";
+import { buttonConfirmAccept, buttonConfirmDecline, buttonPromptAccept, dialogAlert, dialogConfirm, dialogPrompt, divAlertCoontainer, divConfirmContainer, divPromptContainer, inputPrompt } from "../templates/popup.mjs";
 
 const { PI, trunc } = Math;
 
