@@ -255,7 +255,7 @@ dialog {
 
 	&.pop-up div.container {
 		overflow: auto;
-		word-wrap: break-word;
+		text-overflow: clip;
 		white-space: pre;
 	}
 }
@@ -323,8 +323,12 @@ img {
 
 	&.icon,
 	&.avatar {
-		height: var(--size-standart);
 		aspect-ratio: 1;
+		height: var(--size-standart);
+
+		&.large-image {
+			height: var(--size-large-standart);
+		}
 	}
 
 	&.in-line {
@@ -335,7 +339,7 @@ img {
 hr {
 	width: 100%;
 	margin: var(--size-gap) 0;
-	padding: calc(var(--size-serpator) / 2) !important;
+	padding: calc(var(--size-serpator) / 2);
 }
 
 kbd {

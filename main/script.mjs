@@ -37,7 +37,7 @@ class Controller {
 	 * Starts the main application flow.
 	 * @returns {Promise<void>}
 	 */
-	static async launch() {
+	static async build() {
 		Controller.#locked = false;
 		const self = new Controller();
 		Controller.#locked = true;
@@ -79,6 +79,6 @@ class Controller {
 	}
 	//#endregion
 }
-
-await Controller.launch();
 //#endregion
+
+Controller.build();

@@ -2,17 +2,15 @@
 
 import { ImplementationError } from "./extensions.mjs";
 
-const { random, round, trunc } = Math;
+const { random, trunc } = Math;
 
 //#region Engine
 /**
- * @typedef UncomposedEngineEventMap
+ * @typedef {object} EngineEventMap
  * @property {Event} start
  * @property {Event} update
  * @property {Event} launch
  * @property {Event} change
- * 
- * @typedef {EventListener & UncomposedEngineEventMap} EngineEventMap
  */
 
 /**
@@ -26,9 +24,23 @@ class Engine extends EventTarget {
 	}
 	/**
 	 * @template {keyof EngineEventMap} K
-	 * @param {K} type
-	 * @param {(this: Engine, ev: EngineEventMap[K]) => any} listener
-	 * @param {boolean | AddEventListenerOptions} options
+	 * @overload
+	 * @param {K} type 
+	 * @param {(this: Engine, ev: EngineEventMap[K]) => any} listener 
+	 * @param {boolean | AddEventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @overload
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | AddEventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | AddEventListenerOptions} options 
 	 * @returns {void}
 	 */
 	addEventListener(type, listener, options = false) {
@@ -36,9 +48,23 @@ class Engine extends EventTarget {
 	}
 	/**
 	 * @template {keyof EngineEventMap} K
-	 * @param {K} type
-	 * @param {(this: Engine, ev: EngineEventMap[K]) => any} listener
-	 * @param {boolean | EventListenerOptions} options
+	 * @overload
+	 * @param {K} type 
+	 * @param {(this: Engine, ev: EngineEventMap[K]) => any} listener 
+	 * @param {boolean | EventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @overload
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | EventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | EventListenerOptions} options 
 	 * @returns {void}
 	 */
 	removeEventListener(type, listener, options = false) {
@@ -99,9 +125,9 @@ class Engine extends EventTarget {
 //#endregion
 //#region Fast engine
 /**
- * @typedef {{}} UncomposedFastEngineEventMap
+ * @typedef {{ }} Extendable.FastEngineEventMap
  * 
- * @typedef {EngineEventMap & UncomposedFastEngineEventMap} FastEngineEventMap
+ * @typedef {EngineEventMap & Extendable.FastEngineEventMap} FastEngineEventMap
  */
 
 /**
@@ -140,23 +166,51 @@ class FastEngine extends Engine {
 	}
 	/**
 	 * @template {keyof FastEngineEventMap} K
-	 * @param {K} type
-	 * @param {(this: FastEngine, ev: FastEngineEventMap[K]) => any} listener
-	 * @param {boolean | AddEventListenerOptions} options
+	 * @overload
+	 * @param {K} type 
+	 * @param {(this: FastEngine, ev: FastEngineEventMap[K]) => any} listener 
+	 * @param {boolean | AddEventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @overload
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | AddEventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | AddEventListenerOptions} options 
 	 * @returns {void}
 	 */
 	addEventListener(type, listener, options = false) {
-		return super.addEventListener(type, /** @type {(this: Engine, ev: EngineEventMap[K]) => any} */(listener), options);
+		return super.addEventListener(type, listener, options);
 	}
 	/**
 	 * @template {keyof FastEngineEventMap} K
-	 * @param {K} type
-	 * @param {(this: FastEngine, ev: FastEngineEventMap[K]) => any} listener
-	 * @param {boolean | EventListenerOptions} options
+	 * @overload
+	 * @param {K} type 
+	 * @param {(this: FastEngine, ev: FastEngineEventMap[K]) => any} listener 
+	 * @param {boolean | EventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @overload
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | EventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | EventListenerOptions} options 
 	 * @returns {void}
 	 */
 	removeEventListener(type, listener, options = false) {
-		return super.removeEventListener(type, /** @type {(this: Engine, ev: EngineEventMap[K]) => any} */(listener), options);
+		return super.removeEventListener(type, listener, options);
 	}
 	/** @type {boolean} */
 	#launched;
@@ -219,9 +273,9 @@ class FastEngine extends Engine {
 //#endregion
 //#region Precise engine
 /**
- * @typedef {{}} UncomposedPreciseEngineEventMap
+ * @typedef {{ }} Extendable.PreciseEngineEventMap
  * 
- * @typedef {EngineEventMap & UncomposedPreciseEngineEventMap} PreciseEngineEventMap
+ * @typedef {EngineEventMap & Extendable.PreciseEngineEventMap} PreciseEngineEventMap
  */
 
 /**
@@ -258,23 +312,51 @@ class PreciseEngine extends Engine {
 	};
 	/**
 	 * @template {keyof PreciseEngineEventMap} K
-	 * @param {K} type
-	 * @param {(this: PreciseEngine, ev: PreciseEngineEventMap[K]) => any} listener
-	 * @param {boolean | AddEventListenerOptions} options
+	 * @overload
+	 * @param {K} type 
+	 * @param {(this: PreciseEngine, ev: PreciseEngineEventMap[K]) => any} listener 
+	 * @param {boolean | AddEventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @overload
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | AddEventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | AddEventListenerOptions} options 
 	 * @returns {void}
 	 */
 	addEventListener(type, listener, options = false) {
-		return super.addEventListener(type, /** @type {(this: Engine, ev: EngineEventMap[K]) => any} */(listener), options);
+		return super.addEventListener(type, listener, options);
 	}
 	/**
 	 * @template {keyof PreciseEngineEventMap} K
-	 * @param {K} type
-	 * @param {(this: PreciseEngine, ev: PreciseEngineEventMap[K]) => any} listener
-	 * @param {boolean | EventListenerOptions} options
+	 * @overload
+	 * @param {K} type 
+	 * @param {(this: PreciseEngine, ev: PreciseEngineEventMap[K]) => any} listener 
+	 * @param {boolean | EventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @overload
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | EventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | EventListenerOptions} options 
 	 * @returns {void}
 	 */
 	removeEventListener(type, listener, options = false) {
-		return super.removeEventListener(type, /** @type {(this: Engine, ev: EngineEventMap[K]) => any} */(listener), options);
+		return super.removeEventListener(type, listener, options);
 	}
 	/** @type {boolean} */
 	#launched;
@@ -337,9 +419,9 @@ class PreciseEngine extends Engine {
 //#endregion
 //#region Static engine
 /**
- * @typedef {{}} UncomposedStaticEngineEventMap
+ * @typedef {{ }} Extendable.StaticEngineEventMap
  * 
- * @typedef {EngineEventMap & UncomposedStaticEngineEventMap} StaticEngineEventMap
+ * @typedef {EngineEventMap & Extendable.StaticEngineEventMap} StaticEngineEventMap
  */
 
 /**
@@ -378,23 +460,51 @@ class StaticEngine extends Engine {
 	}
 	/**
 	 * @template {keyof StaticEngineEventMap} K
-	 * @param {K} type
-	 * @param {(this: StaticEngine, ev: StaticEngineEventMap[K]) => any} listener
-	 * @param {boolean | AddEventListenerOptions} options
+	 * @overload
+	 * @param {K} type 
+	 * @param {(this: StaticEngine, ev: StaticEngineEventMap[K]) => any} listener 
+	 * @param {boolean | AddEventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @overload
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | AddEventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | AddEventListenerOptions} options 
 	 * @returns {void}
 	 */
 	addEventListener(type, listener, options = false) {
-		return super.addEventListener(type, /** @type {(this: Engine, ev: EngineEventMap[K]) => any} */(listener), options);
+		return super.addEventListener(type, listener, options);
 	}
 	/**
 	 * @template {keyof StaticEngineEventMap} K
-	 * @param {K} type
-	 * @param {(this: StaticEngine, ev: StaticEngineEventMap[K]) => any} listener
-	 * @param {boolean | EventListenerOptions} options
+	 * @overload
+	 * @param {K} type 
+	 * @param {(this: StaticEngine, ev: StaticEngineEventMap[K]) => any} listener 
+	 * @param {boolean | EventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @overload
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | EventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | EventListenerOptions} options 
 	 * @returns {void}
 	 */
 	removeEventListener(type, listener, options = false) {
-		return super.removeEventListener(type, /** @type {(this: Engine, ev: EngineEventMap[K]) => any} */(listener), options);
+		return super.removeEventListener(type, listener, options);
 	}
 	/** @type {boolean} */
 	#launched;
@@ -478,10 +588,15 @@ class Random {
 	}
 	/**
 	 * Generates a random boolean value.
-	 * @returns {boolean} A random boolean value.
+	 * @param {number} factor Probability for `true` (0 to 1, default is 0.5).
+	 * @returns {boolean} Random boolean value.
+	 * @throws {TypeError} If factor is not finite.
+	 * @throws {RangeError} If factor is out of range.
 	 */
-	boolean() {
-		return Boolean(round(random()));
+	boolean(factor = 0.5) {
+		if (!Number.isFinite(factor)) throw new TypeError(`The factor ${factor} must be a finite number`);
+		if (0 > factor || factor > 1) throw new RangeError(`The factor ${factor} is out of range [0 - 1]`);
+		return random() < factor;
 	}
 	/**
 	 * Returns a random number in range [min - max).
@@ -586,4 +701,215 @@ class Random {
 }
 //#endregion
 
-export { Engine, FastEngine, PreciseEngine, StaticEngine, Random };
+//#region Socket package
+/**
+ * @typedef {object} SocketPackageNotation
+ * @property {string} type
+ * @property {boolean} rejected
+ * @property {object} details
+ */
+
+/**
+ * Represents a structured data package for communication over sockets.
+ */
+class SocketPackage {
+	/**
+	 * Imports a SocketPackage from a given source object.
+	 * @param {any} source The object to import as a SocketPackage.
+	 * @param {string} name An optional name for the source, used in error messages.
+	 * @returns {SocketPackage} A new instance of SocketPackage.
+	 * @throws {TypeError} If the source cannot be imported as a SocketPackage.
+	 */
+	static import(source, name = `source`) {
+		try {
+			const shell = Object.import(source);
+			const type = String.import(Reflect.get(shell, `type`), `property type`);
+			const rejected = Boolean.import(Reflect.get(shell, `rejected`), `property rejected`);
+			const details = Reflect.get(shell, `details`);
+			return new SocketPackage(type, details, rejected);
+		} catch (error) {
+			throw new TypeError(`Unable to import ${(name)} due its ${typename(source)} type`, { cause: error });
+		}
+	}
+	/**
+	 * Exports the current SocketPackage instance as a plain object.
+	 * @returns {SocketPackageNotation} The exported package notation.
+	 */
+	export() {
+		return {
+			type: this.#type.export(),
+			rejected: this.#rejected.export(),
+			details: this.#details
+		};
+	}
+	/**
+	 * @param {string} type The type of the package.
+	 * @param {object} details The details or payload of the package.
+	 * @param {boolean} rejected Whether the package is rejected.
+	 */
+	constructor(type, details = null, rejected = false) {
+		this.#type = type;
+		this.#details = details;
+		this.#rejected = rejected;
+	}
+	/** @type {string} */
+	#type;
+	/**
+	 * Gets the type of the package.
+	 * @readonly
+	 * @returns {string}
+	 */
+	get type() {
+		return this.#type;
+	}
+	/** @type {boolean} */
+	#rejected;
+	/**
+	 * Gets the rejection status of the package.
+	 * @readonly
+	 * @returns {boolean}
+	 */
+	get rejected() {
+		return this.#rejected;
+	}
+	/** @type {object} */
+	#details;
+	/**
+	 * Gets the details of the package.
+	 * @readonly
+	 * @returns {object}
+	 */
+	get details() {
+		return this.#details;
+	}
+}
+//#endregion
+//#region Socket manager
+/**
+ * @typedef {object} SocketManagerEventMap
+ * @property {Event} connect
+ * @property {Event} disconnect
+ */
+
+/**
+ * Manages WebSocket connections and provides methods for sending and receiving messages.
+ * This class extends the `EventTarget` API to handle connection events.
+ */
+class SocketManager extends EventTarget {
+	/**
+	 * @param {string | URL} url The URL for the WebSocket connection.
+	 */
+	constructor(url) {
+		super();
+
+		this.#url = url;
+		this.#connect(0);
+	}
+	/**
+	 * @template {keyof SocketManagerEventMap} K
+	 * @overload
+	 * @param {K} type 
+	 * @param {(this: SocketManager, ev: SocketManagerEventMap[K]) => any} listener 
+	 * @param {boolean | AddEventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @overload
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | AddEventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | AddEventListenerOptions} options 
+	 * @returns {void}
+	 */
+	addEventListener(type, listener, options = false) {
+		return super.addEventListener(type, listener, options);
+	}
+	/**
+	 * @template {keyof SocketManagerEventMap} K
+	 * @overload
+	 * @param {K} type 
+	 * @param {(this: SocketManager, ev: SocketManagerEventMap[K]) => any} listener 
+	 * @param {boolean | EventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @overload
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | EventListenerOptions} [options] 
+	 * @returns {void}
+	 */
+	/**
+	 * @param {string} type 
+	 * @param {EventListenerOrEventListenerObject} listener 
+	 * @param {boolean | EventListenerOptions} options 
+	 * @returns {void}
+	 */
+	removeEventListener(type, listener, options = false) {
+		return super.removeEventListener(type, listener, options);
+	}
+	/** @type {string | URL} */
+	#url;
+	/** @type {WebSocket?} */
+	#socket = null;
+	/**
+	 * @param {number} attempt 
+	 * @returns {Promise<void>}
+	 */
+	async #connect(attempt) {
+		try {
+			const socket = this.#socket = new WebSocket(this.#url);
+			await Promise.withSignal((signal, resolve, reject) => {
+				socket.addEventListener(`open`, (event) => resolve(undefined), { signal });
+				socket.addEventListener(`error`, (event) => reject(event["error"]), { signal });
+				socket.addEventListener(`close`, (event) => reject(event.reason), { signal });
+			});
+			this.dispatchEvent(new Event(`connect`));
+		} catch (reason) {
+			await this.#connect(attempt + 1);
+		}
+		this.#observe();
+	}
+	/**
+	 * @returns {Promise<void>}
+	 */
+	async #observe() {
+		const socket = this.#socket;
+		if (socket === null) return;
+		await Promise.withSignal((signal, resolve) => {
+			socket.addEventListener(`error`, (event) => resolve(event["error"]), { signal });
+			socket.addEventListener(`close`, (event) => resolve(event.reason), { signal });
+		});
+		this.dispatchEvent(new Event(`disconnect`));
+		this.#connect(0);
+	}
+	/**
+	 * Sends a message to the server and waits for a response.
+	 * @param {string} type The type of the message.
+	 * @param {object} details The payload of the message.
+	 * @returns {Promise<object>} Resolves with the response details.
+	 * @throws {Error} If the socket is not connected or an error occurs.
+	 */
+	async send(type, details = null) {
+		const socket = this.#socket;
+		if (socket === null || socket.readyState !== WebSocket.OPEN) throw new Error(`Socket is not connected.`);
+		const promiseResponse = Promise.withSignal((signal, resolve, reject) => {
+			socket.addEventListener(`message`, ({ data }) => {
+				const response = SocketPackage.import(JSON.parse(data));
+				if (response.type !== type) return;
+				if (response.rejected) reject(response.details);
+				resolve(response.details);
+			}, { signal });
+		});
+		socket.send(JSON.stringify(new SocketPackage(type, details).export()));
+		return await promiseResponse;
+	}
+}
+//#endregion
+
+export { Engine, FastEngine, PreciseEngine, StaticEngine, Random, SocketManager };

@@ -189,7 +189,7 @@ interface ObjectConstructor {
 	 * @throws {ReferenceError} Throws a ReferenceError if the source is undefined.
 	 * @throws {TypeError} Throws a TypeError if the source is not an object or null.
 	 */
-	import(source: any, name?: string): Object;
+	import(source: any, name?: string): object;
 	/**
 	 * Applies a callback function to a non-nullable value, or returns the original nullable value.
 	 * @template T The type of the input value.
@@ -216,7 +216,7 @@ interface Object {
 	 * Exports the object.
 	 * @returns The exported object.
 	 */
-	export(): Object;
+	export(): object;
 }
 
 interface ArrayConstructor {
@@ -294,6 +294,23 @@ interface PromiseConstructor {
 	 * @returns A promise that can be controlled with an abort signal.
 	 */
 	withSignal<T>(callback: (signal: AbortSignal, resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
+}
+
+interface Promise<T> {
+	/**
+	 * Checks if the promise is fulfilled.
+	 */
+	readonly fulfilled: Promise<boolean>;
+	/**
+	 * Retrieves the value of a resolved promise.
+	 * @throws {Error} Throws an error if the promise is rejected.
+	 */
+	readonly value: Promise<T>;
+	/**
+	 * Retrieves the reason of a rejected promise.
+	 * @throws {Error} Throws an error if the promise is fulfilled.
+	 */
+	readonly reason: Promise<any>;
 }
 
 interface ErrorConstructor {

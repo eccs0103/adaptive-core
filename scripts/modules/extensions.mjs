@@ -204,7 +204,7 @@ Function.ensureImplementation = async function (action, name) {
  * Imports an object from a source.
  * @param {any} source The source to import from.
  * @param {string} name The name of the source.
- * @returns {Object} The imported object.
+ * @returns {object} The imported object.
  * @throws {TypeError} If the source is not an object or null.
  */
 Object.import = function (source, name = `source`) {
@@ -244,7 +244,7 @@ Object.suppress = function (value, name = `value`) {
 
 /**
  * Exports the object.
- * @returns {Object} The exported object.
+ * @returns {object} The exported object.
  */
 Object.prototype.export = function () {
 	return this.valueOf();
@@ -735,6 +735,38 @@ Promise.withSignal = async function (callback) {
 		controller.abort();
 	}
 };
+
+Object.defineProperty(Promise.prototype, `fulfilled`, {
+	async get() {
+		try {
+			await this;
+			return true;
+		} catch (reason) {
+			return false;
+		}
+	}
+});
+
+Object.defineProperty(Promise.prototype, `value`, {
+	async get() {
+		try {
+			return await this;
+		} catch (reason) {
+			throw new Error(`Unable to get value of rejected promise`);
+		}
+	}
+});
+
+Object.defineProperty(Promise.prototype, `reason`, {
+	async get() {
+		try {
+			await this;
+			throw new Error(`Unable to get reason of resolved promise`);
+		} catch (reason) {
+			return reason;
+		}
+	}
+});
 //#endregion
 //#region Promise factory
 /**

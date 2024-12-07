@@ -5,6 +5,13 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 3.2.0 (07.12.2024)
+- Added `promise.fulfilled`, `promise.value`, and `promise.reason`.
+- Introduced the `.large-image` class.
+- Fixed inheritance issues with `EventTarget`.
+- Improved `random.boolean`.
+- Added a preliminary `SocketManager` class.
+
 ### 3.1.6 (28.10.2024)
 - Updated template section.
 - Global functions divided.
