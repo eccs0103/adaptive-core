@@ -44,8 +44,8 @@ class Controller {
 
 		try {
 			await self.#main();
-		} catch (error) {
-			await self.#catch(Error.from(error));
+		} catch (reason) {
+			await self.#catch(Error.from(reason));
 		}
 	}
 	constructor() {

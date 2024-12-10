@@ -1,7 +1,6 @@
 "use strict";
 
-import { ImplementationError } from "./extensions.mjs";
-import { FastEngine } from "./generators.mjs";
+import { ImplementationError } from "../core/extensions.mjs";
 
 const { hypot, abs, trunc } = Math;
 
@@ -293,7 +292,7 @@ class Vector1D extends Vector {
 			this.#x = arg1;
 			return;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	//#endregion
 	//#region Properties
@@ -355,7 +354,7 @@ class Vector1D extends Vector {
 			this.x += arg1;
 			return this;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	/**
 	 * Subtracts a scalar from the current vector.
@@ -381,7 +380,7 @@ class Vector1D extends Vector {
 			this.x -= arg1;
 			return this;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	/**
 	 * Multiplies the current vector by a scalar.
@@ -407,7 +406,7 @@ class Vector1D extends Vector {
 			this.x *= arg1;
 			return this;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	/**
 	 * Divides the current vector by a scalar.
@@ -433,7 +432,7 @@ class Vector1D extends Vector {
 			this.x /= arg1;
 			return this;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	//#endregion
 }
@@ -612,7 +611,7 @@ class Vector2D extends Vector1D {
 			this.#y = arg2;
 			return;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	//#endregion
 	//#region Properties
@@ -687,7 +686,7 @@ class Vector2D extends Vector1D {
 			this.y += arg1;
 			return this;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	/**
 	 * Subtracts a scalar from the current vector.
@@ -725,7 +724,7 @@ class Vector2D extends Vector1D {
 			this.y -= arg1;
 			return this;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	/**
 	 * Multiplies the current vector by a scalar.
@@ -763,7 +762,7 @@ class Vector2D extends Vector1D {
 			this.y *= arg1;
 			return this;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	/**
 	 * Divides the current vector by a scalar.
@@ -801,7 +800,7 @@ class Vector2D extends Vector1D {
 			this.y /= arg1;
 			return this;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	//#endregion
 }
@@ -981,7 +980,7 @@ class Vector3D extends Vector2D {
 			this.#z = arg3;
 			return;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	//#endregion
 	//#region Properties
@@ -1069,7 +1068,7 @@ class Vector3D extends Vector2D {
 			this.z += arg1;
 			return this;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	/**
 	 * Subtracts a scalar from the current vector.
@@ -1119,7 +1118,7 @@ class Vector3D extends Vector2D {
 			this.z -= arg1;
 			return this;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	/**
 	 * Multiplies the current vector by a scalar.
@@ -1169,7 +1168,7 @@ class Vector3D extends Vector2D {
 			this.z *= arg1;
 			return this;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	/**
 	 * Divides the current vector by a scalar.
@@ -1219,7 +1218,7 @@ class Vector3D extends Vector2D {
 			this.z /= arg1;
 			return this;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	//#endregion
 }
@@ -1429,7 +1428,7 @@ class Timespan {
 			this.#milliseconds = 0;
 			return;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	//#endregion
 	//#region Properties
@@ -1609,7 +1608,7 @@ class Timespan {
 			this.duration += arg1;
 			return this;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	/**
 	 * Subtracts a number of milliseconds from this timespan.
@@ -1636,7 +1635,7 @@ class Timespan {
 			this.duration -= arg1;
 			return this;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	/**
 	 * Multiplies this timespan by a number of milliseconds.
@@ -1663,7 +1662,7 @@ class Timespan {
 			this.duration *= arg1;
 			return this;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	/**
 	 * Divides this timespan by a number of milliseconds.
@@ -1690,67 +1689,9 @@ class Timespan {
 			this.duration /= arg1;
 			return this;
 		}
-		throw new TypeError(`No overload with these arguments`);
+		throw new TypeError(`No overload with [${typename(arg1)}] arguments`);
 	}
 	//#endregion
-}
-//#endregion
-//#region Stopwatch
-/**
- * A class representing a stopwatch to measure time durations.
- */
-class Stopwatch {
-	/**
-	 * @param {boolean} launch Whether to start the stopwatch immediately.
-	 */
-	constructor(launch = false) {
-		this.#launched = launch;
-
-		const engine = new FastEngine(true);
-
-		let previous = performance.now();
-		engine.addEventListener(`update`, (event) => {
-			let current = performance.now();
-			if (this.#launched) {
-				this.#elapsed += current - previous;
-			}
-			previous = current;
-		});
-	}
-	/** @type {DOMHighResTimeStamp} */
-	#elapsed = 0;
-	/**
-	 * Gets the elapsed time as milliseconds.
-	 * @readonly
-	 * @returns {DOMHighResTimeStamp}
-	 */
-	get elapsed() {
-		return this.#elapsed;
-	}
-	/**
-	 * Resets the elapsed time to zero.
-	 * @returns {void}
-	 */
-	reset() {
-		this.#elapsed = 0;
-	}
-	/** @type {boolean} */
-	#launched;
-	/**
-	 * Gets the launched state of the stopwatch.
-	 * @returns {boolean}
-	 */
-	get launched() {
-		return this.#launched;
-	}
-	/**
-	 * Sets the launched state of the stopwatch.
-	 * @param {boolean} value
-	 * @returns {void}
-	 */
-	set launched(value) {
-		this.#launched = value;
-	}
 }
 //#endregion
 
@@ -1823,4 +1764,4 @@ class Matrix {
 }
 //#endregion
 
-export { Vector, Vector1D, Vector2D, Vector3D, Timespan, Stopwatch, Matrix };
+export { Vector, Vector1D, Vector2D, Vector3D, Timespan, Matrix };

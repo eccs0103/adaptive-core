@@ -1,6 +1,6 @@
 "use strict";
 
-import { DataPair } from "./extensions.mjs";
+import { DataPair } from "../core/extensions.mjs";
 
 //#region Archive
 /**
@@ -92,7 +92,7 @@ class ArchiveManager {
 		window.addEventListener(`beforeunload`, (event) => {
 			try {
 				archive.data = self.#content.export();
-			} catch (error) {
+			} catch (reason) {
 				event.preventDefault();
 			}
 		});

@@ -149,12 +149,22 @@ String.prototype.toTitleCase = function () {
 };
 
 /**
- * Converts the string to title case based on the specified locale, where the first letter of each word is capitalized.
- * @param {Intl.LocalesArgument} locale The locale to use for the conversion, defaults to the user's language.
- * @returns {string} The string converted to title case based on the specified locale.
+ * Converts the string to title case based on the specified locale(s), capitalizing the first letter of each word.
+ * @overload
+ * @param {string | string[]} locales A single locale or an array of locales for locale-aware case conversion.
+ * @returns {string} The string converted to title case with locale-awareness.
+ * 
+ * Converts the string to title case based on the specified locale(s), capitalizing the first letter of each word.
+ * @overload
+ * @param {Intl.LocalesArgument} locales An argument supported by `Intl` for locale-aware case conversion.
+ * @returns {string} The string converted to title case with locale-awareness.
  */
-String.prototype.toLocalTitleCase = function (locale = navigator.language) {
-	return this.toLocaleLowerCase(locale).replace(patternWordsFirstLetter, char => char.toLocaleUpperCase(locale));
+/**
+ * @param {Intl.LocalesArgument | string | string[]} locales 
+ * @returns {string}
+ */
+String.prototype.toLocalTitleCase = function (locales) {
+	return this.toLocaleLowerCase(locales).replace(patternWordsFirstLetter, char => char.toLocaleUpperCase(locales));
 };
 
 /**
@@ -179,8 +189,8 @@ Function.isImplemented = async function (action) {
 	try {
 		await action();
 		return true;
-	} catch (error) {
-		if (!(error instanceof ImplementationError)) return true;
+	} catch (reason) {
+		if (!(reason instanceof ImplementationError)) return true;
 		return false;
 	}
 };
@@ -790,11 +800,11 @@ class PromiseFactory {
 //#region Error
 /**
  * Generates an Error object from the provided input.
- * @param {any} exception The exception input.
+ * @param {any} reason The reason input.
  * @returns {Error} An Error object representing the input.
  */
-Error.from = function (exception) {
-	return exception instanceof Error ? exception : new Error(exception ?? `Undefined error type`);
+Error.from = function (reason) {
+	return reason instanceof Error ? reason : new Error(reason ?? `Undefined reason`);
 };
 
 /**
@@ -819,7 +829,6 @@ class ImplementationError extends ReferenceError {
 	}
 }
 //#endregion
-
 //#region Global
 /**
  * Returns the prototype of the given non-nullable value.

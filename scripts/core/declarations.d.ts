@@ -119,9 +119,15 @@ interface String {
 	 */
 	toTitleCase(): string;
 	/**
-	 * Converts the string to title case based on the specified locale, where the first letter of each word is capitalized.
-	 * @param locale The locale to use for the conversion, defaults to the user's language.
-	 * @returns The string converted to title case based on the specified locale.
+	 * Converts the string to title case based on the specified locale(s), capitalizing the first letter of each word.
+	 * @param locales A single locale or an array of locales for locale-aware case conversion.
+	 * @returns The string converted to title case with locale-awareness.
+	 */
+	toLocalTitleCase(locales?: string | string[]): string;
+	/**
+	 * Converts the string to title case based on the specified locale(s), capitalizing the first letter of each word.
+	 * @param locales An argument supported by `Intl` for locale-aware case conversion.
+	 * @returns The string converted to title case with locale-awareness.
 	 */
 	toLocalTitleCase(locales?: Intl.LocalesArgument): string;
 	/**
@@ -300,10 +306,10 @@ interface Promise<T> {
 interface ErrorConstructor {
 	/**
 	 * Generates an Error object from the provided input.
-	 * @param exception The exception input.
+	 * @param reason The reason input.
 	 * @returns An Error object representing the input.
 	 */
-	from(exception: any): Error;
+	from(reason: any): Error;
 }
 
 interface Error {

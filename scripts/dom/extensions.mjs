@@ -2,44 +2,8 @@
 
 "use strict";
 
-import { } from "../core/extensions.mjs";
 import { bSubtitle, dialogLoader } from "./loader.mjs";
 import { buttonConfirmAccept, buttonConfirmDecline, buttonPromptAccept, dialogAlert, dialogConfirm, dialogPrompt, divAlertCoontainer, divConfirmContainer, divPromptContainer, inputPrompt } from "./popup.mjs";
-
-//#region Promise
-/**
- * Creates a promise that resolves after the specified timeout.
- * @param {number} timeout The timeout in milliseconds.
- * @returns {Promise<void>} A promise that resolves after the timeout.
- */
-Promise.withTimeout = async function (timeout) {
-	const { promise, resolve } = Promise.withResolvers();
-	let index;
-	try {
-		index = setTimeout(resolve, timeout);
-		return await promise;
-	} finally {
-		clearTimeout(index);
-	}
-};
-
-/**
- * Creates a promise that can be controlled with an abort signal.
- * @template T
- * @param {(signal: AbortSignal, resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void} callback The callback to execute with an abort signal, resolve, and reject functions.
- * @returns {Promise<T>} A promise that can be controlled with an abort signal.
- */
-Promise.withSignal = async function (callback) {
-	const controller = new AbortController();
-	const { promise, resolve, reject } = Promise.withResolvers();
-	try {
-		callback(controller.signal, resolve, reject);
-		return await promise;
-	} finally {
-		controller.abort();
-	}
-};
-//#endregion
 
 //#region Parent node
 /**
@@ -78,7 +42,7 @@ Element.prototype.getElementAsync = function (type, selectors) {
  */
 Element.prototype.getElements = function (type, selectors) {
 	const elements = this.querySelectorAll(selectors);
-	if (elements.values().every(element => element instanceof type)) return (/** @type {NodeListOf<InstanceType<T>>} */ (elements));
+	if (Array.from(elements).every(element => element instanceof type)) return (/** @type {NodeListOf<InstanceType<T>>} */ (elements));
 	else throw new TypeError(`Element ${selectors} is missing or has invalid type`);
 };
 
@@ -178,7 +142,7 @@ DocumentFragment.prototype.getElementAsync = function (type, selectors) {
  */
 DocumentFragment.prototype.getElements = function (type, selectors) {
 	const elements = this.querySelectorAll(selectors);
-	if (elements.values().every(element => element instanceof type)) return (/** @type {NodeListOf<InstanceType<T>>} */ (elements));
+	if (Array.from(elements).every(element => element instanceof type)) return (/** @type {NodeListOf<InstanceType<T>>} */ (elements));
 	else throw new TypeError(`Element ${selectors} is missing or has invalid type`);
 };
 
