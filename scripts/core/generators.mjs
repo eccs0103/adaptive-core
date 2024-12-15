@@ -59,13 +59,13 @@ class Random {
 		return array[this.integer(0, array.length)];
 	}
 	/**
-	 * Generates a sequence of random numbers from min to max (exclusive).
+	 * Generates a range of random numbers from min to max (exclusive).
 	 * @param {number} min The minimum value.
 	 * @param {number} max The maximum value.
 	 * @returns {number[]} An array of random numbers.
 	 */
-	sequence(min, max) {
-		const result = Array.sequence(min, max);
+	range(min, max) {
+		const result = Array.range(min, max);
 		this.shuffle(result);
 		return result;
 	};

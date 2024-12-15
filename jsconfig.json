@@ -31,7 +31,8 @@
 		"allowJs": true,
 		"checkJs": true,
 		"allowSyntheticDefaultImports": true,
-		"target": "ESNext"
+		"target": "ESNext",
+		"lib": [ "ESNext", "WebWorker", "DOM" ]
 	},
 	"include": [ "**/*.js", "**/*.mjs" ]
 }

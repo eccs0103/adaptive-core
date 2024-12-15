@@ -225,6 +225,16 @@ interface Object {
 	export(): object;
 }
 
+interface IteratorConstructor {
+	/**
+	 * Generates a range of integers between the specified minimum and maximum values (exclusive).
+	 * @param min The minimum value of the range (inclusive).
+	 * @param max The maximum value of the range (exclusive).
+	 * @returns A generator yielding integers in the specified range.
+	 */
+	range(min: number, max: number): Generator<number>;
+}
+
 interface ArrayConstructor {
 	/**
 	 * Imports an array from a source.
@@ -236,12 +246,12 @@ interface ArrayConstructor {
 	 */
 	import(source: any, name?: string): any[];
 	/**
-	 * Generates a sequence of numbers from min to max (exclusive).
-	 * @param min The starting number of the sequence (inclusive).
-	 * @param max The ending number of the sequence (exclusive).
-	 * @returns An array containing the sequence of numbers.
+	 * Creates an array of integers between the specified minimum and maximum values (exclusive).
+	 * @param min The minimum value of the range (inclusive).
+	 * @param max The maximum value of the range (exclusive).
+	 * @returns An array containing integers in the specified range.
 	 */
-	sequence(min: number, max: number): number[];
+	range(min: number, max: number): number[];
 }
 
 interface Array<T> {
@@ -254,7 +264,6 @@ interface Array<T> {
 	 * Swaps the elements at the given indices in the array.
 	 * @param index1 The index of the first element.
 	 * @param index2 The index of the second element.
-	 * @returns {void}
 	 */
 	swap(index1: number, index2: number): void;
 }
@@ -305,11 +314,15 @@ interface Promise<T> {
 
 interface ErrorConstructor {
 	/**
-	 * Generates an Error object from the provided input.
+	 * Generates an error object from the provided input.
 	 * @param reason The reason input.
-	 * @returns An Error object representing the input.
 	 */
 	from(reason: any): Error;
+	/**
+	 * Throws an error based on the provided input.
+	 * @param reason The reason for the error.
+	 */
+	throws(reason?: any): never;
 }
 
 interface Error {
