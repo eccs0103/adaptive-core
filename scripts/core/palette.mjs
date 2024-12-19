@@ -377,6 +377,36 @@ class Color {
 		return new Color(source).grayscale(scale);
 	}
 	/**
+	 * Emphasizes the red component of a color.
+	 * @param {Readonly<Color>} source The color to emphasize red.
+	 * @param {number} scale The scale of the emphasis [0 - 1].
+	 * @returns {Color} The red-emphasized color new instance.
+	 * @throws {TypeError} If the scale is not finite.
+	 */
+	static redEmphasis(source, scale = 1) {
+		return new Color(source).redEmphasis(scale);
+	}
+	/**
+	 * Emphasizes the green component of a color.
+	 * @param {Readonly<Color>} source The color to emphasize green.
+	 * @param {number} scale The scale of the emphasis [0 - 1].
+	 * @returns {Color} The green-emphasized color new instance.
+	 * @throws {TypeError} If the scale is not finite.
+	 */
+	static greenEmphasis(source, scale = 1) {
+		return new Color(source).greenEmphasis(scale);
+	}
+	/**
+	 * Emphasizes the blue component of a color.
+	 * @param {Readonly<Color>} source The color to emphasize blue.
+	 * @param {number} scale The scale of the emphasis [0 - 1].
+	 * @returns {Color} The blue-emphasized color new instance.
+	 * @throws {TypeError} If the scale is not finite.
+	 */
+	static blueEmphasis(source, scale = 1) {
+		return new Color(source).blueEmphasis(scale);
+	}
+	/**
 	 * Inverts a color.
 	 * @param {Readonly<Color>} source The color to invert.
 	 * @param {number} scale The scale of the inversion [0 - 1].
@@ -596,9 +626,9 @@ class Color {
 	mix(other, ratio = 0.5) {
 		if (!Number.isFinite(ratio)) throw new TypeError(`The ratio ${ratio} must be a finite number`);
 		ratio = ratio.clamp(0, 1);
-		this.red = this.red + (other.red - this.red) * ratio;
-		this.green = this.green + (other.green - this.green) * ratio;
-		this.blue = this.blue + (other.blue - this.blue) * ratio;
+		this.red += (other.red - this.red) * ratio;
+		this.green += (other.green - this.green) * ratio;
+		this.blue += (other.blue - this.blue) * ratio;
 		return this;
 	}
 	/**
@@ -611,9 +641,51 @@ class Color {
 		if (!Number.isFinite(scale)) throw new TypeError(`The scale ${scale} must be a finite number`);
 		scale = scale.clamp(0, 1);
 		const achromatic = (this.red + this.green + this.blue) / 3;
-		this.red = this.red + (achromatic - this.red) * scale;
-		this.green = this.green + (achromatic - this.green) * scale;
-		this.blue = this.blue + (achromatic - this.blue) * scale;
+		this.red += (achromatic - this.red) * scale;
+		this.green += (achromatic - this.green) * scale;
+		this.blue += (achromatic - this.blue) * scale;
+		return this;
+	}
+	/**
+	 * Emphasizes the red component of the current color.
+	 * @param {number} scale The scale of the emphasis [0 - 1].
+	 * @returns {Color} The current color instance.
+	 * @throws {TypeError} If the scale is not finite.
+	 */
+	redEmphasis(scale = 1) {
+		if (!Number.isFinite(scale)) throw new TypeError(`The scale ${scale} must be a finite number`);
+		scale = scale.clamp(0, 1);
+		const average = (this.green + this.blue) / 2;
+		this.green += (average - this.green) * scale;
+		this.blue += (average - this.blue) * scale;
+		return this;
+	}
+	/**
+	 * Emphasizes the green component of the current color.
+	 * @param {number} scale The scale of the emphasis [0 - 1].
+	 * @returns {Color} The current color instance.
+	 * @throws {TypeError} If the scale is not finite.
+	 */
+	greenEmphasis(scale = 1) {
+		if (!Number.isFinite(scale)) throw new TypeError(`The scale ${scale} must be a finite number`);
+		scale = scale.clamp(0, 1);
+		const average = (this.red + this.blue) / 2;
+		this.red += (average - this.red) * scale;
+		this.blue += (average - this.blue) * scale;
+		return this;
+	}
+	/**
+	 * Emphasizes the blue component of the current color.
+	 * @param {number} scale The scale of the emphasis [0 - 1].
+	 * @returns {Color} The current color instance.
+	 * @throws {TypeError} If the scale is not finite.
+	 */
+	blueEmphasis(scale = 1) {
+		if (!Number.isFinite(scale)) throw new TypeError(`The scale ${scale} must be a finite number`);
+		scale = scale.clamp(0, 1);
+		const average = (this.red + this.green) / 2;
+		this.red += (average - this.red) * scale;
+		this.green += (average - this.green) * scale;
 		return this;
 	}
 	/**
@@ -625,9 +697,9 @@ class Color {
 	invert(scale = 1) {
 		if (!Number.isFinite(scale)) throw new TypeError(`The scale ${scale} must be a finite number`);
 		scale = scale.clamp(0, 1);
-		this.red = this.red + ((255 - this.red) - this.red) * scale;
-		this.green = this.green + ((255 - this.green) - this.green) * scale;
-		this.blue = this.blue + ((255 - this.blue) - this.blue) * scale;
+		this.red += ((255 - this.red) - this.red) * scale;
+		this.green += ((255 - this.green) - this.green) * scale;
+		this.blue += ((255 - this.blue) - this.blue) * scale;
 		return this;
 	}
 	/**
@@ -642,9 +714,9 @@ class Color {
 		const redness = (this.red * 0.393) + (this.green * 0.769) + (this.blue * 0.189);
 		const greenness = (this.red * 0.349) + (this.green * 0.686) + (this.blue * 0.168);
 		const blueness = (this.red * 0.272) + (this.green * 0.534) + (this.blue * 0.131);
-		this.red = this.red + (redness - this.red) * scale;
-		this.green = this.green + (greenness - this.green) * scale;
-		this.blue = this.blue + (blueness - this.blue) * scale;
+		this.red += (redness - this.red) * scale;
+		this.green += (greenness - this.green) * scale;
+		this.blue += (blueness - this.blue) * scale;
 		return this;
 	}
 	/**

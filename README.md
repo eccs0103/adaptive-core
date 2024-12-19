@@ -5,6 +5,13 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 3.3.0 (19.12.2024)
+- The core is now adapted for Node and Workers.
+- Added `matrix.change`, `matrix.forEach`.
+- Introduced filters: `color.redEmphasis`, `color.greenEmphasis`, `color.blueEmphasis`, and `texture.greenEmphasis`, `texture.blueEmphasis`.
+- Optimized application of effects on textures.
+- Minor style improvements.
+
 ### 3.2.0 (07.12.2024)
 - Added `promise.fulfilled`, `promise.value`, and `promise.reason`.
 - Introduced the `.large-image` class.

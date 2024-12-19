@@ -6,7 +6,6 @@
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	user-select: none;
-	-webkit-user-drag: none;
 	border-style: none;
 	outline-style: none;
 	border-width: var(--size-serpator);
@@ -14,6 +13,12 @@
 	outline-offset: calc(-1 * var(--size-serpator));
 	text-overflow: ellipsis;
 	scroll-behavior: smooth;
+}
+
+@supports (-webkit-user-drag: none) {
+	* {
+		-webkit-user-drag: none;
+	}
 }
 
 @media only screen {
@@ -228,8 +233,10 @@ input[type="range"] {
 	}
 }
 
-*[draggable="true"] {
-	-webkit-user-drag: element;
+@supports (-webkit-user-drag: element) {
+	*[draggable="true"] {
+		-webkit-user-drag: element;
+	}
 }
 
 dialog {
@@ -316,10 +323,14 @@ table {
 	}
 }
 
-img {
+img,
+*.fittable {
 	max-width: 100%;
 	max-height: 100%;
 	object-fit: contain;
+}
+
+img {
 
 	&.icon,
 	&.avatar {

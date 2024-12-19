@@ -1761,6 +1761,36 @@ class Matrix {
 		if (0 > x || x >= size.x || 0 > y || y >= size.y) throw new RangeError(`The position ${position} is out of range [(0, 0) - ${size})`);
 		this.#data[y][x] = value;
 	}
+	/**
+	 * Updates a value at a specified position using a callback.
+	 * @param {Readonly<Vector2D>} position The position to modify.
+	 * @param {(value: T) => T} callback Function to compute the new value.
+	 * @throws {TypeError} If the x or y coordinate of the position is not an integer.
+	 * @throws {RangeError} If the x or y coordinate of the position is out of range.
+	 */
+	change(position, callback) {
+		if (!Vector.isInteger(position)) throw new TypeError(`The position ${position} must be a finite integer vector`);
+		const { x, y } = position;
+		const size = this.#size;
+		if (0 > x || x >= size.x || 0 > y || y >= size.y) throw new RangeError(`The position ${position} is out of range [(0, 0) - ${size})`);
+		this.#data[y][x] = callback(this.#data[y][x]);
+	}
+	/**
+	 * Iterates over each element in the matrix and applies a callback function.
+	 * @param {(value: T, position: Vector2D, matrix: Matrix<T>) => void} callback 
+	 * @returns {void}
+	 */
+	forEach(callback) {
+		const size = this.#size;
+		const position = Vector2D.newNaN;
+		for (let y = 0; y < size.y; y++) {
+			for (let x = 0; x < size.x; x++) {
+				position.x = x;
+				position.y = y;
+				callback(this.#data[y][x], position, this);
+			}
+		}
+	}
 }
 //#endregion
 
