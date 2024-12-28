@@ -5,6 +5,10 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
+### 3.3.1 (28.12.2024)
+- Added class `Timer`.
+- Minor code improvements.
+
 ### 3.3.0 (19.12.2024)
 - The core is now adapted for Node and Workers.
 - Added `matrix.change`, `matrix.forEach`.

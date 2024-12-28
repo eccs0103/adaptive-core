@@ -6,7 +6,7 @@ import { ImplementationError } from "../core/extensions.mjs";
 /**
  * @typedef {object} EngineEventMap
  * @property {Event} start
- * @property {Event} update
+ * @property {Event} trigger
  * @property {Event} launch
  * @property {Event} change
  */
@@ -138,29 +138,9 @@ class FastEngine extends Engine {
 	constructor(launch = false) {
 		super();
 
-		this.addEventListener(`update`, (event) => this.dispatchEvent(new Event(`start`)), { once: true });
-
-		let previous = 0;
-		/**
-		 * @param {DOMHighResTimeStamp} current 
-		 * @returns {void}
-		 */
-		const callback = (current) => {
-			const difference = current - previous;
-			if (difference > this.#gap) {
-				if (this.launched) {
-					this.#FPS = (1000 / difference);
-					this.dispatchEvent(new Event(`update`));
-				} else {
-					this.#FPS = 0;
-				}
-				previous = current;
-			}
-			requestAnimationFrame(callback);
-		};
-		requestAnimationFrame(callback);
-
 		this.#launched = launch;
+		this.addEventListener(`trigger`, event => this.dispatchEvent(new Event(`start`)), { once: true });
+		requestAnimationFrame(this.#callback.bind(this));
 	}
 	/**
 	 * @template {keyof FastEngineEventMap} K
@@ -231,6 +211,25 @@ class FastEngine extends Engine {
 		if (value) this.dispatchEvent(new Event(`launch`));
 	}
 	/** @type {number} */
+	#previous = 0;
+	/**
+	 * @param {DOMHighResTimeStamp} current 
+	 * @returns {void}
+	 */
+	#callback(current) {
+		const difference = current - this.#previous;
+		if (difference > this.#gap) {
+			if (this.launched) {
+				this.#FPS = (1000 / difference);
+				this.dispatchEvent(new Event(`trigger`));
+			} else {
+				this.#FPS = 0;
+			}
+			this.#previous = current;
+		}
+		requestAnimationFrame(this.#callback.bind(this));
+	}
+	/** @type {number} */
 	#gap = 0;
 	/**
 	 * Gets the FPS limit of the engine.
@@ -286,27 +285,9 @@ class PreciseEngine extends Engine {
 	constructor(launch = false) {
 		super();
 
-		this.addEventListener(`update`, (event) => this.dispatchEvent(new Event(`start`)), { once: true });
-
-		let previous = performance.now();
-		/**
-		 * @param {DOMHighResTimeStamp} current 
-		 * @returns {void}
-		 */
-		const callback = (current) => {
-			const difference = current - previous;
-			if (this.launched) {
-				this.#FPS = (1000 / difference);
-				this.dispatchEvent(new Event(`update`));
-			} else {
-				this.#FPS = 0;
-			}
-			previous = current;
-			setTimeout(callback, this.#gap, performance.now());
-		};
-		setTimeout(callback, this.#gap, performance.now());
-
 		this.#launched = launch;
+		this.addEventListener(`trigger`, event => this.dispatchEvent(new Event(`start`)), { once: true });
+		setTimeout(this.#callback.bind(this), this.#gap, performance.now());
 	};
 	/**
 	 * @template {keyof PreciseEngineEventMap} K
@@ -375,6 +356,23 @@ class PreciseEngine extends Engine {
 		this.#launched = value;
 		if (previous !== value) this.dispatchEvent(new Event(`change`));
 		if (value) this.dispatchEvent(new Event(`launch`));
+	}
+	/** @type {number} */
+	#previous = performance.now();
+	/**
+	 * @param {DOMHighResTimeStamp} current 
+	 * @returns {void}
+	 */
+	#callback(current) {
+		const difference = current - this.#previous;
+		if (this.launched) {
+			this.#FPS = (1000 / difference);
+			this.dispatchEvent(new Event(`trigger`));
+		} else {
+			this.#FPS = 0;
+		}
+		this.#previous = current;
+		setTimeout(this.#callback.bind(this), this.#gap, performance.now());
 	}
 	/** @type {number} */
 	#gap = 0;

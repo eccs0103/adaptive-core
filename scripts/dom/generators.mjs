@@ -23,29 +23,12 @@ class StaticEngine extends Engine {
 	constructor(launch = false) {
 		super();
 
-		this.addEventListener(`update`, (event) => this.dispatchEvent(new Event(`start`)), { once: true });
-
-		let previous = 0;
-		/**
-		 * @param {DOMHighResTimeStamp} current 
-		 * @returns {void}
-		 */
-		const callback = (current) => {
-			const difference = current - previous;
-			const factor = trunc(difference / this.#gap);
-			this.#delta = difference / factor;
-			for (let index = 0; index < factor; index++) {
-				if (this.#focus && this.launched) this.dispatchEvent(new Event(`update`));
-				previous = current;
-			}
-			requestAnimationFrame(callback);
-		};
-		requestAnimationFrame(callback);
-
 		this.#launched = launch;
+		this.addEventListener(`trigger`, event => this.dispatchEvent(new Event(`start`)), { once: true });
+		requestAnimationFrame(this.#callback.bind(this));
 
-		window.addEventListener(`focus`, (event) => this.#focus = true);
-		window.addEventListener(`blur`, (event) => this.#focus = false);
+		window.addEventListener(`focus`, event => this.#focus = true);
+		window.addEventListener(`blur`, event => this.#focus = false);
 	}
 	/**
 	 * @template {keyof StaticEngineEventMap} K
@@ -115,6 +98,22 @@ class StaticEngine extends Engine {
 		if (previous !== value) this.dispatchEvent(new Event(`change`));
 		if (value) this.dispatchEvent(new Event(`launch`));
 	}
+	/** @type {number} */
+	#previous = 0;
+	/**
+	 * @param {DOMHighResTimeStamp} current 
+	 * @returns {void}
+	 */
+	#callback(current) {
+		const difference = current - this.#previous;
+		const factor = trunc(difference / this.#gap);
+		this.#delta = difference / factor;
+		for (let index = 0; index < factor; index++) {
+			if (this.#focus && this.launched) this.dispatchEvent(new Event(`trigger`));
+			this.#previous = current;
+		}
+		requestAnimationFrame(this.#callback.bind(this));
+	};
 	/** @type {number} */
 	#gap = 1000 / 120;
 	/**
