@@ -15,6 +15,17 @@ class Controller {
 	/** @type {boolean} */
 	static #locked = true;
 	/**
+	 * @param {any} reason 
+	 * @returns {Promise<void>}
+	 */
+	static async #catch(reason) {
+		const error = Error.from(reason);
+		let message = String(error);
+		message += `\n\nAn error occurred. Any further actions may result in errors. To prevent this from happening, would you like to reload?`;
+		if (await window.confirmAsync(message)) location.reload();
+		throw reason;
+	}
+	/**
 	 * Starts the main application flow.
 	 * @returns {Promise<void>}
 	 */
@@ -26,11 +37,7 @@ class Controller {
 		try {
 			await self.#main();
 		} catch (reason) {
-			const error = Error.from(reason);
-			let message = String(error);
-			message += `\n\nAn error occurred. Any further actions may result in errors. To prevent this from happening, would you like to reload?`;
-			if (await window.confirmAsync(message)) location.reload();
-			throw reason;
+			await Controller.#catch(reason);
 		}
 	}
 	constructor() {
