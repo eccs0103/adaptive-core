@@ -5,9 +5,10 @@ Core for creating adaptive web pages.\
 **Version backward compatibility is NOT supported.**
 
 ## Feed
-### 3.3.2 (03.01.2025)
+### 3.3.3 (11.01.2025)
 - Improved controller structure.
 - Fixed the operation of the `StaticEngine` and moved it to [workers](./scripts/workers/generators.mjs).
+- Optimized the `Color` class.
 
 ### 3.3.1 (28.12.2024)
 - Added class `Timer`.
