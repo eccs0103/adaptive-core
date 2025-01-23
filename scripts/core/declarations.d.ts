@@ -249,6 +249,16 @@ interface Array<T> {
 	 * @param index2 The index of the second element.
 	 */
 	swap(index1: number, index2: number): void;
+	/**
+	 * Resizes an array to the specified length. 
+	 * If the new length is greater than the current length, fills the extra slots with the default value.
+	 * If the new length is smaller, truncates the array.
+	 * @template T
+	 * @param length The new length for the array.
+	 * @param _default The default value to fill new slots if the array is extended.
+	 * @returns The resized array.
+	 */
+	resize(length: number, _default: T): T[];
 }
 
 interface Math {
@@ -256,6 +266,9 @@ interface Math {
 	 * Splits a number into its integer and fractional parts.
 	 * @param x The number to be split.
 	 * @returns A tuple where the first element is the integer part and the second element is the fractional part.
+	 * ```ts
+	 * const [integer, fractional] = Math.split(x);
+	 * ```
 	 */
 	split(x: number): [number, number];
 	/**

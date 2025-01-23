@@ -289,6 +289,21 @@ Array.prototype.swap = function (index1, index2) {
 	this[index1] = this[index2];
 	this[index2] = temporary;
 };
+
+/**
+ * Resizes an array to the specified length. 
+ * If the new length is greater than the current length, fills the extra slots with the default value.
+ * If the new length is smaller, truncates the array.
+ * @template T
+ * @param {number} length The new length for the array.
+ * @param {T} _default The default value to fill new slots if the array is extended.
+ * @returns {T[]} The resized array.
+ */
+Array.prototype.resize = function (length, _default) {
+	while (length > this.length) this.push(_default);
+	this.length = length;
+	return this;
+};
 //#endregion
 //#region Data pair
 /**
