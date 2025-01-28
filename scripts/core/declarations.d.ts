@@ -39,12 +39,20 @@ interface Number {
 	 * Interpolates the number from one range to another.
 	 * @param min1 The minimum value of the original range.
 	 * @param max1 The maximum value of the original range.
-	 * @param min2 The minimum value of the target range.
-	 * @param max2 The maximum value of the target range.
+	 * @param min2 The minimum value of the target range. Defaults to 0.
+	 * @param max2 The maximum value of the target range. Defaults to 1.
 	 * @returns The interpolated value within the target range.
-	 * @throws {Error} If the minimum and maximum values of either range are equal.
+	 * @throws {Error} If the minimum and maximum of either range are equal.
 	 */
 	interpolate(min1: number, max1: number, min2?: number, max2?: number): number;
+	/**
+	 * Modulates the current number within a specified range.
+	 * @param length The range length.
+	 * @param start The start of the range. Defaults to 0.
+	 * @returns The number constrained within the range.
+	 * @throws {Error} If the range is zero.
+	 */
+	modulate(length: number, start?: number): number;
 	/**
 	 * Returns the current number or a default value if the current number is NaN.
 	 * @param value The default value to return if the current number is NaN.
@@ -289,7 +297,12 @@ interface Math {
 	 * @returns The angle in radians.
 	 */
 	toRadians(degrees: number): number;
+	meanArithmetic(...values: number[]): number;
+	meanGeometric(...values: number[]): number;
+	meanHarmonic(...values: number[]): number;
 }
+
+Math.hy;
 
 interface Promise<T> {
 	/**

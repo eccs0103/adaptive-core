@@ -2,7 +2,7 @@
 
 "use strict";
 
-const { PI, trunc } = Math;
+const { PI, trunc, pow } = Math;
 
 //#region Number
 /**
@@ -42,15 +42,29 @@ Number.prototype.clamp = function (min, max) {
  * Interpolates the number from one range to another.
  * @param {number} min1 The minimum value of the original range.
  * @param {number} max1 The maximum value of the original range.
- * @param {number} min2 The minimum value of the target range.
- * @param {number} max2 The maximum value of the target range.
+ * @param {number} min2 The minimum value of the target range. Defaults to 0.
+ * @param {number} max2 The maximum value of the target range. Defaults to 1.
  * @returns {number} The interpolated value within the target range.
- * @throws {Error} If the minimum and maximum values of either range are equal.
+ * @throws {Error} If the minimum and maximum of either range are equal.
  */
 Number.prototype.interpolate = function (min1, max1, min2 = 0, max2 = 1) {
 	if (min1 === max1) throw new Error(`Minimum and maximum of the original range cant be equal`);
 	if (min2 === max2) throw new Error(`Minimum and maximum of the target range cant be equal`);
 	return min2 + (max2 - min2) * ((this.valueOf() - min1) / (max1 - min1));
+};
+
+/**
+ * Modulates the current number within a specified range.
+ * @param {number} length The range length.
+ * @param {number} start The start of the range. Defaults to 0.
+ * @returns {number} The number constrained within the range.
+ * @throws {Error} If the range is zero.
+ */
+Number.prototype.modulate = function (length, start = 0) {
+	if (length === 0) throw new Error(`Range can't be zero`);
+	let value = (this.valueOf() - start) % length;
+	if (value < 0) value += length;
+	return value + start;
 };
 
 /**
@@ -406,6 +420,40 @@ const toRadianFactor = PI / 180;
 Math.toRadians = function (degrees) {
 	return degrees * toRadianFactor;
 };
+
+/**
+ * @param  {number[]} values 
+ * @returns {number}
+ */
+Math.meanArithmetic = function (...values) {
+	if (values.length === 0) return NaN;
+	const summary = values.reduce((accumulator, value) => accumulator + value, 0);
+	return summary / values.length;
+};
+
+/**
+ * @param  {number[]} values 
+ * @returns {number}
+ */
+Math.meanGeometric = function (...values) {
+	if (values.length === 0) return NaN;
+	const product = values.reduce((accumulator, value) => accumulator * value, 1);
+	return pow(product, 1 / values.length);
+};
+
+/**
+ * @param  {number[]} values 
+ * @returns {number}
+ */
+Math.meanHarmonic = function (...values) {
+	if (values.length === 0) return NaN;
+	const summary = values.reduce((accumulator, value) => {
+		if (value === 0) return NaN;
+		return accumulator + 1 / value;
+	}, 0);
+	return values.length / summary;
+};
+
 //#endregion
 //#region Promise
 Object.defineProperty(Promise.prototype, `isFulfilled`, {
