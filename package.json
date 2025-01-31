@@ -1,0 +1,29 @@
+{
+	"name": "adaptive-core",
+	"version": "3.3.6",
+	"description": "Core for creating adaptive web pages.",
+	"scripts": {
+		"test": "http-server -p 8080 --silent -c-1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/eccs0103/adaptive-core.git"
+	},
+	"keywords": [
+		"javascript",
+		"css",
+		"html",
+		"template",
+		"jsdoc",
+		"webpage",
+		"core",
+		"adaptive",
+		"framework"
+	],
+	"author": "eccs0103",
+	"license": "SEE LICENSE IN LICENSE",
+	"bugs": {
+		"url": "https://github.com/eccs0103/adaptive-core/issues"
+	},
+	"homepage": "https://github.com/eccs0103/adaptive-core#readme"
+}
