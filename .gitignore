@@ -1,0 +1,12 @@
+.*
+!.gitignore
+.env
+node_modules
+
+*.log
+*.test.*
+
+dist/**/*.js
+dist/**/*.js.map
+dist/**/*.d.ts
+dist/**/*.tsbuildinfo
