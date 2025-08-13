@@ -1,6 +1,7 @@
 {
 	"name": "adaptive-extender",
-	"version": "0.0.0",
+	"version": "0.2.5",
+	"description": "Adaptive library for JS/TS development environments",
 	"type": "module",
 	"exports": {
 		"./core": {
@@ -16,6 +17,17 @@
 			"types": "./dist/node/index.d.ts"
 		}
 	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/eccs0103/adaptive-extender.git"
+	},
+	"keywords": [ "javascript", "typescript", "extensions", "core", "dom", "node" ],
+	"author": "eccs0103",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/eccs0103/adaptive-extender/issues"
+	},
+	"homepage": "https://github.com/eccs0103/adaptive-extender#readme",
 	"scripts": {
 		"build:core": "tsc -p ./src/core/tsconfig.json",
 		"build:dom": "tsc -p ./src/dom/tsconfig.json",
