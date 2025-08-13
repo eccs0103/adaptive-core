@@ -1,18 +1,30 @@
 {
-  "name": "adaptive-extender",
-  "version": "0.0.0",
-  "type": "module",
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      }
-    }
-  },
-  "scripts": {
-    "build": "tsc -b",
-    "watch": "tsc -b --watch",
-    "node": "electron dist/index.js"
-  }
+	"name": "adaptive-extender",
+	"version": "0.0.0",
+	"type": "module",
+	"exports": {
+		"./core": {
+			"import": "./dist/core/index.js",
+			"types": "./dist/core/index.d.ts"
+		},
+		"./dom": {
+			"import": "./dist/dom/index.js",
+			"types": "./dist/dom/index.d.ts"
+		},
+		"./node": {
+			"import": "./dist/node/index.js",
+			"types": "./dist/node/index.d.ts"
+		}
+	},
+	"scripts": {
+		"build:core": "tsc -p ./src/core/tsconfig.json",
+		"build:dom": "tsc -p ./src/dom/tsconfig.json",
+		"build:node": "tsc -p ./src/node/tsconfig.json",
+		"build": "npm run build:core && npm run build:dom && npm run build:node",
+
+		"watch:core": "tsc -p ./src/core/tsconfig.json --watch",
+		"watch:dom": "tsc -p ./src/dom/tsconfig.json --watch",
+		"watch:node": "tsc -p ./src/node/tsconfig.json --watch",
+		"watch": "npm run watch:core && npm run watch:dom && npm run watch:node"
+	}
 }

@@ -1,5 +1,6 @@
 .*
 !.gitignore
+!.npmignore
 .env
 node_modules
 
@@ -10,3 +11,4 @@ dist/**/*.js
 dist/**/*.js.map
 dist/**/*.d.ts
 dist/**/*.tsbuildinfo
+/index.js
