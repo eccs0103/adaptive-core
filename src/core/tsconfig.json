@@ -1,9 +1,9 @@
 {
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
-		"lib": [ "ESNext" ],
-		"outDir": "../../dist/core",
-		"rootDir": "../"
+		"lib": [ "ES2020" ],
+		"rootDirs": [ "./" ],
+		"outDir": "../../dist/core/",
 	},
 	"include": [ "../../src/core/**/*" ]
 }
