@@ -1,6 +1,6 @@
 {
 	"name": "adaptive-extender",
-	"version": "0.2.5",
+	"version": "0.2.6",
 	"description": "Adaptive library for JS/TS development environments",
 	"type": "module",
 	"exports": {

@@ -3,7 +3,7 @@
 	"compilerOptions": {
 		"lib": [ "ESNext" ],
 		"outDir": "../../dist/node",
-		"rootDir": "./"
+		"rootDir": "../"
 	},
 	"include": [ "../../src/node/**/*" ]
 }

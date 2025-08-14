@@ -326,7 +326,7 @@ class Color {
 		const minimum = min(red, green, blue);
 		const maximum = max(red, green, blue);
 		const difference = maximum - minimum;
-		let hue = this.#toHue(maximum, red, green, blue, difference);
+		let hue = Color.#toHue(maximum, red, green, blue, difference);
 		hue = difference && hue;
 		if (hue < 0) hue += 6;
 		hsl[0] = hue * 60;
@@ -334,8 +334,8 @@ class Color {
 		hsl[1] = (median && (difference / median)) * 100;
 		hsl[2] = (maximum + minimum) / 2 * 100;
 	}
-	static #toHEXString(number: number): string {
-		return number.toString(16).padStart(2, "0");
+	static #toHEXString(byte: number): string {
+		return byte.toString(16).padStart(2, "0");
 	}
 	/**
 	 * Returns a string representation of the color in RGB format by default.
@@ -353,11 +353,10 @@ class Color {
 		let { format, deep } = options;
 		format ??= ColorFormats.rgb;
 		deep ??= true;
-		const alpha = trunc(this.alpha * 255);
 		switch (format) {
-			case ColorFormats.rgb: return `rgb${deep ? "a" : String.empty}(${this.red}, ${this.green}, ${this.blue}${deep ? `, ${alpha}` : String.empty})`;
-			case ColorFormats.hsl: return `hsl${deep ? "a" : String.empty}(${this.hue}deg, ${this.saturation}%, ${this.lightness}%${deep ? `, ${alpha}` : String.empty})`;
-			case ColorFormats.hex: return `#${Color.#toHEXString(this.red)}${Color.#toHEXString(this.green)}${Color.#toHEXString(this.blue)}${deep ? Color.#toHEXString(alpha) : String.empty}`;
+			case ColorFormats.rgb: return `rgb${deep ? "a" : String.empty}(${this.red}, ${this.green}, ${this.blue}${deep ? `, ${this.alpha}` : String.empty})`;
+			case ColorFormats.hsl: return `hsl${deep ? "a" : String.empty}(${this.hue}deg, ${this.saturation}%, ${this.lightness}%${deep ? `, ${this.alpha}` : String.empty})`;
+			case ColorFormats.hex: return `#${Color.#toHEXString(this.red)}${Color.#toHEXString(this.green)}${Color.#toHEXString(this.blue)}${deep ? Color.#toHEXString(trunc(this.alpha * 255)) : String.empty}`;
 			default: throw new Error(`Invalid '${format}' format for color`);
 		}
 	}
