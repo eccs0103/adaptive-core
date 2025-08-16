@@ -1,9 +1,13 @@
 {
 	"name": "adaptive-extender",
-	"version": "0.2.7",
+	"version": "0.2.8",
 	"description": "Adaptive library for JS/TS development environments",
 	"type": "module",
 	"exports": {
+		".": {
+			"import": "./dist/core/index.js",
+			"types": "./dist/core/index.d.ts"
+		},
 		"./core": {
 			"import": "./dist/core/index.js",
 			"types": "./dist/core/index.d.ts"
@@ -33,7 +37,6 @@
 		"build:dom": "tsc -p ./src/dom/tsconfig.json",
 		"build:node": "tsc -p ./src/node/tsconfig.json",
 		"build": "npm run build:core && npm run build:dom && npm run build:node",
-
 		"watch:core": "tsc -p ./src/core/tsconfig.json --watch",
 		"watch:dom": "tsc -p ./src/dom/tsconfig.json --watch",
 		"watch:node": "tsc -p ./src/node/tsconfig.json --watch",

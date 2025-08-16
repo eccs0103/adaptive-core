@@ -1,3 +1,6 @@
+## 0.2.8 (16.08.2025)
+- Fixed root import error.
+
 ## 0.2.7 (14.08.2025)
 - Fixed alpha channel bug when converting color to string.
 
