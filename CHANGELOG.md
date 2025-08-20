@@ -1,4 +1,4 @@
-## 0.2.10 (20.08.2025)
+## 0.2.11 (20.08.2025)
 - Added import support for `commonjs` modules.
 
 ## 0.2.8 (16.08.2025)
