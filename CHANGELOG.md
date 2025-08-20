@@ -1,5 +1,5 @@
-## 0.2.9 (20.08.2025)
-- Добавлен импорт для `commonjs` модулей.
+## 0.2.10 (20.08.2025)
+- Added import support for `commonjs` modules.
 
 ## 0.2.8 (16.08.2025)
 - Fixed root import error.
