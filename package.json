@@ -3,29 +3,45 @@
 	"version": "0.2.8",
 	"description": "Adaptive library for JS/TS development environments",
 	"type": "module",
+	"main": "./dist/core/index.js",
+	"types": "./dist/core/index.d.ts",
 	"exports": {
 		".": {
-			"import": "./dist/core/index.js",
-			"types": "./dist/core/index.d.ts"
+			"types": "./dist/core/index.d.ts",
+			"require": "./dist/core/index.js",
+			"default": "./dist/core/index.js"
 		},
-		"./core": {
-			"import": "./dist/core/index.js",
-			"types": "./dist/core/index.d.ts"
+		"./core.js": {
+			"types": "./dist/core/index.d.ts",
+			"require": "./dist/core/index.js",
+			"default": "./dist/core/index.js"
 		},
-		"./dom": {
-			"import": "./dist/dom/index.js",
-			"types": "./dist/dom/index.d.ts"
+		"./core": "./core.js",
+		"./node.js": {
+			"types": "./dist/node/index.d.ts",
+			"require": "./dist/node/index.js",
+			"default": "./dist/node/index.js"
 		},
-		"./node": {
-			"import": "./dist/node/index.js",
-			"types": "./dist/node/index.d.ts"
-		}
+		"./node": "./node.js",
+		"./dom.js": {
+			"types": "./dist/dom/index.d.ts",
+			"require": "./dist/dom/index.js",
+			"default": "./dist/dom/index.js"
+		},
+		"./dom": "./dom.js"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/eccs0103/adaptive-extender.git"
 	},
-	"keywords": [ "javascript", "typescript", "extensions", "core", "dom", "node" ],
+	"keywords": [
+		"javascript",
+		"typescript",
+		"extensions",
+		"core",
+		"dom",
+		"node"
+	],
 	"author": "eccs0103",
 	"license": "MIT",
 	"bugs": {
