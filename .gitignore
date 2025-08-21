@@ -7,8 +7,7 @@ node_modules
 *.log
 *.test.*
 
-dist/**/*.js
-dist/**/*.js.map
-dist/**/*.d.ts
-dist/**/*.tsbuildinfo
-/index.js
+**/*.js
+**/*.js.map
+**/*.d.ts
+**/*.tsbuildinfo

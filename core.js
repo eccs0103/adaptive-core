@@ -1,2 +1,2 @@
-export * from "./dist/core/index.js";
+export * from "./core/index.js";
 //# sourceMappingURL=core.js.map

@@ -2,8 +2,8 @@
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"lib": [ "ES2020" ],
-		"rootDirs": [ "./" ],
-		"outDir": "../../dist/core/",
+		"rootDirs": [ "../core/" ],
+		"outDir": "../../core/"
 	},
-	"include": [ "../../src/core/**/*" ]
+	"include": [ "./*.ts" ],
 }

@@ -1,9 +1,0 @@
-{
-	"extends": "../../tsconfig.json",
-	"compilerOptions": {
-		"lib": [ "ES2020", "DOM" ],
-		"rootDirs": [ "../core/", "../dom/" ],
-		"outDir": "../../dist/"
-	},
-	"include": [ "../../src/dom/**/*" ]
-}

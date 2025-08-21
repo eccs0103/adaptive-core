@@ -1,34 +1,34 @@
 {
 	"name": "adaptive-extender",
-	"version": "0.2.12",
+	"version": "0.2.13",
 	"description": "Adaptive library for JS/TS development environments",
 	"type": "module",
-	"main": "./dist/core/index.js",
-	"types": "./dist/core/index.d.ts",
+	"main": "./core/index.js",
+	"types": "./core/index.d.ts",
 	"exports": {
 		".": {
-			"types": "./dist/core/index.d.ts",
-			"require": "./dist/core/index.js",
-			"default": "./dist/core/index.js"
+			"import": "./core/index.js",
+			"require": "./core/index.js",
+			"types": "./core/index.d.ts"
 		},
 		"./core.js": {
-			"types": "./dist/core/index.d.ts",
-			"require": "./dist/core/index.js",
-			"default": "./dist/core/index.js"
+			"import": "./core/index.js",
+			"require": "./core/index.js",
+			"types": "./core/index.d.ts"
 		},
 		"./core": "./core.js",
 		"./node.js": {
-			"types": "./dist/node/index.d.ts",
-			"require": "./dist/node/index.js",
-			"default": "./dist/node/index.js"
+			"import": "./node/index.js",
+			"require": "./node/index.js",
+			"types": "./node/index.d.ts"
 		},
 		"./node": "./node.js",
-		"./dom.js": {
-			"types": "./dist/dom/index.d.ts",
-			"require": "./dist/dom/index.js",
-			"default": "./dist/dom/index.js"
+		"./web.js": {
+			"import": "./web/index.js",
+			"require": "./web/index.js",
+			"types": "./web/index.d.ts"
 		},
-		"./dom": "./dom.js"
+		"./web": "./web.js"
 	},
 	"repository": {
 		"type": "git",
@@ -43,12 +43,8 @@
 	"homepage": "https://github.com/eccs0103/adaptive-extender#readme",
 	"scripts": {
 		"build:core": "tsc -p ./src/core/tsconfig.json",
-		"build:dom": "tsc -p ./src/dom/tsconfig.json",
 		"build:node": "tsc -p ./src/node/tsconfig.json",
-		"build": "npm run build:core && npm run build:dom && npm run build:node",
-		"watch:core": "tsc -p ./src/core/tsconfig.json --watch",
-		"watch:dom": "tsc -p ./src/dom/tsconfig.json --watch",
-		"watch:node": "tsc -p ./src/node/tsconfig.json --watch",
-		"watch": "npm run watch:core && npm run watch:dom && npm run watch:node"
+		"build:web": "tsc -p ./src/web/tsconfig.json",
+		"build": "tsc -p ./src/tsconfig.json"
 	}
 }
