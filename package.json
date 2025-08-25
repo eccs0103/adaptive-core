@@ -46,5 +46,8 @@
 		"build:node": "tsc -p ./src/node/tsconfig.json",
 		"build:web": "tsc -p ./src/web/tsconfig.json",
 		"build": "tsc -p ./src/tsconfig.json"
+	},
+	"devDependencies": {
+		"typescript": "^5.9.2"
 	}
 }

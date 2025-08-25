@@ -16,18 +16,15 @@ class Vector implements IteratorObject<number, void> {
 		throw new ImplementationError();
 	}
 	next(...[value]: [] | [unknown]): IteratorResult<number, void> {
-		throw new Error("Method not implemented.");
+		return this[Symbol.iterator]().next(value);
 	}
-	return?(value?: unknown): IteratorResult<number, void> {
-		throw new Error("Method not implemented.");
+	return?(value?: void): IteratorResult<number, void> {
+		return this[Symbol.iterator]().return?.(value) ?? { done: true, value: undefined };
 	}
-	throw?(e?: any): IteratorResult<number, void> {
-		throw new Error("Method not implemented.");
+	throw?(reason?: any): IteratorResult<number, void> {
+		return this[Symbol.iterator]().throw?.(reason) ?? { done: true, value: undefined };
 	}
 	[Symbol.toStringTag]: string;
-	[Symbol.dispose](): void {
-		throw new Error("Method not implemented.");
-	}
 
 	// Iterators
 	*map<U>(callback: (value: number, index: number) => U): IteratorObject<U, undefined> {
@@ -45,7 +42,7 @@ class Vector implements IteratorObject<number, void> {
 	}
 
 	*take(limit: number): IteratorObject<number, undefined> {
-		if (limit < 0) throw new RangeError("limit must be >= 0");
+		if (0 > limit) throw new RangeError(`The limit ${limit} is out of range [0 - ∞)`);
 		let index = 0;
 		for (const metric of this) {
 			if (index++ >= limit) break;
@@ -53,14 +50,14 @@ class Vector implements IteratorObject<number, void> {
 		}
 	}
 	*drop(count: number): IteratorObject<number, undefined> {
-		if (count < 0) throw new RangeError("count must be >= 0");
+		if (0 > count) throw new RangeError(`The count ${count} is out of range [0 - ∞)`);
 		let index = 0;
 		for (const metric of this) {
 			if (index++ < count) continue;
 			yield metric;
 		}
 	}
-	*flatMap<U>(callback: (value: number, index: number) => Iterator<U, unknown, undefined> | Iterable<U, unknown, undefined>): IteratorObject<U, undefined> {
+	*flatMap<U>(callback: (value: number, index: number) => IterableIterator<U>): IteratorObject<U, undefined> {
 		let index = 0;
 		for (const metric of this) yield* callback(metric, index++);
 	}
@@ -69,23 +66,11 @@ class Vector implements IteratorObject<number, void> {
 	reduce<U>(callback: (accumulator: U, value: number, index: number) => U, initial: U): U;
 	reduce<U>(callback: (accumulator: U, value: number, index: number) => U, initial?: U): U {
 		let index = 0;
-		let acc: U;
-		const iter = this[Symbol.iterator]();
-		let step = iter.next();
-
-		if (initial === undefined) {
-			if (step.done) throw new TypeError("Reduce of empty vector with no initial value");
-			// @ts-expect-error – TS не выведет U без initialValue
-			acc = step.value;
-			step = iter.next();
-		} else {
-			acc = initial;
+		let accumulator: U = initial ?? (0 as U);
+		for (const value of this) {
+			accumulator = callback(accumulator, value, index++);
 		}
-
-		for (; !step.done; step = iter.next()) {
-			acc = callback(acc, step.value, index++);
-		}
-		return acc;
+		return accumulator;
 	}
 	toArray(): number[] {
 		return [...this];
@@ -136,52 +121,56 @@ class Vector implements IteratorObject<number, void> {
 	toFixed(): string;
 	toFixed(digits: number): string;
 	toFixed(digits?: number): string {
-		let result = "";
+		let result = "(";
 		let first = true;
 		for (const metric of this) {
 			if (!first) result += ", ";
 			result += metric.toFixed(digits);
-			first = false;
+			if (first) first = false;
 		}
+		result += ")";
 		return result;
 	}
 
 	toExponential(): string;
 	toExponential(digits: number): string;
 	toExponential(digits?: number): string {
-		let result = "";
+		let result = "(";
 		let first = true;
 		for (const metric of this) {
 			if (!first) result += ", ";
-			result += digits === undefined ? metric.toExponential() : metric.toExponential(digits);
-			first = false;
+			result += metric.toExponential(digits);
+			if (first) first = false;
 		}
+		result += ")";
 		return result;
 	}
 
 	toPrecision(): string;
 	toPrecision(precision: number): string;
 	toPrecision(precision?: number): string {
-		let result = "";
+		let result = "(";
 		let first = true;
 		for (const metric of this) {
 			if (!first) result += ", ";
-			result += precision === undefined ? metric.toPrecision() : metric.toPrecision(precision);
-			first = false;
+			result += metric.toPrecision(precision);
+			if (first) first = false;
 		}
+		result += ")";
 		return result;
 	}
 
 	toString(): string;
 	toString(radix: number): string;
 	toString(radix?: number): string {
-		let result = "";
+		let result = "(";
 		let first = true;
 		for (const metric of this) {
 			if (!first) result += ", ";
-			result += radix === undefined ? metric.toString() : metric.toString(radix);
-			first = false;
+			result += metric.toString(radix);
+			if (first) first = false;
 		}
+		result += ")";
 		return result;
 	}
 
@@ -192,25 +181,17 @@ class Vector implements IteratorObject<number, void> {
 	toLocaleString(locales: Intl.LocalesArgument): string;
 	toLocaleString(locales: Intl.LocalesArgument, options: Intl.NumberFormatOptions): string;
 	toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string {
-		let result = "";
+		let result = "(";
 		let first = true;
 		for (const metric of this) {
 			if (!first) result += ", ";
-			result += locales === undefined
-				? metric.toLocaleString()
-				: metric.toLocaleString(locales, options);
-			first = false;
+			result += metric.toLocaleString(locales, options);
+			if (first) first = false;
 		}
+		result += ")";
 		return result;
 	}
 }
 //#endregion
-
-class Vector1 extends Vector {
-	x: number;
-	*[Symbol.iterator](): Generator<number, void> {
-		yield this.x;
-	}
-}
 
 export { Vector };
