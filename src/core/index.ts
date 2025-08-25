@@ -14,4 +14,7 @@ export * from "./promise.js";
 export * from "./random.js";
 export * from "./color.js";
 export * from "./vector.js";
+export * from "./vector-1.js";
+export * from "./vector-2.js";
+export * from "./vector-3.js";
 export * from "./engine.js";
