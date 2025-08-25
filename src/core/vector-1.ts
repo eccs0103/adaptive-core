@@ -15,6 +15,9 @@ class Vector1D extends Vector {
 		super();
 		this.#x = x;
 	}
+	*[Symbol.iterator](): Generator<number, void> {
+		yield this.x;
+	}
 }
 //#endregion
 

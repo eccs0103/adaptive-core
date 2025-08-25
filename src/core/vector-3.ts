@@ -15,6 +15,11 @@ class Vector3D extends Vector2D {
 		super(x, y);
 		this.#z = z;
 	}
+	*[Symbol.iterator](): Generator<number, void> {
+		yield this.x;
+		yield this.y;
+		yield this.z;
+	}
 }
 //#endregion
 

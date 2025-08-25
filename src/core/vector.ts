@@ -15,14 +15,16 @@ class Vector implements IteratorObject<number, void> {
 	*[Symbol.iterator](): IteratorObject<number, void> {
 		throw new ImplementationError();
 	}
+	
+	#iterator: IteratorObject<number, void> = this[Symbol.iterator]();
 	next(...[value]: [] | [unknown]): IteratorResult<number, void> {
-		return this[Symbol.iterator]().next(value);
+		return this.#iterator.next(value);
 	}
 	return?(value?: void): IteratorResult<number, void> {
-		return this[Symbol.iterator]().return?.(value) ?? { done: true, value: undefined };
+		return this.#iterator.return?.(value) ?? { done: true, value: undefined };
 	}
 	throw?(reason?: any): IteratorResult<number, void> {
-		return this[Symbol.iterator]().throw?.(reason) ?? { done: true, value: undefined };
+		return this.#iterator.throw?.(reason) ?? { done: true, value: undefined };
 	}
 	[Symbol.toStringTag]: string;
 
