@@ -84,4 +84,4 @@ Object.defineProperty(Promise.prototype, "reason", {
 
 type Promisable<T> = T | Promise<T>;
 
-export { Promisable };
+export { type Promisable };

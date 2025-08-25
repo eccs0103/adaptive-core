@@ -1,15 +1,33 @@
 {
 	"compilerOptions": {
-		"target": "ES2020",
-		"module": "ES2020",
+		/* Language & Environment */
+		"target": "ES2022",
+		"module": "ESNext",
+		"useDefineForClassFields": true,
+
+		/* Module Resolution / Bundler */
+		"moduleResolution": "bundler",
+		"moduleDetection": "force",
+		"verbatimModuleSyntax": true,
+
+		/* Interop & Compatibility */
+		"esModuleInterop": true,
+		"allowJs": true,
+		"skipLibCheck": false,
+
+		/* Emit & Declarations */
 		"declaration": true,
 		"sourceMap": true,
+
+		/* Type Checking & Linting */
 		"strict": true,
-		"esModuleInterop": true,
-		"skipLibCheck": true,
-		"allowJs": true,
-		"forceConsistentCasingInFileNames": true,
+		"strictPropertyInitialization": false,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+
+		/* Miscellaneous */
+		"forceConsistentCasingInFileNames": true
 	},
-	"include": [ "**/*.ts" ],
+	"include": [ "**/*.ts", "qaq.tsconfig" ],
 	"exclude": [ "*.test.ts" ]
 }

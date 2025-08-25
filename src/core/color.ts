@@ -664,5 +664,5 @@ class Color {
 }
 //#endregion
 
-export { ColorProperties };
-export { ColorFormats, Color };
+export { ColorFormats };
+export { type ColorProperties, Color };

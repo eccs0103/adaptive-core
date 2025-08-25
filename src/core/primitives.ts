@@ -10,4 +10,4 @@ interface PrimitivesHintMap {
 	"string": string;
 }
 
-export { PrimitivesHintMap };
+export { type PrimitivesHintMap };
