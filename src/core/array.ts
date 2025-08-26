@@ -23,9 +23,9 @@ declare global {
 		/**
 		 * Combines elements from multiple iterables into tuples.
 		 * Iteration stops when the shortest iterable is exhausted.
-		 * @returns A generator yielding tuples.
+		 * @returns An iterator yielding tuples.
 		 */
-		zip<T extends unknown[]>(...iterables: { [K in keyof T]: Iterable<T[K]> }): Generator<T, void>;
+		zip<T extends unknown[]>(...iterables: { [K in keyof T]: Iterable<T[K]> }): IteratorObject<T, void>;
 	}
 
 	interface Array<T> {
@@ -59,7 +59,7 @@ Array.range = function (min: number, max: number): number[] {
 	return array;
 };
 
-Array.zip = function*<T extends unknown[]>(...iterables: { [K in keyof T]: Iterable<T[K]> }): Generator<T, void> {
+Array.zip = function*<T extends unknown[]>(...iterables: { [K in keyof T]: Iterable<T[K]> }): IteratorObject<T, void> {
 	const iterators = iterables.map(iterable => iterable[Symbol.iterator]());
 	while (true) {
 		const results = iterators.map(iterator => iterator.next());

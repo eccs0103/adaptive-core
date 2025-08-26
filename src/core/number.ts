@@ -55,7 +55,6 @@ Number.prototype.insteadInfinity = function <T>(value: T): number | T {
 
 Number.prototype.insteadZero = function <T>(value: T): number | T {
 	const current = this.valueOf();
-	if (!Number.isFinite(current)) return value;
 	if (current === 0) return value;
 	return current;
 };

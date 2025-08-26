@@ -28,6 +28,6 @@
 		/* Miscellaneous */
 		"forceConsistentCasingInFileNames": true
 	},
-	"include": [ "**/*.ts", "qaq.tsconfig" ],
+	"include": [ "**/*.ts" ],
 	"exclude": [ "*.test.ts" ]
 }

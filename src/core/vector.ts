@@ -6,60 +6,26 @@ import { ImplementationError } from "./error.js";
 /**
  * @abstract
  */
-class Vector implements IteratorObject<number, void> {
+class Vector implements Iterable<number, BuiltinIteratorReturn, unknown> {
+	//#region Builders
 	constructor() {
 		if (new.target === Vector) throw new TypeError("Unable to create an instance of an abstract class");
 	}
-
-	// Iterator core
-	*[Symbol.iterator](): IteratorObject<number, void> {
-		throw new ImplementationError();
-	}
-	
-	#iterator: IteratorObject<number, void> = this[Symbol.iterator]();
-	next(...[value]: [] | [unknown]): IteratorResult<number, void> {
-		return this.#iterator.next(value);
-	}
-	return?(value?: void): IteratorResult<number, void> {
-		return this.#iterator.return?.(value) ?? { done: true, value: undefined };
-	}
-	throw?(reason?: any): IteratorResult<number, void> {
-		return this.#iterator.throw?.(reason) ?? { done: true, value: undefined };
-	}
-	[Symbol.toStringTag]: string;
-
-	// Iterators
-	*map<U>(callback: (value: number, index: number) => U): IteratorObject<U, undefined> {
+	//#endregion
+	//#region LInQ
+	*map<U>(callback: (value: number, index: number) => U): IteratorObject<U, BuiltinIteratorReturn> {
 		let index = 0;
 		for (const metric of this) yield callback(metric, index++);
 	}
-
-	filter<S extends number>(predicate: (value: number, index: number) => value is S): IteratorObject<S, undefined>;
-	filter(predicate: (value: number, index: number) => unknown): IteratorObject<number, undefined>;
-	*filter(predicate: (value: number, index: number) => unknown): IteratorObject<number, undefined> {
+	filter<S extends number>(predicate: (value: number, index: number) => value is S): IteratorObject<S, BuiltinIteratorReturn>;
+	filter(predicate: (value: number, index: number) => unknown): IteratorObject<number, BuiltinIteratorReturn>;
+	*filter(predicate: (value: number, index: number) => unknown): IteratorObject<number, BuiltinIteratorReturn> {
 		let index = 0;
 		for (const metric of this) {
 			if (predicate(metric, index++)) yield metric;
 		}
 	}
-
-	*take(limit: number): IteratorObject<number, undefined> {
-		if (0 > limit) throw new RangeError(`The limit ${limit} is out of range [0 - ∞)`);
-		let index = 0;
-		for (const metric of this) {
-			if (index++ >= limit) break;
-			yield metric;
-		}
-	}
-	*drop(count: number): IteratorObject<number, undefined> {
-		if (0 > count) throw new RangeError(`The count ${count} is out of range [0 - ∞)`);
-		let index = 0;
-		for (const metric of this) {
-			if (index++ < count) continue;
-			yield metric;
-		}
-	}
-	*flatMap<U>(callback: (value: number, index: number) => IterableIterator<U>): IteratorObject<U, undefined> {
+	*flatMap<U>(callback: (value: number, index: number) => IterableIterator<U>): IteratorObject<U, BuiltinIteratorReturn> {
 		let index = 0;
 		for (const metric of this) yield* callback(metric, index++);
 	}
@@ -68,14 +34,17 @@ class Vector implements IteratorObject<number, void> {
 	reduce<U>(callback: (accumulator: U, value: number, index: number) => U, initial: U): U;
 	reduce<U>(callback: (accumulator: U, value: number, index: number) => U, initial?: U): U {
 		let index = 0;
-		let accumulator: U = initial ?? (0 as U);
-		for (const value of this) {
+		let accumulator = initial;
+		const iterator = this[Symbol.iterator]();
+		if (accumulator === undefined) {
+			const result1 = iterator.next();
+			if (result1.done) throw new TypeError("Reduce of empty vector with no initial value");
+			accumulator = result1.value as U;
+		}
+		for (const value of iterator) {
 			accumulator = callback(accumulator, value, index++);
 		}
 		return accumulator;
-	}
-	toArray(): number[] {
-		return [...this];
 	}
 	forEach(callback: (value: number, index: number) => void): void {
 		let index = 0;
@@ -104,8 +73,8 @@ class Vector implements IteratorObject<number, void> {
 		}
 		return undefined;
 	}
-
-	// Number-like checks
+	//#endregion
+	//#region Validators
 	static isNaN(vector: Vector): boolean {
 		return vector.every(Number.isNaN);
 	}
@@ -118,8 +87,23 @@ class Vector implements IteratorObject<number, void> {
 	static isSafeInteger(vector: Vector): boolean {
 		return vector.every(Number.isSafeInteger);
 	}
-
-	// Number-like formatting (streaming, без массива)
+	insteadNaN<T>(value: T): this | T {
+		if (Vector.isNaN(this)) return value;
+		return this;
+	}
+	insteadInfinity<T>(value: T): this | T {
+		if (!Number.isFinite(this)) return value;
+		return this;
+	}
+	insteadZero<T>(value: T): this | T {
+		if (this.every(metric => metric === 0)) return value;
+		return this;
+	}
+	//#endregion
+	//#region Converters
+	*[Symbol.iterator](): IteratorObject<number, BuiltinIteratorReturn> {
+		throw new ImplementationError();
+	}
 	toFixed(): string;
 	toFixed(digits: number): string;
 	toFixed(digits?: number): string {
@@ -133,7 +117,6 @@ class Vector implements IteratorObject<number, void> {
 		result += ")";
 		return result;
 	}
-
 	toExponential(): string;
 	toExponential(digits: number): string;
 	toExponential(digits?: number): string {
@@ -147,7 +130,6 @@ class Vector implements IteratorObject<number, void> {
 		result += ")";
 		return result;
 	}
-
 	toPrecision(): string;
 	toPrecision(precision: number): string;
 	toPrecision(precision?: number): string {
@@ -161,7 +143,6 @@ class Vector implements IteratorObject<number, void> {
 		result += ")";
 		return result;
 	}
-
 	toString(): string;
 	toString(radix: number): string;
 	toString(radix?: number): string {
@@ -175,10 +156,10 @@ class Vector implements IteratorObject<number, void> {
 		result += ")";
 		return result;
 	}
-
 	toLocaleString(): string;
 	toLocaleString(locales: string): string;
 	toLocaleString(locales: string, options: Intl.NumberFormatOptions): string;
+	toLocaleString(locales: string[]): string;
 	toLocaleString(locales: string[], options: Intl.NumberFormatOptions): string;
 	toLocaleString(locales: Intl.LocalesArgument): string;
 	toLocaleString(locales: Intl.LocalesArgument, options: Intl.NumberFormatOptions): string;
@@ -193,6 +174,7 @@ class Vector implements IteratorObject<number, void> {
 		result += ")";
 		return result;
 	}
+	//#endregion
 }
 //#endregion
 
