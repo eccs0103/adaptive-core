@@ -3,32 +3,36 @@
 	"version": "0.2.14",
 	"description": "Adaptive library for JS/TS development environments",
 	"type": "module",
-	"main": "./core/index.js",
-	"types": "./core/index.d.ts",
+	"main": "./dist/core/index.js",
+	"types": "./dist/core/index.d.ts",
+	"typesVersions": {
+		"*": {
+			"core": [ "dist/core/index.d.ts" ],
+			"node": [ "dist/node/index.d.ts" ],
+			"web": [ "dist/web/index.d.ts" ]
+		}
+	},
 	"exports": {
 		".": {
-			"import": "./core/index.js",
-			"require": "./core/index.js",
-			"types": "./core/index.d.ts"
+			"import": "./dist/core/index.js",
+			"require": "./dist/core/index.js",
+			"types": "./dist/core/index.d.ts"
 		},
-		"./core.js": {
-			"import": "./core/index.js",
-			"require": "./core/index.js",
-			"types": "./core/index.d.ts"
+		"./core": {
+			"import": "./dist/core/index.js",
+			"require": "./dist/core/index.js",
+			"types": "./dist/core/index.d.ts"
 		},
-		"./core": "./core.js",
-		"./node.js": {
-			"import": "./node/index.js",
-			"require": "./node/index.js",
-			"types": "./node/index.d.ts"
+		"./node": {
+			"import": "./dist/node/index.js",
+			"require": "./dist/node/index.js",
+			"types": "./dist/node/index.d.ts"
 		},
-		"./node": "./node.js",
-		"./web.js": {
-			"import": "./web/index.js",
-			"require": "./web/index.js",
-			"types": "./web/index.d.ts"
-		},
-		"./web": "./web.js"
+		"./web": {
+			"import": "./dist/web/index.js",
+			"require": "./dist/web/index.js",
+			"types": "./dist/web/index.d.ts"
+		}
 	},
 	"repository": {
 		"type": "git",
