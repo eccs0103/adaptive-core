@@ -1,5 +1,6 @@
 "use strict";
 
+//#region Object
 declare global {
 	interface ObjectConstructor {
 		/**
@@ -47,5 +48,6 @@ Object.suppress = function <T>(value: T, message: string | undefined): NonNullab
 		default: return (value as NonNullable<T>);
 	}
 };
+//#endregion
 
 export { };

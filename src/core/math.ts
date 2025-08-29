@@ -2,6 +2,7 @@
 
 const { PI, trunc, pow } = Math;
 
+//#region Number
 declare global {
 	interface Number {
 		/**
@@ -30,7 +31,30 @@ declare global {
 		 */
 		modulate(length: number, start?: number): number;
 	}
+}
 
+Number.prototype.clamp = function (min: number, max: number): number {
+	let value = this.valueOf();
+	if (value < min) return min;
+	if (value > max) return max;
+	return value;
+};
+
+Number.prototype.interpolate = function (min1: number, max1: number, min2: number = 0, max2: number = 1): number {
+	if (min1 === max1) throw new Error("Minimum and maximum of the original range cant be equal");
+	if (min2 === max2) throw new Error("Minimum and maximum of the target range cant be equal");
+	return min2 + (max2 - min2) * ((this.valueOf() - min1) / (max1 - min1));
+};
+
+Number.prototype.modulate = function (length: number, start: number = 0): number {
+	if (length === 0) throw new Error("Range can't be zero");
+	let value = (this.valueOf() - start) % length;
+	if (value < 0) value += length;
+	return value + start;
+};
+//#endregion
+//#region Math
+declare global {
 	interface Math {
 		/**
 		 * Splits a number into its integer and fractional parts.
@@ -73,26 +97,6 @@ declare global {
 		meanHarmonic(...values: number[]): number;
 	}
 }
-
-Number.prototype.clamp = function (min: number, max: number): number {
-	let value = this.valueOf();
-	if (value < min) return min;
-	if (value > max) return max;
-	return value;
-};
-
-Number.prototype.interpolate = function (min1: number, max1: number, min2: number = 0, max2: number = 1): number {
-	if (min1 === max1) throw new Error("Minimum and maximum of the original range cant be equal");
-	if (min2 === max2) throw new Error("Minimum and maximum of the target range cant be equal");
-	return min2 + (max2 - min2) * ((this.valueOf() - min1) / (max1 - min1));
-};
-
-Number.prototype.modulate = function (length: number, start: number = 0): number {
-	if (length === 0) throw new Error("Range can't be zero");
-	let value = (this.valueOf() - start) % length;
-	if (value < 0) value += length;
-	return value + start;
-};
 
 Math.split = function (x: number): [number, number] {
 	const integer = trunc(x);
@@ -138,5 +142,6 @@ Math.meanHarmonic = function (...values: number[]): number {
 	}
 	return values.length / summary;
 };
+//#endregion
 
 export { };

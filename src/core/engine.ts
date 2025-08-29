@@ -1,5 +1,6 @@
 "use strict";
 
+//#region Engine
 interface Engine {
 	get launched(): boolean;
 	set launched(value: boolean);
@@ -8,5 +9,6 @@ interface Engine {
 	get fps(): number;
 	get delta(): number;
 }
+//#endregion
 
 export { type Engine };

@@ -3,6 +3,7 @@
 import "../core/index.js";
 import { type Promisable } from "../core/index.js";
 
+//#region Promise
 declare global {
 	interface PromiseConstructor {
 		/**
@@ -37,5 +38,6 @@ Promise.withSignal = async function <T>(callback: (signal: AbortSignal, resolve:
 		controller.abort();
 	}
 };
+//#endregion
 
 export { };

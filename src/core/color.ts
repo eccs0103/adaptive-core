@@ -364,92 +364,74 @@ class Color {
 	//#region Presets
 	/**
 	 * Transparent color preset.
-	 * @readonly
 	 */
 	static get newTransparent(): Color { return Color.fromRGB(0, 0, 0, 0); };
 	/**
 	 * Maroon color preset.
-	 * @readonly
 	 */
 	static get newMaroon(): Color { return Color.fromRGB(128, 0, 0); };
 	/**
 	 * Red color preset.
-	 * @readonly
 	 */
 	static get newRed(): Color { return Color.fromRGB(255, 0, 0); };
 	/**
 	 * Orange color preset.
-	 * @readonly
 	 */
 	static get newOrange(): Color { return Color.fromRGB(255, 165, 0); };
 	/**
 	 * Yellow color preset.
-	 * @readonly
 	 */
 	static get newYellow(): Color { return Color.fromRGB(255, 255, 0); };
 	/**
 	 * Olive color preset.
-	 * @readonly
 	 */
 	static get newOlive(): Color { return Color.fromRGB(128, 128, 0); };
 	/**
 	 * Green color preset.
-	 * @readonly
 	 */
 	static get newGreen(): Color { return Color.fromRGB(0, 128, 0); };
 	/**
 	 * Purple color preset.
-	 * @readonly
 	 */
 	static get newPurple(): Color { return Color.fromRGB(128, 0, 128); };
 	/**
 	 * Fuchsia color preset.
-	 * @readonly
 	 */
 	static get newFuchsia(): Color { return Color.fromRGB(255, 0, 255); };
 	/**
 	 * Lime color preset.
-	 * @readonly
 	 */
 	static get newLime(): Color { return Color.fromRGB(0, 255, 0); };
 	/**
 	 * Teal color preset.
-	 * @readonly
 	 */
 	static get newTeal(): Color { return Color.fromRGB(0, 128, 128); };
 	/**
 	 * Aqua color preset.
-	 * @readonly
 	 */
 	static get newAqua(): Color { return Color.fromRGB(0, 255, 255); };
 	/**
 	 * Blue color preset.
-	 * @readonly
 	 */
 	static get newBlue(): Color { return Color.fromRGB(0, 0, 255); };
 	/**
 	 * Navy color preset.
-	 * @readonly
 	 */
 	static get newNavy(): Color { return Color.fromRGB(0, 0, 128); };
 	/**
 	 * Black color preset.
-	 * @readonly
 	 */
 	static get newBlack(): Color { return Color.fromRGB(0, 0, 0); };
 	/**
 	 * Gray color preset.
-	 * @readonly
 	 */
 	static get newGray(): Color { return Color.fromRGB(128, 128, 128); };
 	/**
 	 * Silver color preset.
-	 * @readonly
 	 */
 	static get newSilver(): Color { return Color.fromRGB(192, 192, 192); };
 	/**
 	 * White color preset.
-	 * @readonly
 	 */
 	static get newWhite(): Color { return Color.fromRGB(255, 255, 255); };
 	//#endregion

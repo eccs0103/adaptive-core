@@ -4,6 +4,7 @@ import "./global.js";
 
 const { trunc } = Math;
 
+//#region Array
 declare global {
 	interface ArrayConstructor {
 		/**
@@ -81,5 +82,6 @@ Array.prototype.resize = function <T>(this: T[], length: number, _default: T): T
 	this.length = length;
 	return this;
 };
+//#endregion
 
 export { };

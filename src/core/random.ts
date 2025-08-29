@@ -10,7 +10,6 @@ class Random {
 	static #global: Random = new Random();
 	/**
 	 * Gets the global shared random generator instance.
-	 * @readonly
 	 */
 	static get global(): Random {
 		return Random.#global;

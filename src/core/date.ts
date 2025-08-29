@@ -2,6 +2,7 @@
 
 import "./global.js";
 
+//#region Date
 declare global {
 	interface DateConstructor {
 		/**
@@ -43,5 +44,6 @@ Date.prototype.insteadInvalid = function <T>(value: T): Date | T {
 	if (Date.isInvalid(this)) return value;
 	return this;
 };
+//#endregion
 
 export { };

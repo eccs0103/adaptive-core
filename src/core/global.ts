@@ -1,5 +1,6 @@
 "use strict";
 
+//#region Global
 declare global {
 	/**
 	 * Returns the prototype of the given non-nullable value.
@@ -25,5 +26,6 @@ globalThis.typename = function (value: any): string {
 		default: return prototype(value).name;
 	}
 };
+//#endregion
 
 export { };

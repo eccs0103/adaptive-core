@@ -2,6 +2,7 @@
 
 import "./global.js";
 
+//#region Number
 declare global {
 	interface NumberConstructor {
 		/**
@@ -58,5 +59,6 @@ Number.prototype.insteadZero = function <T>(value: T): number | T {
 	if (current === 0) return value;
 	return current;
 };
+//#endregion
 
 export { };

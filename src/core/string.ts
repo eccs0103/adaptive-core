@@ -14,7 +14,6 @@ declare global {
 		import(source: any, name?: string): string;
 		/**
 		 * A constant empty string.
-		 * @readonly
 		 */
 		empty: string;
 		/**

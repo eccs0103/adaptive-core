@@ -1,5 +1,8 @@
 "use strict";
 
+//#region Promise
+type Promisable<T> = T | Promise<T>;
+
 declare global {
 	interface Promise<T> {
 		/**
@@ -81,7 +84,6 @@ Object.defineProperty(Promise.prototype, "reason", {
 		throw new Error("Unable to get reason of resolved promise");
 	}
 });
-
-type Promisable<T> = T | Promise<T>;
+//#endregion
 
 export { type Promisable };

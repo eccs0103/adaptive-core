@@ -1,5 +1,6 @@
 "use strict";
 
+//#region Error
 declare global {
 	interface ErrorConstructor {
 		/**
@@ -27,7 +28,8 @@ Error.prototype.toString = function (): string {
 	let text = this.stack ?? `${this.name}: ${this.message}`;
 	return text;
 };
-
+//#endregion
+//#region Implementation error
 class ImplementationError extends Error {
 	constructor() {
 		super("Method not implemented");
@@ -35,5 +37,6 @@ class ImplementationError extends Error {
 		this.name = "ImplementationError";
 	}
 }
+//#endregion
 
 export { ImplementationError };

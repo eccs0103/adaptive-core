@@ -2,6 +2,7 @@
 
 import "./global.js";
 
+//#region Boolean
 declare global {
 	interface BooleanConstructor {
 		/**
@@ -19,5 +20,6 @@ Boolean.import = function (source: any, name: string = "[source]"): boolean {
 	if (typeof (source) !== "boolean") throw new TypeError(`Unable to import boolean from ${name} due its ${typename(source)} type`);
 	return source.valueOf();
 };
+//#endregion
 
 export { };
