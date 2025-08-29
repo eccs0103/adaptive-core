@@ -421,7 +421,7 @@ class Color {
 	/**
 	 * Black color preset.
 	 */
-	static get newBlack(): Color { return Color.fromRGB(0, 0, 0); };
+	static get newBlack(): Color { return new Color(); };
 	/**
 	 * Gray color preset.
 	 */

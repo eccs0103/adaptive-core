@@ -50,9 +50,9 @@ class WebEngine extends EventTarget implements Engine {
 	constructor(options: Partial<WebEngineOptions> = {}) {
 		super();
 		if (new.target === WebEngine) throw new TypeError("Unable to create an instance of an abstract class");
+		
 		const { launch } = options;
 		this.#launched = launch ?? false;
-		this.addEventListener("trigger", event => this.dispatchEvent(new Event("start")), { once: true });
 	}
 	addEventListener<K extends keyof WebEngineEventMap>(type: K, listener: (this: this, ev: WebEngineEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
 	addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -150,8 +150,9 @@ class StaticEngine extends WebEngine {
 	constructor(options: Partial<WebEngineOptions>);
 	constructor(options: Partial<WebEngineOptions> = {}) {
 		super(options);
-
 		super.limit = 120;
+
+		this.#previous = 0;
 		setTimeout(this.#callback);
 	}
 	#callback: TimerHandler = () => {

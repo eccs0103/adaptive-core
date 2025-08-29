@@ -54,6 +54,7 @@ class Vector3D extends Vector2D {
 	//#endregion
 	//#region Presets
 	static get newNaN(): Vector3D { return Vector3D.fromScalar(NaN); }
+	static get newZero(): Vector3D { return Vector3D.fromScalar(0); }
 	static get newUnitX(): Vector3D { return new Vector3D(1, 0, 0); }
 	static get newUnitY(): Vector3D { return new Vector3D(0, 1, 0); }
 	static get newUnitZ(): Vector3D { return new Vector3D(0, 0, 1); }

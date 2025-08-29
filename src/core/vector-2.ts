@@ -51,6 +51,7 @@ class Vector2D extends Vector1D {
 	//#endregion
 	//#region Presets
 	static get newNaN(): Vector2D { return Vector2D.fromScalar(NaN); }
+	static get newZero(): Vector2D { return Vector2D.fromScalar(0); }
 	static get newUnitX(): Vector2D { return new Vector2D(1, 0); }
 	static get newUnitY(): Vector2D { return new Vector2D(0, 1); }
 	static get newUnit(): Vector2D { return Vector2D.fromScalar(1); }

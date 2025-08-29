@@ -1,6 +1,6 @@
 "use strict";
 
-import { type PrimitivesHintMap } from "./primitives";
+import { type PrimitivesHintMap } from "./primitives.js";
 
 const { trunc, abs } = Math;
 
@@ -51,13 +51,12 @@ class Timespan {
 	}
 	set milliseconds(value: number) {
 		if (!Number.isFinite(value)) return;
-		this.#value += Timespan.#toValue(0, 0, 0, 0, value - this.#dm[0]);
+		this.#value += Timespan.#toValue(0, 0, 0, 0, value - this.#dm[1]);
 		Timespan.#toComponents(this.#value, this.#dm, this.#hms);
 	}
 	//#endregion
 	//#region Builders
 	static #patternTimespan: RegExp = /^(-)?(?:(\d+)\.)?(\d{2}):(\d{2}):(\d{2})(?:\.(\d{3}))?$/i;
-	static #variations: TimespanProperties[] = [{ full: false }, { full: true }];
 	constructor();
 	constructor(source: Readonly<Timespan>);
 	constructor(source?: Readonly<Timespan>) {
@@ -69,7 +68,7 @@ class Timespan {
 	static fromValue(value: number): Timespan {
 		if (!Number.isFinite(value)) throw new Error(`The value ${value} must be a finite number`);
 		const timespan = new Timespan();
-		timespan.#value = value;
+		timespan.#value = trunc(value);
 		Timespan.#toComponents(timespan.#value, timespan.#dm, timespan.#hms);
 		return timespan;
 	}
@@ -96,24 +95,24 @@ class Timespan {
 		const regex = Timespan.#patternTimespan;
 		const match = regex.exec(string.trim());
 		if (match === null) return null;
-		const negativity: number = (match[1] === undefined ? 1 : -1);
+		const sign: number = (match[1] === undefined ? 1 : -1);
 		const [, , days, hours, minutes, seconds, milliseconds] = match.map(part => Number(part ?? 0));
-		return Timespan.fromComponents(days, hours, minutes, seconds, milliseconds);
+		return Timespan.fromComponents(sign * days, sign * hours, sign * minutes, sign * seconds, sign * milliseconds);
 	}
 	static parse(string: string): Timespan {
 		const color = Timespan.tryParse(string);
-		if (color === null) throw new SyntaxError(`Unable to parse '${string}' of any selected variation`); /** @todo Fix */
+		if (color === null) throw new SyntaxError(`Unable to parse '${string}' as timespan`);
 		return color;
 	}
 	//#endregion
 	//#region Converters
 	static #toValue(days: number, hours: number, minutes: number, seconds: number, milliseconds: number): number {
 		let value: number = 0;
-		value += days * 24;
-		value += hours * 60;
-		value += minutes * 60;
-		value += seconds * 1000;
-		value += milliseconds;
+		value = (value + days) * 24;
+		value = (value + hours) * 60;
+		value = (value + minutes) * 60;
+		value = (value + seconds) * 1000;
+		value = (value + milliseconds);
 		return trunc(value);
 	}
 	static #toComponents(value: number, dm: Uint32Array, hms: Uint8Array): void {
@@ -156,24 +155,30 @@ class Timespan {
 	}
 	//#endregion
 	//#region Presets
-	static #MAX_VALUE: Readonly<Timespan> = Object.freeze(Timespan.fromValue(Number.MAX_VALUE));
-	static get MAX_VALUE(): Readonly<Timespan> {
-		return this.#MAX_VALUE;
-	}
-	static #MIN_VALUE: Readonly<Timespan> = Object.freeze(Timespan.fromValue(-Number.MAX_VALUE));
+	static #MIN_VALUE: Readonly<Timespan> = Object.freeze(Timespan.fromValue(Number.MIN_SAFE_INTEGER));
 	static get MIN_VALUE(): Readonly<Timespan> {
 		return this.#MIN_VALUE;
 	}
-	static get newDay(): Timespan { return Timespan.fromComponents(1, 0, 0, 0, 0); };
-	static get newHour(): Timespan { return Timespan.fromComponents(0, 1, 0, 0, 0); };
-	static get newMinute(): Timespan { return Timespan.fromComponents(0, 0, 1, 0, 0); };
-	static get newSecond(): Timespan { return Timespan.fromComponents(0, 0, 0, 1, 0); };
-	static get newMillisecond(): Timespan { return Timespan.fromComponents(0, 0, 0, 0, 1); };
+	static #MAX_VALUE: Readonly<Timespan> = Object.freeze(Timespan.fromValue(Number.MAX_SAFE_INTEGER));
+	static get MAX_VALUE(): Readonly<Timespan> {
+		return this.#MAX_VALUE;
+	}
 	static get newZero(): Timespan { return new Timespan(); };
+	static get newMillisecond(): Timespan { return Timespan.fromComponents(0, 0, 0, 0, 1); };
+	static get newSecond(): Timespan { return Timespan.fromComponents(0, 0, 0, 1, 0); };
+	static get newMinute(): Timespan { return Timespan.fromComponents(0, 0, 1, 0, 0); };
+	static get newHour(): Timespan { return Timespan.fromComponents(0, 1, 0, 0, 0); };
+	static get newDay(): Timespan { return Timespan.fromComponents(1, 0, 0, 0, 0); };
+	//#endregion
+	//#region Modifiers
+	duration(): Timespan {
+		return Timespan.fromValue(abs(this.#value));
+	}
+	invert(): Timespan {
+		return Timespan.fromValue(-this.#value);
+	}
 	//#endregion
 }
 //#endregion
-
-// Timespan.fromComponents();
 
 export { type TimespanProperties, Timespan };

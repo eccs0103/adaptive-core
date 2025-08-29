@@ -47,6 +47,7 @@ class Vector1D extends Vector {
 	//#endregion
 	//#region Presets
 	static get newNaN(): Vector1D { return Vector1D.fromScalar(NaN); }
+	static get newZero(): Vector1D { return Vector1D.fromScalar(0); }
 	static get newUnitX(): Vector1D { return new Vector1D(1); }
 	static get newUnit(): Vector1D { return Vector1D.fromScalar(1); }
 	//#endregion
