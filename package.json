@@ -49,8 +49,10 @@
 		"build:core": "tsc -p ./src/core/tsconfig.json",
 		"build:node": "tsc -p ./src/node/tsconfig.json",
 		"build:web": "tsc -p ./src/web/tsconfig.json",
-		"build": "npm run build:core & npm run build:node & npm run build:web",
-		"build:linker": "tsc -p ./src/tsconfig.json"
+		"build": "npm run build:core && npm run build:node && npm run build:web",
+		"test:install": "npm install --prefix ./tests",
+		"test": "npm start --prefix ./tests",
+		"start": "npm run build && npm run test:install && npm test"
 	},
 	"devDependencies": {
 		"typescript": "^5.9.2"

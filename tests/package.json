@@ -1,0 +1,14 @@
+{
+	"scripts": {
+		"launch": "node dist/index.js",
+		"compile": "tsc-watch --onSuccess \"npm run launch\"",
+		"start": "npm run compile"
+	},
+	"dependencies": {
+		"adaptive-extender": "file:.."
+	},
+	"devDependencies": {
+		"@types/node": "^24.3.0",
+		"tsc-watch": "^7.1.1"
+	}
+}
