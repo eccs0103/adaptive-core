@@ -2,6 +2,7 @@
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"lib": [ "ES2022" ],
+		"types": [ ],
 		"rootDirs": [ "../core/" ],
 		"outDir": "../../dist/core/"
 	},

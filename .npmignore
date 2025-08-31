@@ -6,5 +6,5 @@ node_modules
 *.test.*
 
 src/
-tests/
+test/
 *tsconfig.json

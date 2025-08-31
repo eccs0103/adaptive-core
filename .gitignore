@@ -31,6 +31,7 @@ package-lock.json
 .*
 !.gitignore
 !.npmignore
+!.mocharc.json
 
 # TypeScript / JS build artifacts
 *.tsbuildinfo
@@ -39,4 +40,3 @@ package-lock.json
 **/*.d.ts
 
 # Test files / temporary code
-*.test.*

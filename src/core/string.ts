@@ -48,23 +48,10 @@ declare global {
 		 * @returns The string converted to title case.
 		 */
 		toTitleCase(): string;
-		/**
-		 * Converts the string to title case based on the specified locale(s), capitalizing the first letter of each word.
-		 * @param locales A single locale or an array of locales for locale-aware case conversion.
-		 * @returns The string converted to title case with locale-awareness.
-		 */
-		toLocalTitleCase(locales?: string | string[]): string;
-		/**
-		 * Converts the string to title case based on the specified locale(s), capitalizing the first letter of each word.
-		 * @param locales An argument supported by `Intl` for locale-aware case conversion.
-		 * @returns The string converted to title case with locale-awareness.
-		 */
-		toLocalTitleCase(locales?: Intl.LocalesArgument): string;
-		/**
-		 * Reverses the string.
-		 * @returns The reversed string.
-		 */
-		reverse(): string;
+		toLocalTitleCase(): string;
+		toLocalTitleCase(locales: string): string;
+		toLocalTitleCase(locales: string[]): string;
+		toLocalTitleCase(locales: Intl.LocalesArgument): string;
 	}
 }
 
@@ -104,16 +91,8 @@ String.prototype.toTitleCase = function (): string {
 	return this.toLowerCase().replace(patternWordsFirstLetter, char => char.toUpperCase());
 };
 
-String.prototype.toLocalTitleCase = function (locales: Intl.LocalesArgument | string | string[]): string {
+String.prototype.toLocalTitleCase = function (locales?: Intl.LocalesArgument | string | string[]): string {
 	return this.toLocaleLowerCase(locales).replace(patternWordsFirstLetter, char => char.toLocaleUpperCase(locales));
-};
-
-String.prototype.reverse = function (): string {
-	let string = String.empty;
-	for (let index = this.length - 1; index >= 0; index--) {
-		string += this[index];
-	}
-	return string;
 };
 
 export { };

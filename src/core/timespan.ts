@@ -2,7 +2,7 @@
 
 import { type PrimitivesHintMap } from "./primitives.js";
 
-const { trunc, abs } = Math;
+const { trunc, abs, sign } = Math;
 
 //#region Timespan
 interface TimespanProperties {
@@ -12,8 +12,8 @@ interface TimespanProperties {
 class Timespan {
 	//#region Properties
 	#value: number = 0;
-	#dm: Uint32Array = new Uint32Array(2);
-	#hms: Uint8Array = new Uint8Array(3);
+	#dm: Int32Array = new Int32Array(2);
+	#hms: Int8Array = new Int8Array(3);
 	get days(): number {
 		return this.#dm[0];
 	}
@@ -62,8 +62,8 @@ class Timespan {
 	constructor(source?: Readonly<Timespan>) {
 		if (!(source instanceof Timespan)) return;
 		this.#value = source.#value;
-		this.#dm = Uint32Array.from(source.#dm);
-		this.#hms = Uint8Array.from(source.#hms);
+		this.#dm = Int32Array.from(source.#dm);
+		this.#hms = Int8Array.from(source.#hms);
 	}
 	static fromValue(value: number): Timespan {
 		if (!Number.isFinite(value)) throw new Error(`The value ${value} must be a finite number`);
@@ -115,17 +115,18 @@ class Timespan {
 		value = (value + milliseconds);
 		return trunc(value);
 	}
-	static #toComponents(value: number, dm: Uint32Array, hms: Uint8Array): void {
+	static #toComponents(value: number, dm: Int32Array, hms: Int8Array): void {
+		const multiplier: number = sign(value).insteadZero(1);
 		value = abs(value);
-		dm[1] = value % 1000;
-		value = trunc(value / 1000);
-		hms[2] = value % 60;
-		value = trunc(value / 60);
-		hms[1] = value % 60;
-		value = trunc(value / 60);
-		hms[0] = value % 24;
-		value = trunc(value / 24);
-		dm[0] = value;
+		dm[1] = (value % 1000) * multiplier;
+		value = Math.trunc(value / 1000);
+		hms[2] = (value % 60) * multiplier;
+		value = Math.trunc(value / 60);
+		hms[1] = (value % 60) * multiplier;
+		value = Math.trunc(value / 60);
+		hms[0] = (value % 24) * multiplier;
+		value = Math.trunc(value / 24);
+		dm[0] = (value) * multiplier;
 	}
 	valueOf(): number {
 		return this.#value;

@@ -50,11 +50,16 @@
 		"build:node": "tsc -p ./src/node/tsconfig.json",
 		"build:web": "tsc -p ./src/web/tsconfig.json",
 		"build": "npm run build:core && npm run build:node && npm run build:web",
-		"test:install": "npm install --prefix ./tests",
-		"test": "npm start --prefix ./tests",
-		"start": "npm run build && npm run test:install && npm test"
+
+		"pretest": "npm run build",
+		"test": "mocha",
+
+		"start": "npm test"
 	},
 	"devDependencies": {
+		"@types/mocha": "^10.0.10",
+		"mocha": "^11.7.1",
+		"ts-node": "^10.9.2",
 		"typescript": "^5.9.2"
 	}
 }

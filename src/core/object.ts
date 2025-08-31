@@ -21,13 +21,8 @@ declare global {
 		 * @returns The mapped result.
 		 */
 		map<T, N extends Exclude<T, NonNullable<T>>, R>(value: NonNullable<T> | N, callback: (object: NonNullable<T>) => R): R | N;
-		/**
-		 * Ensures that the given value is neither null nor undefined.
-		 * @param value The value to check.
-		 * @param message Optional error message.
-		 * @throws {ReferenceError} If the value is null or undefined.
-		 */
-		suppress<T>(value: T, message?: string): NonNullable<T>;
+		suppress<T>(value: T): NonNullable<T>;
+		suppress<T>(value: T, message: string): NonNullable<T>;
 	}
 }
 
@@ -41,10 +36,10 @@ Object.map = function <T, N, R>(value: NonNullable<T> | N, callback: (object: No
 	else return callback(value as NonNullable<T>);
 };
 
-Object.suppress = function <T>(value: T, message: string | undefined): NonNullable<T> {
+Object.suppress = function <T>(value: T, message: string = "Expected a reference with not missing value"): NonNullable<T> {
 	switch (value) {
-		case null: throw new ReferenceError(message ?? "Value mustn't be null");
-		case undefined: throw new ReferenceError(message ?? "Value mustn't be undefined");
+		case undefined:
+		case null: throw new ReferenceError(message);
 		default: return (value as NonNullable<T>);
 	}
 };

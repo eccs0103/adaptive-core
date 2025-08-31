@@ -88,7 +88,7 @@ class Color {
 	 */
 	set hue(value: number) {
 		if (!Number.isFinite(value)) return;
-		this.#hsl[0] = value.modulate(360);
+		this.#hsl[0] = value.mod(360);
 		Color.#HSLtoRGB(this.#hsl, this.#rgb);
 	}
 	/**
