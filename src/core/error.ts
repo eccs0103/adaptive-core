@@ -30,6 +30,10 @@ Error.prototype.toString = function (): string {
 };
 //#endregion
 //#region Implementation error
+/**
+ * Represents an error that indicates a method or functionality is not implemented.
+ * Used as a sealed error type to prevent further extension.
+ */
 class ImplementationError extends Error {
 	constructor() {
 		super("Method not implemented");

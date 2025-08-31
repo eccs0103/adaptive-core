@@ -2,6 +2,7 @@
 
 import "./global.js";
 
+//#region String
 declare global {
 	interface StringConstructor {
 		/**
@@ -18,14 +19,12 @@ declare global {
 		empty: string;
 		/**
 		 * Checks if a string is empty.
-		 * @param text The string to check.
-		 * @returns True if the string is empty, otherwise false.
+		 * @returns True if empty.
 		 */
 		isEmpty(text: string): boolean;
 		/**
 		 * Checks if a string contains only whitespace characters.
-		 * @param text The string to check.
-		 * @returns True if the string is empty or contains only whitespace, otherwise false.
+		 * @returns True if empty or only whitespace.
 		 */
 		isWhitespace(text: string): boolean;
 	}
@@ -33,24 +32,33 @@ declare global {
 	interface String {
 		/**
 		 * Returns the current string unless it is empty, replacing it with the provided value.
-		 * @param value The fallback value.
-		 * @returns The original string or the fallback.
+		 * @returns Original string or fallback.
 		 */
 		insteadEmpty<T>(value: T): string | T;
 		/**
 		 * Returns the current string unless it consists only of whitespace, replacing it with the provided value.
-		 * @param value The fallback value.
-		 * @returns The original string or the fallback.
+		 * @returns Original string or fallback.
 		 */
 		insteadWhitespace<T>(value: T): string | T;
 		/**
 		 * Converts the string to title case, where the first letter of each word is capitalized.
-		 * @returns The string converted to title case.
 		 */
 		toTitleCase(): string;
+		/**
+		 * Converts the string to title case using the default locale.
+		 */
 		toLocalTitleCase(): string;
+		/**
+		 * Converts the string to title case using a single locale string.
+		 */
 		toLocalTitleCase(locales: string): string;
+		/**
+		 * Converts the string to title case using an array of locale strings.
+		 */
 		toLocalTitleCase(locales: string[]): string;
+		/**
+		 * Converts the string to title case using any Intl.LocalesArgument.
+		 */
 		toLocalTitleCase(locales: Intl.LocalesArgument): string;
 	}
 }
@@ -94,5 +102,6 @@ String.prototype.toTitleCase = function (): string {
 String.prototype.toLocalTitleCase = function (locales?: Intl.LocalesArgument | string | string[]): string {
 	return this.toLocaleLowerCase(locales).replace(patternWordsFirstLetter, char => char.toLocaleUpperCase(locales));
 };
+//#endregion
 
 export { };

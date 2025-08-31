@@ -12,9 +12,34 @@ declare global {
 		 * @returns The clamped value.
 		 */
 		clamp(min: number, max: number): number;
+		/**
+		 * Maps the number from a source range into the normalized range [0, 1].
+		 * @param min1 The minimum value of the source range.
+		 * @param max1 The maximum value of the source range.
+		 * @throws {Error} When the source range has equal bounds.
+		 */
 		lerp(min1: number, max1: number): number;
+		/**
+		 * Maps the number from a source range into a target range.
+		 * @param min1 The minimum value of the source range.
+		 * @param max1 The maximum value of the source range.
+		 * @param min2 The minimum value of the target range.
+		 * @param max2 The maximum value of the target range.
+		 * @throws {Error} When the source or target ranges have equal bounds.
+		 */
 		lerp(min1: number, max1: number, min2: number, max2: number): number;
+		/**
+		 * Wraps the number into the range [0, length).
+		 * @param length The length of the range.
+		 * @throws {RangeError} When the length is zero.
+		 */
 		mod(length: number): number;
+		/**
+		 * Wraps the number into the range [start, start + length).
+		 * @param start The start of the range.
+		 * @param length The length of the range.
+		 * @throws {RangeError} When the length is zero.
+		 */
 		mod(start: number, length: number): number;
 	}
 }

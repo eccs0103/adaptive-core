@@ -13,15 +13,23 @@ declare global {
 		import(source: any, name?: string): object;
 		/**
 		 * Applies a callback function to a non-nullable value, or returns the original nullable value.
-		 * @template T The type of the input value.
-		 * @template N The type representing nullable.
-		 * @template R The return type of the callback function.
 		 * @param value The value to map.
 		 * @param callback The function to apply if the value is non-nullable.
 		 * @returns The mapped result.
 		 */
 		map<T, N extends Exclude<T, NonNullable<T>>, R>(value: NonNullable<T> | N, callback: (object: NonNullable<T>) => R): R | N;
+		/**
+		 * Ensures the value is not null or undefined.
+		 * @param value The value to check.
+		 * @throws {ReferenceError} If the value is null or undefined.
+		 */
 		suppress<T>(value: T): NonNullable<T>;
+		/**
+		 * Ensures the value is not null or undefined with a custom message.
+		 * @param value The value to check.
+		 * @param message The error message if the value is missing.
+		 * @throws {ReferenceError} If the value is null or undefined.
+		 */
 		suppress<T>(value: T, message: string): NonNullable<T>;
 	}
 }

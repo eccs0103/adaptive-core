@@ -1,6 +1,9 @@
 "use strict";
 
 //#region Promise
+/**
+ * Represents a value that can be either a plain value or a Promise resolving to that value.
+ */
 type Promisable<T> = T | Promise<T>;
 
 declare global {
