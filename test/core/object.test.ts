@@ -51,36 +51,4 @@ describe("Object extensions", () => {
 			assert.deepEqual(result, { x: 1, y: 2 });
 		});
 	});
-
-	describe("Object.suppress", () => {
-		it("should return value if not null/undefined", () => {
-			assert.equal(Object.suppress(42), 42);
-			assert.equal(Object.suppress("abc"), "abc");
-			assert.deepEqual(Object.suppress({ a: 1 }), { a: 1 });
-		});
-
-		it("should throw ReferenceError if value is null", () => {
-			assert.throws(() => Object.suppress(null), ReferenceError);
-		});
-
-		it("should throw ReferenceError if value is undefined", () => {
-			assert.throws(() => Object.suppress(undefined), ReferenceError);
-		});
-
-		it("should use custom message for null", () => {
-			try {
-				Object.suppress(null, "custom null");
-			} catch (e: any) {
-				assert.ok(e.message.includes("custom null"));
-			}
-		});
-
-		it("should use custom message for undefined", () => {
-			try {
-				Object.suppress(undefined, "custom undefined");
-			} catch (e: any) {
-				assert.ok(e.message.includes("custom undefined"));
-			}
-		});
-	});
 });

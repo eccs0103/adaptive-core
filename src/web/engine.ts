@@ -1,7 +1,7 @@
 "use strict";
 
 import "../core/index.js";
-import { type Engine } from "./index.js";
+import { type Engine } from "../core/index.js";
 
 const { trunc } = Math;
 
@@ -50,7 +50,7 @@ class WebEngine extends EventTarget implements Engine {
 	constructor(options: Partial<WebEngineOptions> = {}) {
 		super();
 		if (new.target === WebEngine) throw new TypeError("Unable to create an instance of an abstract class");
-		
+
 		const { launch } = options;
 		this.#launched = launch ?? false;
 	}
