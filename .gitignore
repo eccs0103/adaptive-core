@@ -1,2 +1,42 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node modules / Build output
+node_modules
+dist
+dist-ssr
+package-lock.json
+*.local
+
+# Environment files
+.env
+
+# Editors / IDE
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# My personal / temporary files
 .*
-~*
+!.gitignore
+!.npmignore
+!.mocharc.json
+
+# TypeScript / JS build artifacts
+*.tsbuildinfo
+**/*.js
+**/*.js.map
+**/*.d.ts
+
+# Test files / temporary code

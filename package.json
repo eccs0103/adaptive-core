@@ -1,29 +1,65 @@
 {
-	"name": "adaptive-core",
-	"version": "3.3.6",
-	"description": "Core for creating adaptive web pages.",
-	"scripts": {
-		"test": "http-server -p 8080 --silent -c-1"
+	"name": "adaptive-extender",
+	"version": "0.2.14",
+	"description": "Adaptive library for JS/TS development environments",
+	"type": "module",
+	"main": "./dist/core/index.js",
+	"types": "./dist/core/index.d.ts",
+	"typesVersions": {
+		"*": {
+			"core": [ "dist/core/index.d.ts" ],
+			"node": [ "dist/node/index.d.ts" ],
+			"web": [ "dist/web/index.d.ts" ]
+		}
+	},
+	"exports": {
+		".": {
+			"import": "./dist/core/index.js",
+			"require": "./dist/core/index.js",
+			"types": "./dist/core/index.d.ts"
+		},
+		"./core": {
+			"import": "./dist/core/index.js",
+			"require": "./dist/core/index.js",
+			"types": "./dist/core/index.d.ts"
+		},
+		"./node": {
+			"import": "./dist/node/index.js",
+			"require": "./dist/node/index.js",
+			"types": "./dist/node/index.d.ts"
+		},
+		"./web": {
+			"import": "./dist/web/index.js",
+			"require": "./dist/web/index.js",
+			"types": "./dist/web/index.d.ts"
+		}
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/eccs0103/adaptive-core.git"
+		"url": "git+https://github.com/eccs0103/adaptive-extender.git"
 	},
-	"keywords": [
-		"javascript",
-		"css",
-		"html",
-		"template",
-		"jsdoc",
-		"webpage",
-		"core",
-		"adaptive",
-		"framework"
-	],
+	"keywords": [ "javascript", "typescript", "extensions", "core", "dom", "node" ],
 	"author": "eccs0103",
-	"license": "SEE LICENSE IN LICENSE",
+	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/eccs0103/adaptive-core/issues"
+		"url": "https://github.com/eccs0103/adaptive-extender/issues"
 	},
-	"homepage": "https://github.com/eccs0103/adaptive-core#readme"
+	"homepage": "https://github.com/eccs0103/adaptive-extender#readme",
+	"scripts": {
+		"build:core": "tsc -p ./src/core/tsconfig.json",
+		"build:node": "tsc -p ./src/node/tsconfig.json",
+		"build:web": "tsc -p ./src/web/tsconfig.json",
+		"build": "npm run build:core && npm run build:node && npm run build:web",
+
+		"pretest": "npm run build",
+		"test": "mocha",
+
+		"start": "npm test"
+	},
+	"devDependencies": {
+		"@types/mocha": "^10.0.10",
+		"mocha": "^11.7.1",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.9.2"
+	}
 }
